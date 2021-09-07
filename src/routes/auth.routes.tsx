@@ -1,5 +1,6 @@
 import React from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+// import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import { theme } from '../global/styles/theme';
 
@@ -8,26 +9,25 @@ import { LandingPage } from '../screens/LandingPage';
 import { SignIn } from '../screens/SignIn';
 import { Menu } from '../screens/Menu';
 
-const { Navigator, Screen } = createDrawerNavigator();
+// const { Navigator, Screen } = createStackNavigator();
+const { Navigator, Screen } = createStackNavigator();
 
-export function AppRoutes() {
+export function AuthRoutes() {
 	return(
 		<Navigator
 			initialRouteName="LandingPage"
-			backBehavior="history"
 			screenOptions={{
 				headerShown: false,
-				drawerPosition: 'right',
-
-				drawerStyle: {
-					backgroundColor: theme.colors.background,
-				},
 			}}
-			drawerContent={(props) => <CustomDrawer {...props} />}
 		>
 			<Screen 
-				name="Menu"
-				component={Menu}
+				name="LandingPage"
+				component={LandingPage}
+			/>
+
+			<Screen 
+				name="SignIn"
+				component={SignIn}
 			/>
 		</Navigator>
 	)

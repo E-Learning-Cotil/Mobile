@@ -14,7 +14,7 @@ export const theme = {
 		purple80: '#9F18DF',
 
 		highlight: '#ABB1CC',
-    white: '#fff'
+    	white: '#fff'
 
 	},
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, StatusBar} from 'react-native';
 
 import { Routes } from './src/routes';
+import { AuthProvider } from './src/contexts/auth';
 
 import { useFonts } from 'expo-font';
 import { Quicksand_400Regular, Quicksand_700Bold } from '@expo-google-fonts/quicksand';
@@ -16,11 +17,13 @@ export default function App() {
     Righteous_400Regular,
   });
 
+
   if(!fontsLoaded){
     return <AppLoading/>
   }
 
 	return (
+		
 		<View 
 			style={{
 				flex: 1
@@ -31,7 +34,10 @@ export default function App() {
 				backgroundColor="transparent"
 				translucent
 			/>
-			<Routes />
+
+			<AuthProvider>
+				<Routes />
+			</AuthProvider>
 		</View>
 	);
 }

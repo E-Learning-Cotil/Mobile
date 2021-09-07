@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
 	View,
 	Image,
@@ -17,10 +17,23 @@ import PurpleWave from '../../assets/purpleWave.png';
 
 import { Checkbox } from '../../components/Checkbox';
 
+import { useNavigation } from '@react-navigation/native';
+
+import AuthContext from '../../contexts/auth';
+
 export function SignIn () {
 	const [ alunoState, setAlunoState ] = useState(false);
 	const [ professorState, setProfessorState ] = useState(false);
 	const [ rememberUser, setRememberUser ] = useState(false);
+
+	const { signed, user, signIn } = useContext(AuthContext);
+
+	console.log(signed);
+	console.log(user);
+
+	function handleSignIn () {
+		signIn();
+	}
 
 	function handleAlunoSelect () {
 		if (!alunoState) {
@@ -35,6 +48,8 @@ export function SignIn () {
 			setAlunoState(false);
 		}
 	}
+
+	const navigation = useNavigation();
 
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
@@ -95,6 +110,7 @@ export function SignIn () {
 				</View>
 
 				<View style={styles.inputsView}>
+					{ /*Campo Email*/ }
 					<View style={styles.inputView}>
 						<FontAwesome5 name="user" size={24} color={theme.colors.gray90} />
 						<TextInput
@@ -107,6 +123,7 @@ export function SignIn () {
 						/>
 					</View>
 
+					{ /*Campo Senha*/ }
 					<View style={styles.inputView}>
 						<FontAwesome5 name="lock" size={24} color={theme.colors.gray90} />
 						<TextInput
@@ -132,11 +149,11 @@ export function SignIn () {
 					style={styles.accessButtonView}
 				>
 					<RectButton
-						onPress={() => {}}
+						onPress={handleSignIn}
 						style={styles.accessButton}
 					>
 						<Text style={styles.accessButtonText}>
-							Acessar
+							Entrar
 						</Text>
 					</RectButton>
 				</View>

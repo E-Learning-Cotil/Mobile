@@ -7,13 +7,14 @@ export const styles = StyleSheet.create({
         flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+		backgroundColor: theme.colors.background,
     },
 
 	topImage: {
 		position: 'absolute',
 		top: 0,
 		width: '100%',
-		height: 150
+		height: 150,
 	},
 
 	bottomImage: {
