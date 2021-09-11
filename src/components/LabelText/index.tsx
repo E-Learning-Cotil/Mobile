@@ -5,17 +5,18 @@ import { View, ViewProps, Text } from 'react-native';
 import { styles } from './styles';
 
 import { FontAwesome5 } from '@expo/vector-icons'; 
+import { theme } from '../../global/styles/theme';
 
 type Props = ViewProps & {
   title: string;
-  iconName: string;
+  color: string;
 }
 
-export function LabelIcon({title, iconName,...rest}: Props) {
+export function LabelText({title, color,...rest}: Props) {
     return(
-		<View style={[styles.container, rest.style]}>
-				<FontAwesome5 name={iconName} size={24} color="white" />
+		<View style={[styles.container, rest]}>
 				<Text style={styles.text}>{title}</Text>
+        <View style={[styles.bar, { backgroundColor: color  } ]} />
 		</View>
 
     );

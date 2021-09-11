@@ -6,23 +6,31 @@ import { LabelIcon } from '../LabelIcon';
 import { styles } from './styles';
 
 import { FontAwesome5 } from '@expo/vector-icons'; 
+import { RectButton } from 'react-native-gesture-handler';
+
+import { DrawerActions, useNavigation, NavigationProp } from '@react-navigation/native';
 
 type Props = {
-  title: string;
-  iconName: string;
-  color: string;
-
+	title: string;
+	iconName: string;
+	color: string;
 }
 
 export function NavBar({title, iconName, color}: Props){
+	const navigation = useNavigation();
+	
+	function openDrawerClickHandler () {
+		navigation.dispatch(DrawerActions.openDrawer());
+	}
+
     return(
-      <View style={[styles.container, {backgroundColor: color, paddingLeft:24}]}>
+      <View style={[styles.container, {backgroundColor: color}]}>
           <LabelIcon title={title} iconName={iconName}/>
           
-          <View style={{marginRight: 28}}>
-          <FontAwesome5 name="bars" size={32} color="white" />
-          </View>
+          <RectButton style={styles.navButton} onPress={openDrawerClickHandler}>
+              <FontAwesome5 name="bars" size={32} color="white" />
+          </RectButton>
 
       </View>
     );
-  }
+}

@@ -10,13 +10,13 @@ export const styles = StyleSheet.create({
 
 	userInfoView: {
 		paddingTop: 40,
-		paddingBottom: 10,
 		paddingHorizontal: 20,
 		width: '100%',
-
-		backgroundColor: theme.colors.green90
+		height: 100,
+		backgroundColor: theme.colors.green90,
+		justifyContent: 'center',
 	},
-
+	
 	pageLinksView: {},
 
 	signOutView: {
@@ -37,6 +37,6 @@ export const styles = StyleSheet.create({
 		fontFamily: theme.fonts.title400,  
 		color: theme.colors.white,
 		fontSize: 24,
-		paddingLeft: 10,
+		paddingRight: 10,
 	},
 });

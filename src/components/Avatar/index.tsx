@@ -1,17 +1,17 @@
 import React from 'react';
-import { Image, View } from 'react-native';
+import { Image, View, ViewProps } from 'react-native';
 
 import { styles } from './styles';
 import { theme } from '../../global/styles/theme';
 
-interface Props {
+type Props = ViewProps & {
   urlImage: string | undefined;
 }
 
-export function Avatar( { urlImage }: Props ) {
+export function Avatar( { urlImage, ...rest }: Props ) {
 
-  return (
-	  <View style={styles.container}>
+	return (
+		<View style={[styles.container, rest.style]}>
 		{
 			urlImage ? 
 				<Image 
@@ -21,8 +21,6 @@ export function Avatar( { urlImage }: Props ) {
 			:
 				null
 		}
-	  </View>
-	 
-  )
-
+		</View>
+	);
 }
