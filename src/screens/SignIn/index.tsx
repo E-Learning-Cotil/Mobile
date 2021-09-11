@@ -1,39 +1,22 @@
-import React, { useState, useContext } from 'react';
-import {
-	View,
-	Image,
-	Text,
-	TextInput
-} from 'react-native';
-
-import { RectButton, Switch } from 'react-native-gesture-handler';
+import React, { useState, useEffect } from 'react';
+import { View, Image, Text, TextInput, ActivityIndicator } from 'react-native';
+import { RectButton } from 'react-native-gesture-handler';
 
 import { FontAwesome5 } from '@expo/vector-icons'; 
-
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
+
 import GreenWave from '../../assets/greenWave.png';
 import PurpleWave from '../../assets/purpleWave.png';
 
+import { useAuth } from '../../contexts/auth';
 import { Checkbox } from '../../components/Checkbox';
 
-import { useNavigation } from '@react-navigation/native';
-
-import AuthContext from '../../contexts/auth';
 
 export function SignIn () {
-	const [ alunoState, setAlunoState ] = useState(false);
+	const [ alunoState, setAlunoState ] = useState(true);
 	const [ professorState, setProfessorState ] = useState(false);
 	const [ rememberUser, setRememberUser ] = useState(false);
-
-	const { signed, user, signIn } = useContext(AuthContext);
-
-	console.log(signed);
-	console.log(user);
-
-	function handleSignIn () {
-		signIn();
-	}
 
 	function handleAlunoSelect () {
 		if (!alunoState) {
@@ -49,10 +32,88 @@ export function SignIn () {
 		}
 	}
 
-	const navigation = useNavigation();
-
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
+
+	const [ isEmailValid, setEmailStatus ] = useState(false);
+	const [ emailValidationMessage, setEmailValidationMessage ] = useState('');
+
+	const [ isPasswordValid, setPasswordStatus ] = useState(false);
+	const [ passwordValidationMessage, setPasswordValidationMessage ] = useState('');
+
+	const [ firstOccurrence, setFirstOccurrence ] = useState(true);
+
+	function validateEmail () {
+		const reg = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+
+		if (!firstOccurrence) {
+			if (email === '') {
+				setEmailValidationMessage('Obrigatório!');
+				setEmailStatus(false);
+			}
+			else if (!reg.test(email)) {
+				setEmailValidationMessage('Inválido!');
+				setEmailStatus(false);
+			}
+			else {
+				setEmailValidationMessage('');
+				setEmailStatus(true);
+			}
+		}
+	}
+
+	function validatePassword() {
+		if (!firstOccurrence) {
+			if (password === '') {
+				setPasswordValidationMessage('Obrigatório!');
+				setPasswordStatus(false);
+			}
+			else {
+				setPasswordValidationMessage('');
+				setPasswordStatus(true);
+			}
+		}
+	}
+
+	useEffect(() => { validateEmail() }, [ email ]);
+
+	useEffect(() => { validatePassword() }, [ password ]);
+
+	useEffect(() => { setFirstOccurrence(false) }, []);
+
+	const [ submitMessage, setSubmitMessage ] = useState('');
+	const [ loading, setLoading ] = useState(false);
+
+	const { signIn } = useAuth();
+
+	async function handleSignIn () {
+		setLoading(true);
+
+		validateEmail();
+		validatePassword();
+
+		if (isEmailValid && isPasswordValid) {
+			const response = await signIn({
+				email,
+				password,
+				role: alunoState ? 'ALUNO' : 'PROFESSOR',
+				rememberUser
+			});
+	
+			const { status, message } = response;
+
+			if (status === 200)
+				setSubmitMessage('');
+			else if (status === 400 || status === 401) {
+				const roleText = alunoState ? 'aluno' : 'professor';
+
+				setSubmitMessage(`Email ou senha do ${roleText} incorretos!`);
+			}
+			else setSubmitMessage(message);
+		}
+
+		setLoading(false);
+	}
 
 	return(
 		<View style={styles.container}>
@@ -112,7 +173,10 @@ export function SignIn () {
 				<View style={styles.inputsView}>
 					{ /*Campo Email*/ }
 					<View style={styles.inputView}>
-						<FontAwesome5 name="user" size={24} color={theme.colors.gray90} />
+						<FontAwesome5
+							name="user" size={24}
+							color={theme.colors.gray90}
+						/>
 						<TextInput
 							style={styles.input}
 							onChangeText={setEmail}
@@ -121,11 +185,18 @@ export function SignIn () {
 							autoCompleteType="email"
 							keyboardType="email-address"
 						/>
+
+						<Text style={ styles.validationMessage } >
+							{emailValidationMessage}
+						</Text>
 					</View>
 
 					{ /*Campo Senha*/ }
 					<View style={styles.inputView}>
-						<FontAwesome5 name="lock" size={24} color={theme.colors.gray90} />
+						<FontAwesome5
+							name="lock" size={24}
+							color={theme.colors.gray90}
+						/>
 						<TextInput
 							style={styles.input}
 							onChangeText={setPassword}
@@ -134,27 +205,43 @@ export function SignIn () {
 							autoCompleteType="password"
 							secureTextEntry={true}
 						/>
+
+						<Text style={ styles.validationMessage } >
+							{passwordValidationMessage}
+						</Text>
 					</View>
 				</View>
 
-				 <View style={styles.checkboxView}>
+				<View style={styles.checkboxView}>
 					<Checkbox
 						checkboxState={rememberUser}
 						setCheckboxState={setRememberUser}
 					/>
 
 					<Text style={styles.checkboxText}>Lembrar Usuário</Text>
-				 </View> 
+				</View>
+
+				<Text style={ styles.submitMessage } >
+					{submitMessage}
+				</Text>
+
 				<View
 					style={styles.accessButtonView}
 				>
 					<RectButton
 						onPress={handleSignIn}
 						style={styles.accessButton}
+						enabled={!loading}
 					>
 						<Text style={styles.accessButtonText}>
 							Entrar
 						</Text>
+						<ActivityIndicator
+							size="large"
+							color="#fff"
+							animating={loading}
+							style={ styles.spinner }
+						/>
 					</RectButton>
 				</View>
 			</View>

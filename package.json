@@ -10,9 +10,11 @@
   "dependencies": {
     "@expo-google-fonts/quicksand": "^0.2.0",
     "@expo-google-fonts/righteous": "^0.2.0",
+    "@react-native-async-storage/async-storage": "^1.15.7",
     "@react-navigation/drawer": "^6.1.4",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/stack": "^6.0.3",
+    "axios": "^0.21.4",
     "expo": "~42.0.1",
     "expo-app-loading": "^1.1.2",
     "expo-font": "~9.2.1",

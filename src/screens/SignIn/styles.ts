@@ -151,6 +151,12 @@ export const styles = StyleSheet.create({
 		width: '95%',
 	},
 
+	validationMessage: {
+		color: theme.colors.red80,
+		position: 'absolute',
+		right: 5,
+	},
+
 	checkboxView: {
 		flexDirection: 'row',
 		marginTop: 15
@@ -162,9 +168,14 @@ export const styles = StyleSheet.create({
 		marginLeft: 5
 	},
 
+	submitMessage: {
+		color: theme.colors.red80,
+		marginTop: 5,
+	},
+
 	accessButtonView: {
 		height: 60,
-		marginTop: 20,
+		marginTop: 5,
 
 		borderColor: '#FFF',
 		borderWidth: 1,
@@ -175,6 +186,7 @@ export const styles = StyleSheet.create({
 		width: '100%',
 		height: '100%',
 
+		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
@@ -183,5 +195,10 @@ export const styles = StyleSheet.create({
 		fontFamily: theme.fonts.text700,
 		color: '#fff',
 		fontSize: 20,
+	},
+
+	spinner: {
+		position: 'absolute',
+		right: 5,
 	}
 });

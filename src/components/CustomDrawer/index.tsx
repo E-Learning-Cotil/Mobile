@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 
@@ -16,11 +16,11 @@ import {
 	Text,
 } from 'react-native';
 
-import AuthContext from '../../contexts/auth';
+import { useAuth } from '../../contexts/auth';
 import { LabelIcon } from '../LabelIcon';
 
 export function CustomDrawer ({ navigation }: DrawerContentComponentProps) {
-	const { user, signOut } = useContext(AuthContext);
+	const { user, signOut } = useAuth();
 
 	function handleSignOut () {
 		signOut();
@@ -48,7 +48,7 @@ export function CustomDrawer ({ navigation }: DrawerContentComponentProps) {
 				<ButtonIcon
 					navigation
 					title="Atividades"
-					iconName="hourglass"
+					iconName="list"
 					routeName=""
 				/>
 				<ButtonIcon
@@ -85,8 +85,8 @@ export function CustomDrawer ({ navigation }: DrawerContentComponentProps) {
 					style={styles.signOutButton}
 				>
 
+					<Text style={styles.text}>Sair</Text>			
 					<FontAwesome5 name="sign-out-alt" size={24} color="white" />
-					<Text style={styles.text}>Sair</Text>				
 				</RectButton>
 			</View>
 		</View>
