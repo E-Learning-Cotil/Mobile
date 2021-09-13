@@ -4,14 +4,33 @@ import { theme } from '../../global/styles/theme';
 
 export const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: theme.colors.background
-      },
+		flex: 1,
+		paddingTop: 100,
+		backgroundColor: theme.colors.background,
+	},
 
-    text: {
-      fontFamily: theme.fonts.text400,
-      color: theme.colors.highlight
+	content: {
+		padding: 20,
+		paddingTop: 30,
+	},
+
+	atividades: {
+		paddingBottom: 20,
     },
+
+	atividadesList: {
+		paddingTop: 5,
+
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+
+		justifyContent: 'space-between',
+	},
+
+	turmas: {
+    },
+
+	turmasList: {
+
+	},
 });

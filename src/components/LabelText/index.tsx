@@ -15,8 +15,8 @@ type Props = ViewProps & {
 export function LabelText({title, color,...rest}: Props) {
     return(
 		<View style={[styles.container, rest]}>
-				<Text style={styles.text}>{title}</Text>
-        <View style={[styles.bar, { backgroundColor: color  } ]} />
+			<Text style={styles.text}>{title}</Text>
+			<View style={[styles.bar, { backgroundColor: color } ]} />
 		</View>
 
     );

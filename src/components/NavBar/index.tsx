@@ -24,7 +24,7 @@ export function NavBar({title, iconName, color}: Props){
 	}
 
     return(
-      <View style={[styles.container, {backgroundColor: color}]}>
+      <View style={[styles.container, { backgroundColor: color }]}>
           <LabelIcon title={title} iconName={iconName}/>
           
           <RectButton style={styles.navButton} onPress={openDrawerClickHandler}>
