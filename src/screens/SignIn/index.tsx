@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Image, Text, TextInput, ActivityIndicator } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
@@ -47,39 +47,43 @@ export function SignIn () {
 		const reg = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
 		if (!firstOccurrence) {
+			let message = '';
+			let status = true;
+
 			if (email === '') {
-				setEmailValidationMessage('Obrigatório!');
-				setEmailStatus(false);
+				message = 'Obrigatório!';
+				status = false;
 			}
 			else if (!reg.test(email)) {
-				setEmailValidationMessage('Inválido!');
-				setEmailStatus(false);
+				message = 'Inválido!';
+				status = false;
 			}
-			else {
-				setEmailValidationMessage('');
-				setEmailStatus(true);
-			}
+
+			setEmailValidationMessage(message);
+			setEmailStatus(status);
 		}
 	}
 
 	function validatePassword() {
 		if (!firstOccurrence) {
+			let message = '';
+			let status = true;
+
 			if (password === '') {
-				setPasswordValidationMessage('Obrigatório!');
-				setPasswordStatus(false);
+				message = 'Obrigatório!';
+				status = false;
 			}
-			else {
-				setPasswordValidationMessage('');
-				setPasswordStatus(true);
-			}
+			
+			setPasswordValidationMessage(message);
+			setPasswordStatus(status);
 		}
 	}
 
-	useEffect(() => { validateEmail() }, [ email ]);
+	useEffect(() => { validateEmail(); }, [ email ]);
 
-	useEffect(() => { validatePassword() }, [ password ]);
+	useEffect(() => { validatePassword(); }, [ password ]);
 
-	useEffect(() => { setFirstOccurrence(false) }, []);
+	useEffect(() => { setFirstOccurrence(false); }, []);
 
 	const [ submitMessage, setSubmitMessage ] = useState('');
 	const [ loading, setLoading ] = useState(false);
@@ -102,18 +106,27 @@ export function SignIn () {
 	
 			const { status, message } = response;
 
-			if (status === 200)
-				setSubmitMessage('');
-			else if (status === 400 || status === 401) {
-				const roleText = alunoState ? 'aluno' : 'professor';
+			if (isMounted.current)
+				if (status === 200)
+					setSubmitMessage('');
+				else if (status === 400 || status === 401) {
+					const roleText = alunoState ? 'aluno' : 'professor';
 
-				setSubmitMessage(`Email ou senha do ${roleText} incorretos!`);
-			}
-			else setSubmitMessage(message);
+					setSubmitMessage(`Email ou senha do ${roleText} incorretos!`);
+				}
+				else setSubmitMessage(message);
 		}
-
-		setLoading(false);
+		
+		if (isMounted.current)
+			setLoading(false);
 	}
+
+	const isMounted = useRef(false);
+
+	useEffect(() => {
+		isMounted.current = true;
+		return () => { isMounted.current = false };
+	}, []);
 
 	return(
 		<View style={styles.container}>
@@ -233,14 +246,19 @@ export function SignIn () {
 						style={styles.accessButton}
 						enabled={!loading}
 					>
-						<Text style={styles.accessButtonText}>
+						<Text
+							style={[
+								styles.accessButtonText,
+								loading && { display: 'none' }
+							]}
+						>
 							Entrar
 						</Text>
 						<ActivityIndicator
 							size="large"
 							color="#fff"
 							animating={loading}
-							style={ styles.spinner }
+							style={ !loading && { display: 'none' } }
 						/>
 					</RectButton>
 				</View>

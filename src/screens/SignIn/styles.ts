@@ -196,9 +196,4 @@ export const styles = StyleSheet.create({
 		color: '#fff',
 		fontSize: 20,
 	},
-
-	spinner: {
-		position: 'absolute',
-		right: 5,
-	}
 });
