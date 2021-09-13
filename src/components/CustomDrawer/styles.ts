@@ -9,12 +9,27 @@ export const styles = StyleSheet.create({
 	},
 
 	userInfoView: {
-		paddingTop: 40,
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingTop: 25,
 		paddingHorizontal: 20,
 		width: '100%',
 		height: 100,
-		backgroundColor: theme.colors.green90,
-		justifyContent: 'center',
+	},
+
+	userInfoTextView: {
+		marginLeft: 10,
+	},
+
+	userName: {
+		color: theme.colors.white,
+		fontFamily: theme.fonts.text400,
+		fontSize: 18,
+	},
+
+	userEmail: {
+		color: theme.colors.white,
+		fontFamily: theme.fonts.text400
 	},
 	
 	pageLinksView: {},

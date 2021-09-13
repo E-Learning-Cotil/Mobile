@@ -17,7 +17,6 @@ import {
 } from 'react-native';
 
 import { useAuth } from '../../contexts/auth';
-import { LabelIcon } from '../LabelIcon';
 
 export function CustomDrawer ({ navigation }: DrawerContentComponentProps) {
 	const { user, signOut } = useAuth();
@@ -28,49 +27,64 @@ export function CustomDrawer ({ navigation }: DrawerContentComponentProps) {
 
 	return (
 		<View style={styles.container}>
-			<View style={styles.userInfoView}>
+			<View
+				style={[
+					styles.userInfoView,
+					user?.role === 'ALUNO' ? 
+					{ backgroundColor: theme.colors.green90 } :
+					{ backgroundColor: theme.colors.purple90 }
+				]}
+			>
 				<Avatar
 					urlImage={user?.foto}
 				/>
-				<Text>
-					
-				</Text>
+				<View style={styles.userInfoTextView} >
+					<Text style={styles.userName} >
+						{ user?.nome }
+					</Text>
+					<Text style={styles.userEmail} >
+						{ user?.email }
+					</Text>
+				</View>
 			</View>
 
 			<View style={styles.pageLinksView}>
 				<ButtonIcon
-					navigation
+					navigation={navigation} 
 					title="Home"
 					iconName="home"
 					routeName=""
 					
 				/>
 				<ButtonIcon
-					navigation
+					navigation={navigation} 
 					title="Atividades"
 					iconName="list"
 					routeName=""
 				/>
 				<ButtonIcon
-					navigation
+					navigation={navigation} 
 					title="Turmas"
 					iconName="book"
 					routeName=""
 				/>
 				<ButtonIcon
-					navigation
+					navigation={navigation} 
 					title="Boletim"
 					iconName="scroll"
 					routeName=""
+					style={
+						user?.role === 'PROFESSOR' && { display: 'none' }
+					}
 				/>
 				<ButtonIcon
-					navigation
+					navigation={navigation} 
 					title="Conversas"
 					iconName="comment-alt"
 					routeName=""
 				/>
 				<ButtonIcon
-					navigation
+					navigation={navigation} 
 					title="Configurações"
 					iconName="cog"
 					routeName=""
