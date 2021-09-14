@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
 
 	content: {
 		padding: 20,
-		paddingTop: 30,
+		paddingTop: 20,
 	},
 
 	atividades: {
@@ -28,9 +28,10 @@ export const styles = StyleSheet.create({
 	},
 
 	turmas: {
+		paddingBottom: 30,
     },
 
 	turmasList: {
-
+		paddingTop: 5,
 	},
 });

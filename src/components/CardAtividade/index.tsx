@@ -11,7 +11,7 @@ interface Props {
 	date: string;
 }
 
-export function ActivityView ({ color, text, date }: Props) {
+export function CardAtividade ({ color, text, date }: Props) {
 	return (
 		<View style={styles.container}>
 			<RectButton style={styles.button}>
