@@ -7,12 +7,12 @@ import { styles } from './styles';
 
 interface Props {
 	title: string;
-	nomeProfessor: string;
+	subtitle: string | null;
     iconLink: string;
     color: string;
 }
 
-export function CardTurma ({ title, nomeProfessor, iconLink, color }: Props) {
+export function CardTurma ({ title, subtitle, iconLink, color }: Props) {
 	return (
 		<View style={styles.container}>
 			<RectButton style={styles.button}>
@@ -39,16 +39,17 @@ export function CardTurma ({ title, nomeProfessor, iconLink, color }: Props) {
                             numberOfLines={1}
                         >
 							{title}
-						</Text>
-
+						</Text> 
+                        
 						<Text 
                             style={[ 
                                 styles.text, 
-                                styles.nameProfessor 
+                                styles.subtitle,
+                                subtitle === null && { display: 'none' }
                             ]} 
                             numberOfLines={1}
                         >
-							{nomeProfessor}
+							{subtitle}
 						</Text>
 					</View>
 				</View>

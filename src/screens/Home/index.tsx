@@ -20,7 +20,7 @@ interface Atividade {
 	nome: string;
 }
 
-interface Turma {
+interface TurmaAluno {
 	id: number;
 	nome: string;
 	professor: {
@@ -34,27 +34,52 @@ interface Turma {
 	};
 }
 
+interface TurmaProfessor {
+	id: number;
+	nome: string;
+	serie: {
+		ano: string;
+		sigla: string;
+	};
+	cores: {
+		corPrim: string;
+	};
+	icone: {
+		link: string;
+	};
+}
+
 export function Home(){
 	const { user } = useAuth();
-	const color = user?.role === 'ALUNO' ? theme.colors.green90 : theme.colors.purple90
+	const role = user?.role;
+	const color = role === 'ALUNO' ? theme.colors.green90 : theme.colors.purple90;
 
 	const [ loading, setLoading ] = useState(true);
 
 	const [ atividades, setAtividades ] = useState<Atividade[]>([]);
-	const [ turmas, setTurmas ] = useState<Turma[]>([]);
+	const [ turmas, setTurmas ] = useState<TurmaAluno[] | TurmaProfessor[]>([]);
 
 	useEffect(() => {
 		async function getAtividadesAndTurmas() {
-			const {
-				data:{
-					atividades,
-					turmas
-				},
-				status
-			} = await api.get('/pagina-inicial');
+			if (role === 'ALUNO') {
+				const {	
+					data,
+					status 
+				} = await api.get('/pagina-inicial'); 
 
-			setAtividades(atividades);
-			setTurmas(turmas);
+				setAtividades(data.atividades);
+				setTurmas(data.turmas);
+			}
+			else
+			{
+				const {	
+					data,
+					status 
+				} = await api.get('/turmas/list-by-role'); 
+
+				setTurmas(data);	
+			}
+			
 			setLoading(false);
 		}
 
@@ -69,36 +94,57 @@ export function Home(){
 			/>
 
 			<ScrollView style={styles.content}>
-				<View style={styles.atividades}>
-					<LabelText title="Atividades" color={color}/>
-					<View style={styles.atividadesList}>
-						<ActivityIndicator color="#fff" size='large' animating={loading} style={ !loading && { display: 'none' } } />
-						{
-							atividades.map(atividade => {
-								const key = atividade.id + atividade.tipo;
-								const text = atividade.nome;
-								const date = atividade.dataFim.slice(5, 10);
-								const formatedDate = date.split('-')[1] + '/' + date.split('-')[0];
+				{
+					role === 'ALUNO'
+					&&
+					<View style={styles.atividades}>
+						<LabelText title="Atividades" color={color}/>
+						<View style={styles.atividadesList}>
+							<ActivityIndicator color="#fff" size='large' animating={loading} style={ !loading && { display: 'none' } } />
+							{
+								atividades.map(atividade => {
+									const key = atividade.id + atividade.tipo;
+									const text = atividade.nome;
+									const date = atividade.dataFim.slice(5, 10);
+									const formatedDate = date.split('-')[1] + '/' + date.split('-')[0];
 
 
-								return <CardAtividade key={key} color={color} text={text} date={formatedDate} />
-							})
-						}
+									return <CardAtividade key={key} color={color} text={text} date={formatedDate} />
+								})
+							}
+						</View>
 					</View>
-				</View>
+				}
 
 				<View style={styles.turmas}>
 					<LabelText title="Turmas" color={color}/>
 					<View style={styles.turmasList}>
 						{
-							turmas.map(turma => {
+							role === 'ALUNO' ?
+							(turmas as TurmaAluno[]).map(turma => {
 								const key = turma.id;
 								const title = turma.nome;
 								const professor = turma.professor.nome;
 								const link = turma.icone.link;
 								const color = turma.cores.corPrim;
 
-								return <CardTurma key={key} title={title} color={color} nomeProfessor={professor} iconLink={link} />
+								return <CardTurma key={key} title={title} color={color} subtitle={professor} iconLink={link} />
+							})
+							:
+							(turmas as TurmaProfessor[]).map(turma => {
+								const key = turma.id;
+								const title = turma.nome;
+								const subtitle = turma.serie.ano + ' ' + turma.serie.sigla;
+								const link = turma.icone.link;
+								const color = turma.cores.corPrim;
+
+								return <CardTurma
+									key={key} 
+									title={title} 
+									color={color}
+									subtitle={subtitle} 
+									iconLink={link} 
+								/>
 							})
 						}
 					</View>

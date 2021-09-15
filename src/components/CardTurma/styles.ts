@@ -47,16 +47,15 @@ export const styles = StyleSheet.create({
 	text: {
 		paddingLeft: 12,
 		paddingRight: 24,
-
-		fontFamily: theme.fonts.text400,
 	},
 
 	title: {
+		fontFamily:theme.fonts.title400,
 		color: theme.colors.white,
 		fontSize: 22,
 	},
 
-	nameProfessor: {
+	subtitle: {
 		fontFamily: theme.fonts.text400,
 		color: theme.colors.highlight,
 		fontSize: 18,

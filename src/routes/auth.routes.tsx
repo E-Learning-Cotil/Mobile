@@ -7,7 +7,7 @@ import { theme } from '../global/styles/theme';
 import { CustomDrawer } from '../components/CustomDrawer'
 import { LandingPage } from '../screens/LandingPage';
 import { SignIn } from '../screens/SignIn';
-import { Menu } from '../screens/Menu';
+import { Home } from '../screens/Home';
 
 // const { Navigator, Screen } = createStackNavigator();
 const { Navigator, Screen } = createStackNavigator();

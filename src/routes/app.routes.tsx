@@ -5,8 +5,10 @@ import { theme } from '../global/styles/theme';
 
 import { CustomDrawer } from '../components/CustomDrawer'
 import { LandingPage } from '../screens/LandingPage';
+
 import { SignIn } from '../screens/SignIn';
-import { Menu } from '../screens/Menu';
+import { Home } from '../screens/Home';
+import { Turmas } from '../screens/Turmas';
 
 const { Navigator, Screen } = createDrawerNavigator();
 
@@ -26,8 +28,13 @@ export function AppRoutes() {
 			drawerContent={(props) => <CustomDrawer {...props} />}
 		>
 			<Screen 
-				name="Menu"
-				component={Menu}
+				name="Home"
+				component={Home}
+			/>
+
+			<Screen
+				name="Turmas"
+				component={Turmas}
 			/>
 		</Navigator>
 	)
