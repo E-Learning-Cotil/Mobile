@@ -13,10 +13,10 @@ type Props = RectButtonProps & {
   routeName?: string;
 }
 
-export function ButtonIcon( { navigation, title, iconName, ...rest } : Props) {
+export function ButtonIcon( { navigation, title, iconName, routeName, ...rest } : Props) {
     
     function handleAccessClick () {
-      	navigation.navigate('menu');
+      	navigation.navigate(routeName);
     }
 
     return(

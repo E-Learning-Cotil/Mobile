@@ -53,7 +53,7 @@ export function CustomDrawer ({ navigation }: DrawerContentComponentProps) {
 					navigation={navigation} 
 					title="Home"
 					iconName="home"
-					routeName=""
+					routeName="Home"
 					
 				/>
 				<ButtonIcon
@@ -66,7 +66,7 @@ export function CustomDrawer ({ navigation }: DrawerContentComponentProps) {
 					navigation={navigation} 
 					title="Turmas"
 					iconName="book"
-					routeName=""
+					routeName="Turmas"
 				/>
 				<ButtonIcon
 					navigation={navigation} 
