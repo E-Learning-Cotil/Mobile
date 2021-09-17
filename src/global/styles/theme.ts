@@ -3,6 +3,7 @@ export const theme = {
 		background: '#202020',
 		gray90: '#3D3D3D',
 		gray80: '#505050',
+		gray70: '#5c5c5c',
 
 		green100: '#007013',
 		green90: '#009418',

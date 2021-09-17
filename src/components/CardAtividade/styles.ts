@@ -34,4 +34,15 @@ export const styles = StyleSheet.create({
 		color: theme.colors.white,
 		fontSize: 18,
 	},
+
+	skeleton: {
+		width: '49%',
+		height: 90,
+		
+		backgroundColor: theme.colors.gray90,
+		
+		borderRadius: 16,
+
+		marginVertical: 5,
+	},
 });

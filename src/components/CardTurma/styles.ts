@@ -61,4 +61,11 @@ export const styles = StyleSheet.create({
 		fontSize: 18,
 	},
 
+	skeleton: {		
+		backgroundColor: theme.colors.gray90,
+		
+		borderRadius: 16,
+
+		marginVertical: 5,
+	},
 });
