@@ -44,19 +44,26 @@ export function AuthProvider ({ children }: AuthProviderProps) {
 
 	useEffect(() => {
 		async function loadStoragedData () {
-			const storagedUser = await AsyncStorage.getItem('@Elearning:user');
-			const storagedToken =  await AsyncStorage.getItem('@Elearning:token');
+			const now = Date.now();
+			const setDate = Number(await AsyncStorage.getItem('@Elearning:setDate'));
 
-			if (storagedUser && storagedToken) {
-				setUser(JSON.parse(storagedUser));
-				api.defaults.headers['Authorization'] = `Bearer ${storagedToken}`;
+			const hoursDiff = Math.abs(now - setDate) / 36e5;
+
+			if (hoursDiff < 24) {
+				const storagedUser = await AsyncStorage.getItem('@Elearning:user');
+				const storagedToken =  await AsyncStorage.getItem('@Elearning:token');
+
+				if (storagedUser && storagedToken) {
+					setUser(JSON.parse(storagedUser));
+					api.defaults.headers['Authorization'] = `Bearer ${storagedToken}`;
+				}
 			}
 
 			setLoading(false);
 		}
 
 		loadStoragedData();
-	}, [])
+	}, []);
 
     async function signIn ({ email, password, role, rememberUser }: AuthData) {
 		try {
@@ -75,6 +82,9 @@ export function AuthProvider ({ children }: AuthProviderProps) {
 			if (rememberUser) {
 				await AsyncStorage.setItem('@Elearning:user', JSON.stringify(user));
 				await AsyncStorage.setItem('@Elearning:token', token);
+
+				const now = Date.now().toString();
+				await AsyncStorage.setItem('@Elearning:setDate', now);
 			}
 	
 			return {
