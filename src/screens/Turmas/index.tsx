@@ -23,20 +23,24 @@ interface Atividade {
 interface Turma {
 	id: number;
 	nome: string;
-  serie: {
-    ano: string;
-    sigla: string;
-  }
+	professor: {
+		nome: string;
+	};
+	serie: {
+		ano: string;
+		sigla: string;
+	}
 	cores: {
 		corPrim: string;
 	};
 	icone: {
-		link: string;
+		altLink: string;
 	};
 }
 
 export function Turmas(){
 	const { user } = useAuth();
+	const role = user?.role;
 	const color = user?.role === 'ALUNO' ? theme.colors.green90 : theme.colors.purple90
 
 	const [ loading, setLoading ] = useState(true);
@@ -68,14 +72,30 @@ export function Turmas(){
 				
 				<View style={styles.turmas}>
 					<LabelText title="Turmas" color={color}/>
-          <ActivityIndicator color="#fff" size='large' animating={loading} style={ !loading && { display: 'none' } } />
 					<View style={styles.turmasList}>
 						{
-							turmas.map(turma => {
+							loading ?
+							[...Array(6)].map((value, index) => {
+								return <CardTurma key={index} loading={true} />
+							})
+							:
+							(role === 'ALUNO'
+							?
+							(turmas).map(turma => {
 								const key = turma.id;
 								const title = turma.nome;
-								const subtitle = user?.role === 'ALUNO' ? null : "";
-								const link = turma.icone.link;
+								const professor = `Professor(a): ${turma.professor.nome}`;
+								const link = turma.icone.altLink;
+								const color = turma.cores.corPrim;
+
+								return <CardTurma key={key} title={title} color={color} subtitle={professor} iconLink={link} />
+							})
+							:
+							(turmas).map(turma => {
+								const key = turma.id;
+								const title = turma.nome;
+								const subtitle = turma.serie.ano + ' ' + turma.serie.sigla;
+								const link = turma.icone.altLink;
 								const color = turma.cores.corPrim;
 
 								return <CardTurma
@@ -85,7 +105,7 @@ export function Turmas(){
 									subtitle={subtitle} 
 									iconLink={link} 
 								/>
-							})
+							}))
 						}
 					</View>
 				</View>

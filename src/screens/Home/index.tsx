@@ -108,9 +108,6 @@ export function Home(){
 								[...Array(6)].map((value, index) => {
 									return <CardAtividade key={index} loading={true} />
 								})
-								// for (let index = 0; index < 6; index++) {
-								// 	return <CardAtividade loading={true} />
-								// }
 								:
 								atividades.map(atividade => {
 									const key = atividade.id + atividade.tipo;
@@ -140,7 +137,7 @@ export function Home(){
 							(turmas as TurmaAluno[]).map(turma => {
 								const key = turma.id;
 								const title = turma.nome;
-								const professor = turma.professor.nome;
+								const professor = `Professor(a): ${turma.professor.nome}`;
 								const link = turma.icone.altLink;
 								const color = turma.cores.corPrim;
 

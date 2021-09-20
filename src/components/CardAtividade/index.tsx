@@ -39,7 +39,7 @@ export function CardAtividade ({ color, text, date, loading = false }: Props) {
 		return (
 			<ContentLoader
 				style={styles.skeleton}
-				speed={2}
+				speed={1}
 				width={'49%'}
 				height={90}
 				backgroundColor={theme.colors.gray80}

@@ -63,7 +63,7 @@ export function CardTurma ({ title, subtitle, iconLink, color, loading = false }
 		return (
 			<ContentLoader
 				style={styles.skeleton}
-				speed={2}
+				speed={1}
 				width={'100%'}
 				height={70}
 				backgroundColor={theme.colors.gray80}
