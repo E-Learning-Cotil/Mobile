@@ -4,11 +4,13 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { theme } from '../global/styles/theme';
 
 import { CustomDrawer } from '../components/CustomDrawer'
-import { LandingPage } from '../screens/LandingPage';
 
-import { SignIn } from '../screens/SignIn';
 import { Home } from '../screens/Home';
 import { Turmas } from '../screens/Turmas';
+import { Boletim } from '../screens/Boletim';
+import { Configuracoes } from '../screens/Configuracoes';
+import { Conversas } from '../screens/Conversas';
+import { Atividades } from '../screens/Atividades';
 
 const { Navigator, Screen } = createDrawerNavigator();
 
@@ -35,6 +37,26 @@ export function AppRoutes() {
 			<Screen
 				name="Turmas"
 				component={Turmas}
+			/>
+
+			<Screen
+				name="Boletim"
+				component={Boletim}
+			/>
+
+			<Screen 
+				name="Configuracoes"
+				component={Configuracoes}
+			/>
+
+			<Screen 
+				name="Conversas"
+				component={Conversas}
+			/>
+
+			<Screen 
+				name="Atividades"
+				component={Atividades}
 			/>
 		</Navigator>
 	)
