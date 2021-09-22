@@ -1,22 +1,23 @@
 import React from 'react';
-import { Image, View, ViewProps } from 'react-native';
+import { Image, View, ViewProps, ImageStyle } from 'react-native';
 
 import { styles } from './styles';
 import { theme } from '../../global/styles/theme';
 
 type Props = ViewProps & {
   urlImage: string | undefined;
+  imageBorderRadius?: ImageStyle;
 }
 
-export function Avatar( { urlImage, ...rest }: Props ) {
+export function Avatar( { urlImage, imageBorderRadius, ...rest }: Props ) {
 
 	return (
-		<View style={[styles.container, rest.style]}>
+		<View style={[styles.container, rest.style, imageBorderRadius]}>
 		{
 			urlImage ? 
 				<Image 
 					source={{ uri: urlImage }}
-					style={styles.avatar}
+					style={[styles.avatar, imageBorderRadius]}
 				/>
 			:
 				null
