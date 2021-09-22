@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { View, ActivityIndicator, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 
 import { LabelText } from '../../components/LabelText';
 import { NavBar } from '../../components/NavBar';
