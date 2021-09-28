@@ -17,7 +17,10 @@ export const theme = {
 		highlight: '#9f9f9f',
     	white: '#fff',
 
-		red80: '#e74b4b',
+		red70: '#e74b4b',
+		red80: '#ED3131',
+
+		yellow80: '#E7EA4B',
 	},
 
 	fonts: {

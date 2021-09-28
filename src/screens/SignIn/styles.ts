@@ -152,7 +152,7 @@ export const styles = StyleSheet.create({
 	},
 
 	validationMessage: {
-		color: theme.colors.red80,
+		color: theme.colors.red70,
 		position: 'absolute',
 		right: 5,
 	},
@@ -169,7 +169,7 @@ export const styles = StyleSheet.create({
 	},
 
 	submitMessage: {
-		color: theme.colors.red80,
+		color: theme.colors.red70,
 		marginTop: 5,
 	},
 
