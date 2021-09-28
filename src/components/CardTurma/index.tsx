@@ -5,6 +5,7 @@ import ContentLoader, { Rect } from "react-content-loader/native"
 
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
+import { DrawerContentComponentProps } from "@react-navigation/drawer";
 
 interface Props {
 	title?: string;
@@ -12,13 +13,18 @@ interface Props {
     iconLink?: string;
     color?: string;
 	loading?: boolean;
+	id?: number;
+	navigation : any;
 }
 
-export function CardTurma ({ title, subtitle, iconLink, color, loading = false }: Props) {
+export function CardTurma ({ title, subtitle, iconLink, color, loading = false, navigation, id }: Props) {
 	if (!loading)
 		return (
 			<View style={styles.container}>
-				<RectButton style={styles.button}>
+				<RectButton 
+					style={styles.button} 
+					onPress={() => {navigation?.navigate("Turma", { id: id }); console.log(id)}}
+				>
 					<View style={styles.row}>
 						<View 
 							style={[
