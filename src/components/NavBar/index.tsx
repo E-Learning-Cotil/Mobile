@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, ViewProps } from 'react-native';
+import { View, ViewProps, Image } from 'react-native';
 import { LabelIcon } from '../LabelIcon';
 
 import { styles } from './styles';
@@ -12,8 +12,8 @@ import { DrawerActions, useNavigation, NavigationProp } from '@react-navigation/
 
 type Props = {
 	title: string;
-	iconName: string;
-	color: string;
+	iconName?: string;
+	color?: string | undefined;
 }
 
 export function NavBar({title, iconName, color}: Props){
@@ -25,6 +25,7 @@ export function NavBar({title, iconName, color}: Props){
 
     return(
       <View style={[styles.container, { backgroundColor: color }]}>
+
           <LabelIcon title={title} iconName={iconName}/>
           
           <RectButton style={styles.navButton} onPress={openDrawerClickHandler}>
