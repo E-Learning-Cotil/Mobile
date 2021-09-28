@@ -51,7 +51,7 @@ interface TurmaProfessor {
 	};
 }
 
-export function Home(){
+export function Home({ navigation }: any){
 	const { user } = useAuth();
 	const role = user?.role;
 	const color = role === 'ALUNO' ? theme.colors.green90 : theme.colors.purple90;
@@ -129,7 +129,11 @@ export function Home(){
 						{
 							loading ?
 							[...Array(6)].map((value, index) => {
-								return <CardTurma key={index} loading={true} />
+								return <CardTurma 
+									key={index} 
+									loading={true} 
+									navigation = {navigation}
+								/>
 							})
 							:
 							(role === 'ALUNO'
@@ -140,8 +144,17 @@ export function Home(){
 								const professor = `Professor(a): ${turma.professor.nome}`;
 								const link = turma.icone.altLink;
 								const color = turma.cores.corPrim;
+								const id = turma.id;
 
-								return <CardTurma key={key} title={title} color={color} subtitle={professor} iconLink={link} />
+								return <CardTurma 
+									key={key} 
+									title={title} 
+									color={color} 
+									subtitle={professor} 
+									iconLink={link} 
+									navigation = {navigation} 
+									id={id}
+								/>
 							})
 							:
 							(turmas as TurmaProfessor[]).map(turma => {
@@ -150,6 +163,7 @@ export function Home(){
 								const subtitle = turma.serie.ano + ' ' + turma.serie.sigla;
 								const link = turma.icone.altLink;
 								const color = turma.cores.corPrim;
+								const id = turma.id;
 
 								return <CardTurma
 									key={key} 
@@ -157,6 +171,8 @@ export function Home(){
 									color={color}
 									subtitle={subtitle} 
 									iconLink={link} 
+									navigation = {navigation}
+									id={id}
 								/>
 							}))
 						}
