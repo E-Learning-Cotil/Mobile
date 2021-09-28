@@ -17,4 +17,10 @@ export const styles = StyleSheet.create({
 		paddingLeft: 10,
 	},
 
+	icon: {
+		width: 30,
+		height: 30,
+		resizeMode:'contain',
+	},
+
 });

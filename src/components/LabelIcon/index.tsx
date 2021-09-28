@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, ViewProps, Text } from 'react-native';
+import { View, ViewProps, Text, Image } from 'react-native';
 
 import { styles } from './styles';
 
@@ -8,13 +8,36 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 type Props = ViewProps & {
   title: string;
-  iconName: string;
+  iconName?: string;
 }
 
 export function LabelIcon({title, iconName,...rest}: Props) {
+    const isLink = iconName?.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+
     return(
 		<View style={[styles.container, rest.style]}>
-				<FontAwesome5 name={iconName} size={24} color="white" />
+        {
+          isLink === null? <FontAwesome5 name={iconName} size={24} color="white" /> :
+							<Image
+								source={{ uri: iconName }}
+								style={ styles.icon }
+							/>
+          /*if(isLink !== null){
+              <FontAwesome5 name={iconName} size={24} color="white" />
+            }else{
+              <View 
+							style={[
+								styles.iconView,
+								{/* backgroundColor: color }
+							]}
+						>
+							<Image
+								source={{ uri: iconName }}
+								style={ styles.icon }
+							/>
+						</View>
+            }*/
+          }
 				<Text style={styles.text}>{title}</Text>
 		</View>
 
