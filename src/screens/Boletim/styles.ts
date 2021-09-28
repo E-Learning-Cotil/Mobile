@@ -13,16 +13,9 @@ export const styles = StyleSheet.create({
 		padding: 20,
 	},
 
-	boletim: {
-		// borderColor: '#fff',
-		// borderWidth: 2,
-		// borderBottomWidth: 0,
-	},
+	boletim: {},
 
-	tableGroup: {
-		// borderColor: theme.colors.white,
-		// borderBottomWidth: 2,
-	},
+	tableGroup: {},
 
 	tableHeader: {
 		backgroundColor: theme.colors.gray90,
@@ -41,6 +34,14 @@ export const styles = StyleSheet.create({
 		color: theme.colors.white,
 		fontFamily: theme.fonts.text700,
 		fontSize: 24,
+	},
+
+	gradePreview: {
+		position: 'absolute',
+		right: 20,
+
+		width: '20%',
+		textAlign: 'center'
 	},
 
 	tableBody: {
@@ -75,5 +76,9 @@ export const styles = StyleSheet.create({
 		fontFamily: theme.fonts.text400,
 		fontSize: 20,
 		lineHeight: 22,
+	},
+
+	skeleton: {
+		backgroundColor: theme.colors.gray90,
 	},
 });

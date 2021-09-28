@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-
-import { Animated, View, Text, ScrollView, Button, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Animated, View, Text, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import ContentLoader, { Rect } from "react-content-loader/native"
 
 import { NavBar } from '../../components/NavBar';
 
@@ -83,10 +83,8 @@ export function Boletim() {
 			<ScrollView style={styles.content}>
 				<View style={styles.boletim}>
 					{
-						loading
+						!loading
 						?
-						<Text style={{color: '#fff'}}>Carregando...</Text>
-						:
 						boletim?.map((turma, index) => {
 							const { nome, mediaAtividades, mediaTestes, mediaTurma } = turma;
 
@@ -96,6 +94,9 @@ export function Boletim() {
 										<View style={styles.tableHeader}>
 											<Text style={styles.headerText}>
 												{nome}
+											</Text>
+											<Text style={[styles.tableText, styles.gradePreview, dropDownStates[index] && {display: 'none'}]}>
+													{mediaTurma}
 											</Text>
 											<FontAwesome5
 												name={dropDownStates[index] ? "caret-up" : "caret-down"}
@@ -152,6 +153,19 @@ export function Boletim() {
 								</View>
 							);
 						})
+						:
+						<ContentLoader
+							style={styles.skeleton}
+							speed={1}
+							width={'100%'}
+							height={108}
+							backgroundColor={theme.colors.gray80}
+							foregroundColor={theme.colors.gray70}
+						>
+							<Rect x="10" y="6" rx="2" ry="2" width="95%" height="24" />
+							<Rect x="10" y="42" rx="2" ry="2" width="95%" height="24" />
+							<Rect x="10" y="78" rx="2" ry="2" width="95%" height="24" />
+						</ContentLoader>
 					}
 				</View>
 			</ScrollView>
