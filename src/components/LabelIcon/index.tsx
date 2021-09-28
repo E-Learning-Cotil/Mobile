@@ -22,21 +22,6 @@ export function LabelIcon({title, iconName,...rest}: Props) {
 								source={{ uri: iconName }}
 								style={ styles.icon }
 							/>
-          /*if(isLink !== null){
-              <FontAwesome5 name={iconName} size={24} color="white" />
-            }else{
-              <View 
-							style={[
-								styles.iconView,
-								{/* backgroundColor: color }
-							]}
-						>
-							<Image
-								source={{ uri: iconName }}
-								style={ styles.icon }
-							/>
-						</View>
-            }*/
           }
 				<Text style={styles.text}>{title}</Text>
 		</View>
