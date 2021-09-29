@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
-import ContentLoader, { Rect } from "react-content-loader/native"
+import ContentLoader, { Rect } from "react-content-loader/native";
 
 import { FontAwesome5 } from '@expo/vector-icons';
 import { theme } from '../../global/styles/theme';
