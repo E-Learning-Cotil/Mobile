@@ -11,5 +11,6 @@ export const styles = StyleSheet.create({
 
 	content: {
 		padding: 20,
+		paddingBottom: 100,
 	},
 });
