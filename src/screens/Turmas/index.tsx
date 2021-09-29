@@ -71,7 +71,6 @@ export function Turmas({ navigation }: any){
 			<ScrollView style={styles.content}>
 				
 				<View style={styles.turmas}>
-					<LabelText title="Turmas" color={color}/>
 					<View style={styles.turmasList}>
 						{
 							loading ?
