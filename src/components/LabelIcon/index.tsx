@@ -7,7 +7,7 @@ import { styles } from './styles';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 type Props = ViewProps & {
-  title: string;
+  title?: string;
   iconName?: string;
 }
 

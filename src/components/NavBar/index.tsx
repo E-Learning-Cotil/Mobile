@@ -11,7 +11,7 @@ import { RectButton } from 'react-native-gesture-handler';
 import { DrawerActions, useNavigation, NavigationProp } from '@react-navigation/native';
 
 type Props = {
-	title: string;
+	title?: string;
 	iconName?: string;
 	color?: string | undefined;
 }
