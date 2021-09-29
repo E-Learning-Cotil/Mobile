@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Text } from 'react-native';
 
 import { LabelText } from '../../components/LabelText';
 import { NavBar } from '../../components/NavBar';
@@ -12,6 +12,7 @@ import { useAuth } from '../../contexts/auth';
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
 import api from '../../services/api';
+import { CardTopico } from '../../components/CardTopico';
 
 
 interface DadosTurma {
@@ -23,6 +24,11 @@ interface DadosTurma {
 		altLink: string;
 	};
 }
+interface Topicos {
+	id: number;
+	nome: string;
+	descricao: string;
+}
 
 export function Turma({ route, navigation }: any){
 	const { id } = route.params;
@@ -32,36 +38,85 @@ export function Turma({ route, navigation }: any){
 	const [ loading, setLoading ] = useState(true);
 	
 	const [ dados, setDados ] = useState<DadosTurma>();
+	const [topicos, setTopicos] = useState<Topicos[]>([]);
 	
-	useEffect(() => {
+	useEffect(() => {		
 		async function getDados() {
 			const {
-				data,
+				data,	
 				status
 			} = await api.get(`/turmas/${id}`);
 
 			setDados(data);
+		}
+
+		async function getTopicos() {
+			const {
+				data,	
+				status
+			} = await api.get(`/topicos/?idTurma=${id}`);
+
+			setTopicos(data);
+		}
+
+		async function load(){
+			await getDados();
+			await getTopicos();
 			setLoading(false);
 		}
-		
-		getDados();
+		setLoading(true);
+		load();
 	}, [id]);
-	
-	const color = dados?.cores.corPrim;
 
-	return(
-		<View style={styles.container}>          
-			<NavBar 
-				title="Turmas" 
-				
-				iconName={dados?.icone.altLink}
-				color={color}
-				
-			/>
+	if(!loading){
+		return( 
+			<View style={[styles.container]}>
+						<NavBar 
+						title={ dados?.nome } 
+						
+						iconName={ dados?.icone.altLink }
+							color={ dados?.cores.corPrim }
+						/>
 
-			<ScrollView style={styles.content}>
-				
-			</ScrollView>
-		</View>
-	);
+						<ScrollView style={styles.content}>
+							<View style={styles.topicosList}>
+								{
+									(topicos).map(topico => {
+										const id = topico.id;
+										const title = topico.nome;
+										const descricao = topico.descricao;
+		
+										return <CardTopico 
+											key={ id } 
+											title={ title } 
+											description={ descricao } 
+											navigation = { navigation } 
+										/>
+									})
+								}
+							</View>
+						</ScrollView>
+			</View>
+		);
+	}
+	else
+	{
+		return(
+			<View style={[styles.container]}>
+				<NavBar color={theme.colors.highlight}/>
+				<ScrollView style={styles.content}>
+				{
+					[...Array(6)].map((value, index) => {
+						return <CardTopico 
+							key={ index } 
+							loading={true} 
+							navigation = {navigation} 
+						/>
+					})
+				}
+				</ScrollView>
+			</View>
+		);
+	}			
+
 }

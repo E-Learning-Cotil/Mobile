@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
 		paddingBottom: 30,
     },
 
-	turmasList: {
+	topicosList: {
 		paddingTop: 5,
 	},
 });
