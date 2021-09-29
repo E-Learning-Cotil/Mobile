@@ -23,7 +23,7 @@ export function CardTurma ({ title, subtitle, iconLink, color, loading = false, 
 			<View style={styles.container}>
 				<RectButton 
 					style={styles.button} 
-					onPress={() => {navigation?.navigate("Turma", { id: id }); console.log(id)}}
+					onPress={() => {navigation?.navigate("Turma", { id: id })}}
 				>
 					<View style={styles.row}>
 						<View 
