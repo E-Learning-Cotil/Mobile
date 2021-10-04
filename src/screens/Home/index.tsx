@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { View, ActivityIndicator, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 
 import { LabelText } from '../../components/LabelText';
 import { NavBar } from '../../components/NavBar';
@@ -12,8 +12,6 @@ import { useAuth } from '../../contexts/auth';
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
 import api from '../../services/api';
-
-import ContentLoader, { Rect } from "react-content-loader/native"
 
 interface Atividade {
 	id: number;
@@ -106,17 +104,28 @@ export function Home({ navigation }: any){
 								loading
 								?
 								[...Array(6)].map((value, index) => {
-									return <CardAtividade key={index} loading={true} />
+									return <CardAtividade 
+										key={index} 
+										loading={true} 
+									/>
 								})
 								:
 								atividades.map(atividade => {
 									const key = atividade.id + atividade.tipo;
 									const text = atividade.nome;
 									const date = atividade.dataFim.slice(5, 10);
+									const id = atividade.id;
 									const formatedDate = date.split('-')[1] + '/' + date.split('-')[0];
 
 
-									return <CardAtividade key={key} color={color} text={text} date={formatedDate} />
+									return <CardAtividade 
+										key={key} 
+										color={color} 
+										text={text}
+										date={formatedDate} 
+										navigation = {navigation}
+										id={id}
+									/>
 								})
 							}
 						</View>
