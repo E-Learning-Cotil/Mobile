@@ -1,91 +1,47 @@
 import React, { useEffect, useState } from 'react';
 
-import { View, ActivityIndicator, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 
-import { LabelText } from '../../components/LabelText';
 import { NavBar } from '../../components/NavBar';
-import { CardAtividade } from '../../components/CardAtividade';
-import { CardTurma } from '../../components/CardTurma';
+import { ContatoChat } from '../../components/ContatoChat';
 
 import { useAuth } from '../../contexts/auth';
 
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
+
+import { io } from "socket.io-client";
 import api from '../../services/api';
 
-import ContentLoader, { Rect } from "react-content-loader/native"
-
-interface Atividade {
-	id: number;
-	tipo: string;
-	dataFim: string;
-	nome: string;
-}
-
-interface TurmaAluno {
-	id: number;
-	nome: string;
+interface Conversation {
+	data: string;
+	mensagem: string;
 	professor: {
+		email: string;
+		foto: string;
 		nome: string;
-	};
-	cores: {
-		corPrim: string;
-	};
-	icone: {
-		altLink: string;
-	};
-}
-
-interface TurmaProfessor {
-	id: number;
-	nome: string;
-	serie: {
-		ano: string;
-		sigla: string;
-	};
-	cores: {
-		corPrim: string;
-	};
-	icone: {
-		altLink: string;
-	};
+		rg: string;
+		telefone: string;
+	}
 }
 
 export function Conversas(){
-	const { user } = useAuth();
+	const { user, token } = useAuth();
 	const role = user?.role;
 	const color = role === 'ALUNO' ? theme.colors.green90 : theme.colors.purple90;
 
-	const [ loading, setLoading ] = useState(true);
+	const socket = io("https://elearning-tcc.herokuapp.com/");
 
-	const [ atividades, setAtividades ] = useState<Atividade[]>([]);
-	const [ turmas, setTurmas ] = useState<TurmaAluno[] | TurmaProfessor[]>([]);
+	const [conversations, setConversations] = useState<Conversation[]>([]);
+    const [messages, setMessages] = useState([]);
 
 	useEffect(() => {
-		async function getAtividadesAndTurmas() {
-			if (role === 'ALUNO') {
-				const {	
-					data,
-					status 
-				} = await api.get('/pagina-inicial'); 
+		socket.on("conversations", setConversations);
+		socket.on("previous_messages", setMessages);
+		socket.emit("identify", { token });
 
-				setAtividades(data.atividades);
-				setTurmas(data.turmas);
-			}
-			else
-			{
-				const {	
-					data,
-					status 
-				} = await api.get('/turmas/list-by-role'); 
-
-				setTurmas(data);	
-			}
-			
-			setLoading(false);
-		}
-
-		getAtividadesAndTurmas();
+		console.log("Conversations: ", conversations);
+		console.log("Messages: ", messages);
 	}, []);
 
 	return(
@@ -96,7 +52,17 @@ export function Conversas(){
 			/>
 
 			<ScrollView style={styles.content}>
-				
+				{
+					conversations.map(conversation => {
+						const rg = conversation.professor.rg;
+						const avatar = conversation.professor.foto;
+						const title = conversation.professor.nome;
+						const message = conversation.mensagem;
+						const date = conversation.data;
+
+						return <ContatoChat key={rg} avatar={avatar} title={title} message={message} date={date}/>
+					})
+				}
 			</ScrollView>
 		</View>
 	);
