@@ -13,10 +13,6 @@ export const styles = StyleSheet.create({
 		padding: 20,
 	},
 
-	turmas: {
-		paddingBottom: 30,
-    },
-
 	topicosList: {
 		paddingTop: 5,
 	},
