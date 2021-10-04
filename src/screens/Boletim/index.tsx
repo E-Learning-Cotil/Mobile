@@ -158,13 +158,18 @@ export function Boletim() {
 							style={styles.skeleton}
 							speed={1}
 							width={'100%'}
-							height={108}
+							height={360}
 							backgroundColor={theme.colors.gray80}
 							foregroundColor={theme.colors.gray70}
 						>
-							<Rect x="10" y="6" rx="2" ry="2" width="95%" height="24" />
-							<Rect x="10" y="42" rx="2" ry="2" width="95%" height="24" />
-							<Rect x="10" y="78" rx="2" ry="2" width="95%" height="24" />
+							{
+								[...Array(10)].map((value, index) => {
+									const y = index * 36 + 6;
+
+									return <Rect key={index} x="10" y={y} rx="2" ry="2" width="95%" height="24" />
+								})
+							}
+							
 						</ContentLoader>
 					}
 				</View>
