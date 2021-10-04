@@ -69,21 +69,8 @@ export const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 
-	checkButton: {
-		width: 36,
-		height: 36,
-		backgroundColor: theme.colors.green90,
-
-		justifyContent: 'center',
-		alignItems: 'center',
-
-		borderRadius: 4,
-	},
-
 	navigateButton: {
 		flex: 1,
-
-		marginLeft: 10,
 
 		height: 36,
 		backgroundColor: theme.colors.purple90,

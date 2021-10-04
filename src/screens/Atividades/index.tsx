@@ -37,7 +37,7 @@ export function Atividades(){
 			const {
 				data,
 				status
-			} = await api.get('/atividades');
+			} = await api.get('/atividades/list-by-role');
 
 			setAtividades(data);
 
@@ -55,23 +55,24 @@ export function Atividades(){
 			/>
 
 			<ScrollView style={styles.content}>
-				{
-					!loading
-					?
-					atividades.map(atividade => {
-						const id = atividade.id;
-						const title = atividade.topico.turma.nome;
-						const deadline = atividade.dataFim;
-						const description = `${atividade.topico.nome} - ${atividade.nome}`;
+				<View style={styles.atividades}>
+					{
+						!loading
+						?
+						atividades.map(atividade => {
+							const id = atividade.id;
+							const title = atividade.topico.turma.nome;
+							const deadline = atividade.dataFim;
+							const description = `${atividade.topico.nome} - ${atividade.nome}`;
 
-						return <DropdownAtividade key={id} id={id} title={title} deadline={deadline} description={description} loading={false} />
-					})
-					:
-					[...Array(6)].map((value, index) => {
-						return <DropdownAtividade key={index} loading={true} />
-					})
-				}
-				<View style={{height: 50}}>{/*ISTO N É GAMBIARRA*/}</View>
+							return <DropdownAtividade key={id} id={id} title={title} deadline={deadline} description={description} loading={false} />
+						})
+						:
+						[...Array(12)].map((value, index) => {
+							return <DropdownAtividade key={index} loading={true} />
+						})
+					}
+				</View>
 			</ScrollView>
 		</View>
 	);

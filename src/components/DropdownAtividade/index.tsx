@@ -21,16 +21,19 @@ interface Props {
 export function DropdownAtividade({id, title, deadline, description, loading = false}: Props) {
 	const { user } = useAuth();
 	const role = user?.role;
+	let status;
 
-	const now = new Date((new Date()).getTime() - (3 * 60 * 60 * 1000));
+	if (deadline) {
+		const now = new Date((new Date()).getTime() - (3 * 60 * 60 * 1000));
 
-	deadline = "2021-05-27T19:12:04.843Z"; // deadline.substring(0, 10)
-	const deadlineDate = new Date(deadline);
-	const date = deadlineDate.getDate() < 10 ? `0${deadlineDate.getDate()}` : deadlineDate.getDate();
-	const month = deadlineDate.getMonth() < 10 ? `0${deadlineDate.getMonth()}` : deadlineDate.getMonth();
-	deadline = "(" + date + "/" + month + ")";
+		deadline = deadline.substring(0, 10);
+		const deadlineDate = new Date(deadline);
+		const date = deadlineDate.getDate() < 10 ? `0${deadlineDate.getDate()}` : deadlineDate.getDate();
+		const month = deadlineDate.getMonth() < 10 ? `0${deadlineDate.getMonth()}` : deadlineDate.getMonth();
+		deadline = "(" + date + "/" + month + ")";
 
-	const status = deadlineDate > now ? 'green' : deadlineDate == now ? 'yellow' : 'red' ;
+		status = deadlineDate > now ? 'green' : deadlineDate == now ? 'yellow' : 'red' ;
+	}
 
 	const scaleAnim = useRef(new Animated.Value(0)).current;
 	const [ dropDownState, setDropDownState ] = useState(false);
@@ -96,9 +99,6 @@ export function DropdownAtividade({id, title, deadline, description, loading = f
 						{description}
 					</Text>
 					<View style={styles.buttonsView}>
-						<TouchableOpacity style={styles.checkButton}>
-							<FontAwesome5 name="check" size={22} color={theme.colors.white} />
-						</TouchableOpacity>
 						<TouchableOpacity style={styles.navigateButton}>
 							<Text style={styles.navigateButtonText}>
 								Ver atividade
@@ -114,11 +114,11 @@ export function DropdownAtividade({id, title, deadline, description, loading = f
 				style={styles.skeleton}
 				speed={1}
 				width={'100%'}
-				height={44}
+				height={48}
 				backgroundColor={theme.colors.gray80}
 				foregroundColor={theme.colors.gray70}
 			>
-				<Rect x="10" y="10" rx="6" ry="6" width="60%" height="24"/>
+				<Rect x="10" y="12" rx="6" ry="6" width="60%" height="24"/>
 				<FontAwesome5
 					name={"caret-down"}
 					size={24}
