@@ -12,14 +12,19 @@ interface Props {
 	text?: string;
 	date?: string;
 	loading?: boolean;
+	id?: number;
+	navigation?: any;
 }
 
-export function CardAtividade ({ color, text, date, loading = false }: Props) {
+export function CardAtividade ({ color, text, date, loading = false, navigation, id }: Props) {
 
 	if (!loading)
 		return (
 			<View style={styles.container}>
-				<RectButton style={styles.button}>
+				<RectButton 
+					style={styles.button}
+					onPress={() => {navigation?.navigate("Atividade", { id: id })}}
+				>
 					<View style={styles.row}>
 						<FontAwesome5 name="bookmark" size={24} color={color} />
 						<Text style={styles.text} numberOfLines={1}>
