@@ -11,6 +11,7 @@ import { Boletim } from '../screens/Boletim';
 import { Configuracoes } from '../screens/Configuracoes';
 import { Conversas } from '../screens/Conversas';
 import { Atividades } from '../screens/Atividades';
+import { Atividade } from '../screens/Atividade';
 import { Turma } from '../screens/Turma';
 
 const { Navigator, Screen } = createDrawerNavigator();
@@ -63,6 +64,11 @@ export function AppRoutes() {
 			<Screen 
 				name="Turma"
 				component={Turma}
+			/> 
+
+			<Screen 
+				name="Atividade"
+				component={Atividade}
 			/>
 		</Navigator>
 	)
