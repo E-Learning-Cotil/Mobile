@@ -29,6 +29,7 @@ interface AuthContextData {
 	loading: boolean;
     signIn({ email, password, role }: AuthData): Promise<AuthResponse>;
 	signOut(): void;
+	token: string | null;
 }
 
 interface AuthData {
@@ -40,6 +41,7 @@ interface AuthData {
 
 export function AuthProvider ({ children }: AuthProviderProps) {
 	const [ user, setUser ] = useState<User | null>(null);
+	const [ token, setToken ] = useState<string | null>(null);
 	const [ loading, setLoading ] = useState(true);
 
 	useEffect(() => {
@@ -55,6 +57,7 @@ export function AuthProvider ({ children }: AuthProviderProps) {
 
 				if (storagedUser && storagedToken) {
 					setUser(JSON.parse(storagedUser));
+					setToken(storagedToken);
 					api.defaults.headers['Authorization'] = `Bearer ${storagedToken}`;
 				}
 			}
@@ -76,7 +79,8 @@ export function AuthProvider ({ children }: AuthProviderProps) {
 			const { token, user, status, message } = response;
 			
 			setUser(user)
-
+			
+			setToken(token);
 			api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
 			if (rememberUser) {
@@ -107,7 +111,7 @@ export function AuthProvider ({ children }: AuthProviderProps) {
 	}
 
 	return (
-		<AuthContext.Provider value={{ signed: Boolean(user), user, loading, signIn, signOut }}>
+		<AuthContext.Provider value={{ signed: Boolean(user), user, loading, signIn, signOut, token }}>
 			{children}
 		</AuthContext.Provider>
 	);	
