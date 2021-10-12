@@ -34,14 +34,18 @@ export function Atividades(){
 
 	useEffect(() => {
 		async function getAtividades() {
-			const {
-				data,
-				status
-			} = await api.get('/atividades/list-by-role');
-
-			setAtividades(data);
-
-			setLoading(false);
+			try {
+				const {
+					data,
+					status
+				} = await api.get('/atividades/list-by-role');
+	
+				setAtividades(data);
+	
+				setLoading(false);
+			} catch (error: any) {
+				console.log('Error Atividades: ', error.response.data.error);
+			}
 		}
 
 		getAtividades();

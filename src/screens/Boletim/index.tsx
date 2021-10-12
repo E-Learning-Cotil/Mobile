@@ -27,19 +27,23 @@ export function Boletim() {
 
 	useEffect(() => {
 		async function getBoletim () {
-			const {
-				data,
-				status
-			} = await api.get('/boletim');
-
-			setScaleAnimArray(await data.map(() => {
-				return new Animated.ValueXY({ x: 0, y: 0 });
-			}));
-
-			setDropDownStates(await data.map(() => false));
-
-			setBoletim(data);
-			setLoading(false);
+			try {
+				const {
+					data,
+					status
+				} = await api.get('/boletim');
+	
+				setScaleAnimArray(await data.map(() => {
+					return new Animated.ValueXY({ x: 0, y: 0 });
+				}));
+	
+				setDropDownStates(await data.map(() => false));
+	
+				setBoletim(data);
+				setLoading(false);
+			} catch (error: any) {
+				console.log('Error Atividades: ', error.response.data.error);
+			}
 		}
 
 		getBoletim();
