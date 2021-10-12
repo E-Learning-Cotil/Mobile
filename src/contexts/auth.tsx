@@ -41,7 +41,7 @@ interface AuthData {
 
 export function AuthProvider ({ children }: AuthProviderProps) {
 	const [ user, setUser ] = useState<User | null>(null);
-	const [ token, setToken ] = useState<string | null>(null);
+	const [ userToken, setUserToken ] = useState<string | null>(null);
 	const [ loading, setLoading ] = useState(true);
 
 	useEffect(() => {
@@ -57,7 +57,7 @@ export function AuthProvider ({ children }: AuthProviderProps) {
 
 				if (storagedUser && storagedToken) {
 					setUser(JSON.parse(storagedUser));
-					setToken(storagedToken);
+					setUserToken(storagedToken);
 					api.defaults.headers['Authorization'] = `Bearer ${storagedToken}`;
 				}
 			}
@@ -76,12 +76,12 @@ export function AuthProvider ({ children }: AuthProviderProps) {
 				role
 			});
 			
-			const { token, user, status, message } = response;
+			const { user, token, status, message } = response;
 			
-			setUser(user)
+			setUser(user);
 			
-			setToken(token);
 			api.defaults.headers['Authorization'] = `Bearer ${token}`;
+			setUserToken(token);
 
 			if (rememberUser) {
 				await AsyncStorage.setItem('@Elearning:user', JSON.stringify(user));
@@ -111,7 +111,7 @@ export function AuthProvider ({ children }: AuthProviderProps) {
 	}
 
 	return (
-		<AuthContext.Provider value={{ signed: Boolean(user), user, loading, signIn, signOut, token }}>
+		<AuthContext.Provider value={{ signed: Boolean(user), user, loading, signIn, signOut, token: userToken }}>
 			{children}
 		</AuthContext.Provider>
 	);	
