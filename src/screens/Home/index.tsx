@@ -62,25 +62,34 @@ export function Home({ navigation }: any){
 	useEffect(() => {
 		async function getAtividadesAndTurmas() {
 			if (role === 'ALUNO') {
-				const {	
-					data,
-					status 
-				} = await api.get('/pagina-inicial'); 
-
-				setAtividades(data.atividades);
-				setTurmas(data.turmas);
+				try {
+					const {	
+						data,
+						status 
+					} = await api.get('/pagina-inicial'); 
+	
+					setAtividades(data.atividades);
+					setTurmas(data.turmas);
+					setLoading(false);
+				} catch (error: any) {
+					console.log('Error Home Aluno: ', error.response.data.error);
+				}				
 			}
 			else
 			{
-				const {	
-					data,
-					status 
-				} = await api.get('/turmas/list-by-role'); 
-
-				setTurmas(data);	
+				try {
+					const {	
+						data,
+						status 
+					} = await api.get('/turmas/list-by-role'); 
+	
+					setTurmas(data);
+					setLoading(false);
+				} catch (error: any) {
+					console.log('Error Home Professor: ', error.response.data.error);
+				}
+				
 			}
-			
-			setLoading(false);
 		}
 
 		getAtividadesAndTurmas();
@@ -106,7 +115,7 @@ export function Home({ navigation }: any){
 								[...Array(6)].map((value, index) => {
 									return <CardAtividade 
 										key={index} 
-										loading={true} 
+										loading={true}
 									/>
 								})
 								:
@@ -114,7 +123,7 @@ export function Home({ navigation }: any){
 									const key = atividade.id + atividade.tipo;
 									const text = atividade.nome;
 									const date = atividade.dataFim.slice(5, 10);
-									const id = atividade.id;
+									const idAtividade = atividade.id;
 									const formatedDate = date.split('-')[1] + '/' + date.split('-')[0];
 
 
@@ -124,7 +133,7 @@ export function Home({ navigation }: any){
 										text={text}
 										date={formatedDate} 
 										navigation = {navigation}
-										id={id}
+										id={idAtividade}
 									/>
 								})
 							}
@@ -136,12 +145,12 @@ export function Home({ navigation }: any){
 					<LabelText title="Turmas" color={color}/>
 					<View style={styles.turmasList}>
 						{
-							loading ?
+							loading
+							?
 							[...Array(6)].map((value, index) => {
 								return <CardTurma 
 									key={index} 
-									loading={true} 
-									navigation = {navigation}
+									loading={true}
 								/>
 							})
 							:
