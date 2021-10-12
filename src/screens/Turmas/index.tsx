@@ -79,13 +79,13 @@ export function Turmas({ navigation }: any){
 									key={index} 
 									loading={true} 
 									navigation = {navigation} 
+									id = {index}
 								/>
 							})
 							:
 							(role === 'ALUNO'
 							?
 							(turmas).map(turma => {
-								const key = turma.id;
 								const title = turma.nome;
 								const professor = `Professor(a): ${turma.professor.nome}`;
 								const link = turma.icone.altLink;
@@ -93,7 +93,7 @@ export function Turmas({ navigation }: any){
 								const id = turma.id;
 
 								return <CardTurma 
-									key={key} 
+									key={id}
 									title={title} 
 									color={color} 
 									subtitle={professor} 

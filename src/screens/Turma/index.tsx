@@ -34,6 +34,8 @@ export function Turma({ route, navigation }: any){
 	const { id } = route.params;
 	const { user } = useAuth();
 	const role = user?.role;
+
+	
 	
 	const [ loading, setLoading ] = useState(true);
 	
@@ -42,21 +44,29 @@ export function Turma({ route, navigation }: any){
 	
 	useEffect(() => {		
 		async function getDados() {
-			const {
-				data,	
-				status
-			} = await api.get(`/turmas/${id}`);
-
-			setDados(data);
+			try{
+				const {
+					data,	
+					status
+				} = await api.get(`/turmas/${id}`);
+				setDados(data);
+			} catch (error: any) {
+				console.log('Error Turma: ', error.response.data.error);
+			}	
+			
 		}
 
 		async function getTopicos() {
-			const {
-				data,	
-				status
-			} = await api.get(`/topicos/?idTurma=${id}`);
+			try{
+				const {
+					data,	
+					status
+				} = await api.get(`/topicos/?idTurma=${id}`);
 
-			setTopicos(data);
+				setTopicos(data);
+			} catch (error: any) {
+				console.log('Error Turma: ', error.response.data.error);
+			}	
 		}
 
 		async function load(){
@@ -71,7 +81,7 @@ export function Turma({ route, navigation }: any){
 	if(!loading){
 		return( 
 			<View style={[styles.container]}>
-						<NavBar 
+					<NavBar 
 						title={ dados?.nome } 
 						
 						iconName={ dados?.icone.altLink }
@@ -88,6 +98,7 @@ export function Turma({ route, navigation }: any){
 		
 										return <CardTopico 
 											key={ id } 
+											id={ id }
 											title={ title } 
 											description={ descricao } 
 											navigation = { navigation } 
@@ -108,7 +119,7 @@ export function Turma({ route, navigation }: any){
 				{
 					[...Array(6)].map((value, index) => {
 						return <CardTopico 
-							key={ index } 
+							key={index} 
 							loading={true} 
 							navigation = {navigation} 
 						/>
@@ -118,5 +129,4 @@ export function Turma({ route, navigation }: any){
 			</View>
 		);
 	}			
-
 }
