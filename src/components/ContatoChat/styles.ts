@@ -63,4 +63,12 @@ export const styles = StyleSheet.create({
 
 		lineHeight: 16,
 	},
+
+	skeleton: {
+		backgroundColor: theme.colors.gray90,
+
+		borderRadius: 8,
+
+		marginBottom: 10,
+	},
 });
