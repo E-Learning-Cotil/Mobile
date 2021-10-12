@@ -10,9 +10,11 @@ import { Turmas } from '../screens/Turmas';
 import { Boletim } from '../screens/Boletim';
 import { Configuracoes } from '../screens/Configuracoes';
 import { Conversas } from '../screens/Conversas';
+import { Conversa } from '../screens/Conversa';
 import { Atividades } from '../screens/Atividades';
 import { Atividade } from '../screens/Atividade';
 import { Turma } from '../screens/Turma';
+import { Topico } from '../screens/Topico';
 
 const { Navigator, Screen } = createDrawerNavigator();
 
@@ -57,6 +59,11 @@ export function AppRoutes() {
 			/>
 
 			<Screen 
+				name="Conversa"
+				component={Conversa}
+			/>
+
+			<Screen 
 				name="Atividades"
 				component={Atividades}
 			/>
@@ -69,6 +76,11 @@ export function AppRoutes() {
 			<Screen 
 				name="Atividade"
 				component={Atividade}
+			/>
+
+			<Screen 
+				name="Topico"
+				component={Topico}
 			/>
 		</Navigator>
 	)
