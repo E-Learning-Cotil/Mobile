@@ -12,16 +12,16 @@ interface Props {
 	description?: string | null;
 	loading?: boolean;
 	navigation : any;
-	key?: number;
+	id?: number;
 }
 
-export function CardTopico ({ title, description, loading = false, navigation, key}: Props) {
+export function CardTopico ({ title, description, loading = false, navigation, id}: Props) {
 	if (!loading)
 		return (
 			<View style={styles.container}>
 				<RectButton 
 					style={styles.button} 
-					onPress={() => {navigation?.navigate("Turma", { id: key })}}
+					onPress={() => {navigation?.navigate("Topico", { id: id })}}
 				>
 
 						

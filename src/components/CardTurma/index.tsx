@@ -14,16 +14,17 @@ interface Props {
     color?: string;
 	loading?: boolean;
 	id?: number;
-	navigation : any;
+	navigation?: any;
 }
 
-export function CardTurma ({ title, subtitle, iconLink, color, loading = false, navigation, id }: Props) {
+export function CardTurma ({ title, subtitle, iconLink, color, loading = false, navigation, id}: Props) {
+	
 	if (!loading)
 		return (
 			<View style={styles.container}>
 				<RectButton 
 					style={styles.button} 
-					onPress={() => {navigation?.navigate("Turma", { id: id })}}
+					onPress={() => {navigation?.navigate("Turma", {id: id} )}}
 				>
 					<View style={styles.row}>
 						<View 

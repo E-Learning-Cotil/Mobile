@@ -103,7 +103,8 @@ export function Configuracoes() {
           <View>
             <LabelText title="Serie" color={color} />
             <Text style={styles.textConfig}>{info?.serie</Text>
-          </View>*/}
+          </View>
+            */}
           
 
           <LabelText title="Tema" color={color} />
