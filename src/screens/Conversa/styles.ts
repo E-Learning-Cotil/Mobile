@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
 	},
 
 	content: {
+	},
+
+	messages: {
 		padding: 20,
 	},
 });
