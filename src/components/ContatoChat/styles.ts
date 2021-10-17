@@ -33,14 +33,14 @@ export const styles = StyleSheet.create({
 		width: '80%',
 	},
 
-	titleView: {
+	nameView: {
 		flexDirection: 'row',
 
 		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
 
-	title: {
+	name: {
 		fontFamily: theme.fonts.text700,
 		fontSize: 22,
 		color: theme.colors.white,
