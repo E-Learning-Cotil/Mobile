@@ -32,7 +32,6 @@ export function Conversas({ navigation }: any){
 	const socket = io("https://elearning-tcc.herokuapp.com");
 
 	const [ conversations, setConversations ] = useState<Conversation[]>([]);
-    const [ messages, setMessages ] = useState([]);
 
 	const [ loading, setLoading ] = useState(true);
 
@@ -41,11 +40,7 @@ export function Conversas({ navigation }: any){
 			setConversations(conversations);
 			setLoading(false);
 		});
-		socket.on("previous_messages", setMessages);
 		socket.emit("identify", { token });
-
-		console.log("Conversations: ", conversations);
-		console.log("Messages: ", messages);
 	}, []);
 
 	return(
@@ -62,11 +57,11 @@ export function Conversas({ navigation }: any){
 					conversations.map(conversation => {
 						const rg = conversation.professor.rg;
 						const avatar = conversation.professor.foto;
-						const title = conversation.professor.nome;
+						const name = conversation.professor.nome;
 						const message = conversation.mensagem;
 						const date = conversation.data;
 
-						return <ContatoChat key={rg} loading={false} id={rg} avatar={avatar} title={title} message={message} date={date} socket={socket} navigation={navigation}/>
+						return <ContatoChat key={rg} loading={false} id={rg} avatar={avatar} name={name} message={message} date={date} navigation={navigation}/>
 					})
 					:
 					[...Array(6)].map((value, index) => {

@@ -7,20 +7,19 @@ import ContentLoader, { Circle, Rect } from "react-content-loader/native"
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
 
-import { Socket } from "socket.io-client";
-
 interface Props {
 	loading: boolean;
 	id?: string;
 	avatar?: string;
-	title?: string;
+	name?: string;
 	message?: string;
 	date?: string;
-	socket?: Socket;
 	navigation?: any;
 }
 
-export function ContatoChat({ loading, id, avatar, title, message, date, socket, navigation }: Props){
+export function ContatoChat({ loading, id, avatar, name, message, date, navigation }: Props){
+	console.log(id);
+
 	if (date) {
 		const now = new Date((new Date()).getTime() - (3 * 60 * 60 * 1000));
 		const messageDate = new Date((new Date(date)).getTime() - (1000 * 3600 * 3));
@@ -53,7 +52,7 @@ export function ContatoChat({ loading, id, avatar, title, message, date, socket,
 				<RectButton
 					style={styles.button}
 					onPress={() => {
-						navigation.navigate('Conversa', { id: id, socket: socket });
+						navigation.navigate('Conversa', { id: id, name: name });
 					}}
 				>
 					<View style={styles.avatarView}>
@@ -63,9 +62,9 @@ export function ContatoChat({ loading, id, avatar, title, message, date, socket,
 						/>
 					</View>
 					<View style={styles.textView}>
-						<View style={styles.titleView}>
-							<Text style={styles.title} numberOfLines={1}>
-								{title}
+						<View style={styles.nameView}>
+							<Text style={styles.name} numberOfLines={1}>
+								{name}
 							</Text>
 							<Text style={styles.date} numberOfLines={1}>
 								{date}
