@@ -18,8 +18,6 @@ interface Props {
 }
 
 export function ContatoChat({ loading, id, avatar, name, message, date, navigation }: Props){
-	console.log(id);
-
 	if (date) {
 		const now = new Date((new Date()).getTime() - (3 * 60 * 60 * 1000));
 		const messageDate = new Date((new Date(date)).getTime() - (1000 * 3600 * 3));
