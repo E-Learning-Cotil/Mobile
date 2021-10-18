@@ -11,15 +11,16 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 interface Props {
 	id?: number;
+	
 	type?: number;
 	title?: string;
+	color?: string;
 
 	loading?: boolean;
 	navigation : any;
-
 }
 
-export function CardMaterialAtividadeTeste ({ title, type, loading = false, navigation, id}: Props) {
+export function CardMaterialAtividadeTeste ({navigation, id, type, title, color, loading = false}: Props) {
 	var pagina = "";
 	var nomeIcone = "";
 
@@ -47,19 +48,22 @@ export function CardMaterialAtividadeTeste ({ title, type, loading = false, navi
 						navigation?.navigate(pagina, { id: id })
 					}}
 				>
-							<Text 
-								style={[ 
-									styles.text,
-									styles.title 
-								]} 
-								numberOfLines={1}
-							>
-								{title}
-							</Text> 
+					<View style={styles.row}>
+						<Text 
+							style={[ 
+								styles.text,
+								styles.title 
+							]} 
+							numberOfLines={1}
+						>
+							{title}
+						</Text> 
 
-							<View style={styles.iconDiv}>
-								<FontAwesome5 name={nomeIcone} size={24} color="black" />
-							</View>
+						<View style={[styles.iconDiv, {backgroundColor: color}]}>
+							<FontAwesome5 name={nomeIcone} size={24} color="white" />
+						</View>
+					</View>
+							
 				</RectButton>
 			</View>
 		)

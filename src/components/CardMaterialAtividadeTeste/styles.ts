@@ -5,19 +5,22 @@ import { theme } from '../../global/styles/theme';
 export const styles = StyleSheet.create({
 	container: {
 		width: '100%',
-		height: 100,
+		height: 46,
 
 		backgroundColor: theme.colors.gray90,
 
 		borderRadius: 16,
 
-		marginVertical: 5,
+		marginVertical: 8,
 	},
 
 	button: {
 		flex: 1,
-		paddingVertical: 10,
-		paddingHorizontal: 20,
+	},
+
+	row: {
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 
 	column: {},
@@ -30,13 +33,9 @@ export const styles = StyleSheet.create({
 	title: {
 		fontFamily:theme.fonts.title400,
 		color: theme.colors.white,
-		fontSize: 22,
-	},
-
-	subtitle: {
-		fontFamily: theme.fonts.text400,
-		color: theme.colors.highlight,
 		fontSize: 18,
+		width: '75%',
+
 	},
 
 	skeleton: {		
@@ -44,6 +43,15 @@ export const styles = StyleSheet.create({
 		
 		borderRadius: 16,
 
-		marginVertical: 5,
+		marginVertical: 8,
 	},
+
+	iconDiv: {
+		borderRadius: 16,
+		width: '25%',
+		backgroundColor: theme.colors.gray70,
+		height: 46,
+		alignItems: 'center',
+		justifyContent: 'center',
+	}
 });
