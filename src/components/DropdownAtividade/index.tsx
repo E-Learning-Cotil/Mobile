@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { getFormattedDatetime, getDatetimeColor } from '../../utils/moment';
 
 import { Animated, View, Text, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 
@@ -24,15 +25,9 @@ export function DropdownAtividade({id, title, deadline, description, loading = f
 	let status;
 
 	if (deadline) {
-		const now = new Date((new Date()).getTime() - (3 * 60 * 60 * 1000));
-
-		deadline = deadline.substring(0, 10);
-		const deadlineDate = new Date(deadline);
-		const date = deadlineDate.getDate() < 10 ? `0${deadlineDate.getDate()}` : deadlineDate.getDate();
-		const month = deadlineDate.getMonth() < 10 ? `0${deadlineDate.getMonth()}` : deadlineDate.getMonth();
-		deadline = "(" + date + "/" + month + ")";
-
-		status = deadlineDate > now ? 'green' : deadlineDate == now ? 'yellow' : 'red' ;
+		status = getDatetimeColor(deadline);
+		
+		deadline = '(' + getFormattedDatetime(deadline, 'DD/MM') + ')';
 	}
 
 	const scaleAnim = useRef(new Animated.Value(0)).current;

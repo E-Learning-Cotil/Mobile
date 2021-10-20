@@ -1,4 +1,5 @@
 import React from 'react';
+import { getStyledDatetime } from '../../utils/moment';
 
 import { View, Text } from 'react-native';
 import ContentLoader, { Rect } from "react-content-loader/native"
@@ -8,39 +9,15 @@ import { styles } from './styles';
 
 interface Props {
 	loading: boolean;
+	right: boolean;
 	message?: string;
 	date?: string;
-	right: boolean;
 }
 
 export function Message({ loading, message, date, right }: Props) {
-	if (date) {
-		const now = new Date((new Date()).getTime() - (3 * 60 * 60 * 1000));
-		const messageDate = new Date((new Date(date)).getTime() - (1000 * 3600 * 3));
+	if (!loading && date) {
+		date = getStyledDatetime(date);
 
-		const hourDifference = (now.getTime() - messageDate.getTime()) / (1000 * 3600);
-
-		if (hourDifference < 24) {
-			const hour = messageDate.getHours() < 10 ? `0${messageDate.getHours()}` : messageDate.getHours();
-			const minute = messageDate.getMinutes() < 10 ? `0${messageDate.getMinutes()}` : messageDate.getMinutes();
-
-			date = hour + ':' + minute;
-		}
-		else {
-			const day = messageDate.getDate() < 10 ? `0${messageDate.getDate()}` : messageDate.getDate();
-			const month = messageDate.getMonth() < 10 ? `0${messageDate.getMonth()}` : messageDate.getMonth();
-
-			if (now.getFullYear() === messageDate.getFullYear()) {
-				date = day + '/' + month;
-			} else {
-				const year = messageDate.getFullYear();
-
-				date = day + '/' + month + '/' + year;
-			}
-		}
-	}
-
-	if (!loading)
 		return (
 			<View style={[
 				styles.container,
@@ -63,7 +40,7 @@ export function Message({ loading, message, date, right }: Props) {
 				]}/>
 			</View>
 		);
-	else {
+	} else {
 		const randomWidth = Math.floor(Math.random()*(70-30+1)+30);
 		const messageWidth = randomWidth + 20;
 		const skeletonMargin = 100 - messageWidth;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { getStyledDatetime } from '../../utils/moment';
 
 import { View, Image, Text } from 'react-native';
 import { RectButton } from "react-native-gesture-handler";
@@ -18,33 +19,9 @@ interface Props {
 }
 
 export function ContatoChat({ loading, id, avatar, name, message, date, navigation }: Props){
-	if (date) {
-		const now = new Date((new Date()).getTime() - (3 * 60 * 60 * 1000));
-		const messageDate = new Date((new Date(date)).getTime() - (1000 * 3600 * 3));
+	if (!loading && date) {
+		date = getStyledDatetime(date);
 
-		const hourDifference = (now.getTime() - messageDate.getTime()) / (1000 * 3600);
-
-		if (hourDifference < 24) {
-			const hour = messageDate.getHours() < 10 ? `0${messageDate.getHours()}` : messageDate.getHours();
-			const minute = messageDate.getMinutes() < 10 ? `0${messageDate.getMinutes()}` : messageDate.getMinutes();
-
-			date = hour + ':' + minute;
-		}
-		else {
-			const day = messageDate.getDate() < 10 ? `0${messageDate.getDate()}` : messageDate.getDate();
-			const month = messageDate.getMonth() < 10 ? `0${messageDate.getMonth()}` : messageDate.getMonth();
-
-			if (now.getFullYear() === messageDate.getFullYear()) {
-				date = day + '/' + month;
-			} else {
-				const year = messageDate.getFullYear();
-
-				date = day + '/' + month + '/' + year;
-			}
-		}
-	}
-
-	if (!loading)
 		return (
 			<View style={styles.container}>
 				<RectButton
@@ -75,7 +52,7 @@ export function ContatoChat({ loading, id, avatar, name, message, date, navigati
 				</RectButton>
 			</View>
 		);
-	else
+	} else {
 		return (
 			<ContentLoader
 				style={styles.skeleton}
@@ -91,4 +68,5 @@ export function ContatoChat({ loading, id, avatar, name, message, date, navigati
 				<Rect x="85%" y="13" rx="6" ry="6" width="10%" height="16" />
 			</ContentLoader>
 		);
+	}
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { getFormattedDatetime } from '../../utils/moment'
 
 import { View, ScrollView } from 'react-native';
 
@@ -122,16 +123,15 @@ export function Home({ navigation }: any){
 								atividades.map(atividade => {
 									const key = atividade.id + atividade.tipo;
 									const text = atividade.nome;
-									const date = atividade.dataFim.slice(5, 10);
+									const date = getFormattedDatetime(atividade.dataFim, "DD/MM");
 									const idAtividade = atividade.id;
-									const formatedDate = date.split('-')[1] + '/' + date.split('-')[0];
 
 
 									return <CardAtividade 
 										key={key} 
 										color={color} 
 										text={text}
-										date={formatedDate} 
+										date={date} 
 										navigation = {navigation}
 										id={idAtividade}
 									/>
