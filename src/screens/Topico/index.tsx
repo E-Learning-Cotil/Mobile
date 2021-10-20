@@ -43,14 +43,11 @@ export function Topico({ route, navigation }: any){
 	const { user } = useAuth();
 	const role = user?.role;
 
-	//const cores = [ dados?.turma.cores.corPrim, dados?.turma.cores.corSec ];
-	const cores = [ 'red', 'blue' ];
+	var qtdElementos = 0;
 	
 	const [ loading, setLoading ] = useState(true);
 	
 	const [ dados, setDados ] = useState<DadosTopico>();
-
-	const [ cor, setCor ] = useState<string>(cores[0]);
 	
 	useEffect(() => {		
 		async function getDados() {
@@ -60,8 +57,9 @@ export function Topico({ route, navigation }: any){
 					status
 				} = await api.get(`/topicos/${id}`);
 				
-				
 				setDados(data);
+
+				
 			} catch (error: any) {
 				console.log('Error Topico: ', error.response.data.error);
 			}			
@@ -82,6 +80,7 @@ export function Topico({ route, navigation }: any){
 
 		async function load(){
 			await getDados();
+
 			/*await getTopicos();*/
 			setLoading(false);
 		}
@@ -116,18 +115,21 @@ export function Topico({ route, navigation }: any){
 							</Text>
 
 							{
-								dados.materiais && (dados.materiais).map((index, material) => {
+								dados?.materiais && (dados.materiais).map((material) => {
 									const title = material.nome;
 									
 									const id = material.id;
 
-									const cor = index % 2;
+									const cor = qtdElementos % 2;
+
+									qtdElementos++;
+									
 
 									return <CardMaterialAtividadeTeste 
 										key={id}
 										type={1}
 										title={title} 
-										color={cores[cor]} 
+										color={ cor == 0? dados.turma.cores.corPrim : dados.turma.cores.corSec }
 										navigation = {navigation} 
 										id = {id}
 									/>
@@ -136,18 +138,19 @@ export function Topico({ route, navigation }: any){
 
 
 							{
-								dados.atividades && (dados.atividades).map((index, atividade) => {
+								dados?.atividades && (dados.atividades).map((atividade) => {
 									const title = atividade.nome;
 									
 									const id = atividade.id;		
+									const cor = qtdElementos % 2;
 
-									const cor = index % 2 == 0? 1: 0;
+									qtdElementos++;
 
 									return <CardMaterialAtividadeTeste 
 										key={id}
 										type={2}
 										title={title} 
-										color={cores[cor]} 
+										color={cor == 0? dados.turma.cores.corPrim : dados.turma.cores.corSec} 
 										navigation = {navigation} 
 										id = {id}
 									/>
@@ -155,28 +158,28 @@ export function Topico({ route, navigation }: any){
 							}
 
 							{
-								dados.testes && (dados.testes).map((index, teste) => {
+								dados?.testes && (dados.testes).map((teste) => {
 									const title = teste.nome;
 									
 									const id = teste.id;		
 
-									const cor = index % 2 == 0? 1: 0;
+
+
+									const cor = qtdElementos % 2;
+
+									qtdElementos++;
 
 									return <CardMaterialAtividadeTeste 
 										key={id}
 										type={3}
 										title={title} 
-										color={cores[cor]} 
+										color={cor == 0? dados.turma.cores.corPrim : dados.turma.cores.corSec} 
 										navigation = {navigation} 
 										id = {id}
 									/>
 								})
 							}
 
-							<CardMaterialAtividadeTeste navigation={navigation} loading={true} />
-							<CardMaterialAtividadeTeste navigation={navigation} type={1} color={"red"} loading={false} />
-							<CardMaterialAtividadeTeste navigation={navigation} type={2} color={"green"} loading={false} />
-							<CardMaterialAtividadeTeste navigation={navigation} type={3} color={"blue"} loading={false} />
 						</ScrollView>
 			</View>
 		);
@@ -187,7 +190,16 @@ export function Topico({ route, navigation }: any){
 			<View style={[styles.container]}>
 				<NavBar color={theme.colors.highlight}/>
 				<ScrollView style={styles.content}>
-				
+					{
+						[...Array(6)].map((value, index) => {
+							return <CardMaterialAtividadeTeste 
+								key={index} 
+								loading={true} 
+								navigation = {navigation} 
+								id = {index}
+							/>
+						})
+					}
 				</ScrollView>
 			</View>
 		);
