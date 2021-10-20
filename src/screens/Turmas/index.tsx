@@ -49,6 +49,7 @@ export function Turmas({ navigation }: any){
 
 	useEffect(() => {
 		async function getTurmas() {
+			try{
 			const {
 				data,
 				status
@@ -56,6 +57,9 @@ export function Turmas({ navigation }: any){
 
 			setTurmas(data);
 			setLoading(false);
+			} catch (error: any) {
+				console.log('Error Turmas: ', error.response.data.error);
+			}	
 		}
 
 		getTurmas();
