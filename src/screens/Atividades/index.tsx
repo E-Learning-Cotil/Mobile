@@ -24,7 +24,7 @@ interface Atividade {
 	}
 }
 
-export function Atividades(){
+export function Atividades({ navigation }: any){
 	const { user } = useAuth();
 	const role = user?.role;
 	const color = role === 'ALUNO' ? theme.colors.green90 : theme.colors.purple90;
@@ -69,7 +69,7 @@ export function Atividades(){
 							const deadline = atividade.dataFim;
 							const description = `${atividade.topico.nome} - ${atividade.nome}`;
 
-							return <DropdownAtividade key={id} id={id} title={title} deadline={deadline} description={description} loading={false} />
+							return <DropdownAtividade key={id} id={id} title={title} deadline={deadline} description={description} loading={false} navigation={navigation} />
 						})
 						:
 						[...Array(12)].map((value, index) => {

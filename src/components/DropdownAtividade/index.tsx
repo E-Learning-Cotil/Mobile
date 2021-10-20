@@ -12,14 +12,15 @@ import { styles } from './styles';
 import ContentLoader, { Rect } from "react-content-loader/native"
 
 interface Props {
+	loading: boolean;
 	id?: number;
 	title?: string;
 	deadline?: string;
 	description?: string;
-	loading: boolean;
+	navigation?: any;
 }
 
-export function DropdownAtividade({id, title, deadline, description, loading = false}: Props) {
+export function DropdownAtividade({id, title, deadline, description, loading, navigation}: Props) {
 	const { user } = useAuth();
 	const role = user?.role;
 	let status;
@@ -94,7 +95,10 @@ export function DropdownAtividade({id, title, deadline, description, loading = f
 						{description}
 					</Text>
 					<View style={styles.buttonsView}>
-						<TouchableOpacity style={styles.navigateButton}>
+						<TouchableOpacity
+							style={styles.navigateButton}
+							onPress={() => {navigation?.navigate("Atividade", { id: id })}}
+						>
 							<Text style={styles.navigateButtonText}>
 								Ver atividade
 							</Text>
