@@ -59,9 +59,9 @@ export function CardTopico ({ title, description, loading = false, navigation, i
 				backgroundColor={theme.colors.gray80}
 				foregroundColor={theme.colors.gray70}
 			>
-				<Rect x="20" y="12" rx="6" ry="6" width="88%" height="22" />
-				<Rect x="20" y="40" rx="6" ry="6" width="88%" height="18" />
-				<Rect x="20" y="64" rx="6" ry="6" width="88%" height="18" />
+				<Rect x="6%" y="12" rx="6" ry="6" width="88%" height="22" />
+				<Rect x="6%" y="40" rx="6" ry="6" width="88%" height="18" />
+				<Rect x="6%" y="64" rx="6" ry="6" width="88%" height="18" />
 			</ContentLoader>
 		)
 }

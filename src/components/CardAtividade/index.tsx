@@ -50,8 +50,8 @@ export function CardAtividade ({ color, text, date, loading = false, navigation,
 				backgroundColor={theme.colors.gray80}
 				foregroundColor={theme.colors.gray70}
 			>
-				<Rect x="20" y="16" rx="6" ry="6" width="80%" height="24" />
-				<Rect x="20" y="50" rx="6" ry="6" width="80%" height="24" />
+				<Rect x="10%" y="16" rx="6" ry="6" width="80%" height="24" />
+				<Rect x="10%" y="50" rx="6" ry="6" width="80%" height="24" />
 			</ContentLoader>
 		);
 }

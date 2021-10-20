@@ -70,7 +70,6 @@ export function CardMaterialAtividadeTeste ({navigation, id, type, title, color,
 	else
 		return (
 			<ContentLoader
-				rtl
 				style={styles.skeleton}
 				speed={1}
 				width={'100%'}
@@ -78,8 +77,8 @@ export function CardMaterialAtividadeTeste ({navigation, id, type, title, color,
 				backgroundColor={theme.colors.gray80}
 				foregroundColor={theme.colors.gray70}
 			>
-				<Rect x="0" y="0" rx="16" ry="16" width="25%" height="46" />
-				<Rect x="30%" y="12" rx="6" ry="6" width="65%" height="22" />
+				<Rect x="75%" y="0" rx="16" ry="16" width="25%" height="46" />
+				<Rect x="5%" y="12" rx="6" ry="6" width="65%" height="22" />
 			</ContentLoader>
 		)
 }
