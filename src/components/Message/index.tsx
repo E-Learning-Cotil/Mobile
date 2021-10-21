@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { getStyledDate, getFormattedDatetime } from '../../utils/moment';
 
 import { View, Text } from 'react-native';
+import { DateLabel } from './DateLabel';
 
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
@@ -14,7 +15,7 @@ interface Props {
 	lastMessageDate: string;
 }
 
-export function Message({ message, date, right, lastMessageSameSide, lastMessageDate }: Props) {
+function Message({ message, date, right, lastMessageSameSide, lastMessageDate }: Props) {
 	const lastStyledDate = getStyledDate(lastMessageDate).toUpperCase();
 	const currentStyledDate = getStyledDate(date).toUpperCase();
 	const isNewDay = currentStyledDate !== lastStyledDate;
@@ -23,14 +24,7 @@ export function Message({ message, date, right, lastMessageSameSide, lastMessage
 
 	return (
 		<View>
-			<View style={[
-				styles.dateLabel,
-				!isNewDay && { display: 'none' }
-			]}>
-				<Text style={styles.dateLabelText}>
-					{currentStyledDate}
-				</Text>
-			</View>
+			<DateLabel visible={isNewDay} styledDate={currentStyledDate} />
 
 			<View style={[
 				styles.container,
@@ -57,3 +51,5 @@ export function Message({ message, date, right, lastMessageSameSide, lastMessage
 		</View>
 	);
 }
+
+export default memo(Message) ;

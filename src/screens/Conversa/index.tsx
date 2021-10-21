@@ -5,7 +5,7 @@ import { RectButton } from "react-native-gesture-handler";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 import { NavBar } from '../../components/NavBar';
-import { Message } from '../../components/Message'
+import Message from '../../components/Message'
 import { Skeleton } from '../../components/Message/Skeleton'
 
 import { useAuth } from '../../contexts/auth';
