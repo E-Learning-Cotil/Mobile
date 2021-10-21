@@ -15,4 +15,18 @@ export const styles = StyleSheet.create({
 	messages: {
 		padding: 20,
 	},
+
+	scrollDownButton: {
+		backgroundColor: theme.colors.gray70,
+		position: 'absolute',
+		right: 10,
+		bottom: 0,
+
+		height: 32,
+		width: 32,
+		borderRadius: 16,
+
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 });

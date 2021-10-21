@@ -14,9 +14,20 @@ function getStyledDatetime (date: string) {
 		format = 'DD/MM/YY';
 	}
 
-	moment.locale('pt-br');
+	moment().locale('pt-br');
 
 	return moment(date).format(format);
+}
+
+function getStyledDate (date: string) {
+	moment.locale('pt-br');
+
+	return moment(date).calendar({
+		sameDay: '[hoje]',
+		lastDay: '[ontem]',
+		lastWeek: 'dddd',
+		sameElse: 'DD/MM/YYYY'
+	});
 }
 
 function getFormattedDatetime (date: string, format: string) {
@@ -37,4 +48,4 @@ function getDatetimeColor (date: string) {
 	}
 }
 
-export { getStyledDatetime, getFormattedDatetime, getDatetimeColor };
+export { getStyledDatetime, getStyledDate, getFormattedDatetime, getDatetimeColor };

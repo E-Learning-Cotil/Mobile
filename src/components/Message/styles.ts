@@ -1,30 +1,52 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 import { theme } from '../../global/styles/theme';
 
 export const styles = StyleSheet.create({
+	dateLabel: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+
+		marginTop: 15,
+	},
+
+	dateLabelText: {
+		fontFamily: theme.fonts.text700,
+		fontSize: 14,
+		color: theme.colors.white,
+		lineHeight: 16,
+
+		backgroundColor: theme.colors.gray70,
+		paddingHorizontal: 6,
+		paddingVertical: 3,
+		borderRadius: 8,
+		opacity: 0.75,
+	},
+
 	container: {
-		maxWidth: '90%',
+		maxWidth: '85%',
 		alignSelf: 'flex-start',
 		backgroundColor: theme.colors.gray90,
 
 		borderRadius: 8,
-		borderTopLeftRadius: 0,
 
-		marginBottom: 10,
+		marginTop: 10,
+		marginLeft: 20,
 		paddingVertical: 3,
 		paddingHorizontal: 8,
 
 		flexDirection: 'row',
-		justifyContent: 'space-between',
+		flexWrap: 'wrap',
+		justifyContent: 'flex-end',
 	},
 
 	rightMessage: {
+		marginLeft: 0,
+		marginRight: 20,
+
 		alignSelf: 'flex-end',
 		backgroundColor: theme.colors.green90,
-
-		borderTopLeftRadius: 8,
-		borderTopRightRadius: 0,
 	},
 
 	messageBubbleCorner: {
@@ -52,8 +74,6 @@ export const styles = StyleSheet.create({
 	},
 
 	messageView: {
-		maxWidth: '85%',
-
 		justifyContent: 'center',
 	},
 
@@ -69,7 +89,6 @@ export const styles = StyleSheet.create({
 
 	dateView: {
 		marginLeft: 10,
-
 		justifyContent: 'flex-end',
 	},
 
