@@ -48,4 +48,8 @@ function getDatetimeColor (date: string) {
 	}
 }
 
-export { getStyledDatetime, getStyledDate, getFormattedDatetime, getDatetimeColor };
+function getNowDateUtc () {
+	return moment().format();
+}
+
+export { getStyledDatetime, getStyledDate, getFormattedDatetime, getDatetimeColor, getNowDateUtc };
