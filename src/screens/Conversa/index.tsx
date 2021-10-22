@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 
-import { View, ScrollView, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { RectButton } from "react-native-gesture-handler";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
-import { NavBar } from '../../components/NavBar';
-import Message from '../../components/Message'
-import { Skeleton } from '../../components/Message/Skeleton'
 import { ChatNavBar } from '../../components/ChatNavBar';
+import Message from '../../components/Message';
+import { Skeleton } from '../../components/Message/Skeleton';
+import { ChatTextBox } from '../../components/ChatTextBox';
 
 import { useAuth } from '../../contexts/auth';
+import { getNowDateUtc } from '../../utils/moment';
 
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
@@ -41,7 +42,6 @@ interface FlatListProps {
 	index: number;
 }
 
-export function Conversa({route: {params: { id, name } }}: Props) {
 export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 	const { user, token } = useAuth();
 	const role = user?.role;
@@ -49,12 +49,12 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 
 	const socket = io("https://elearning-tcc.herokuapp.com");
 
-	const scrollViewRef = useRef<ScrollView | null>(null);
 	const flatListRef = useRef<FlatList | null>(null);
 
 	const [ scrolledToBottom, setScrolledToBottom ] = useState(true);
 
 	const [ messages, setMessages ] = useState<Message[]>([]);
+	const [ newMessage, setNewMessage ] = useState('');
 
 	const [ loading, setLoading ] = useState<boolean>(true);
 
@@ -67,8 +67,8 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 		socket.emit("open_chat", { otherUser: id, token });
 		socket.on("new_message", ([data]: Message[]) => {
 			setMessages((prevMessages: Message[]) => {
-                if((data.origem.identity === id)){
-                    return [data, ...prevMessages]
+                if(data.origem.identity === id){
+                    return [data, ...prevMessages];
                 }
 				else {
 					return prevMessages;
@@ -90,9 +90,6 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 
 		const mensagem = message.mensagem;
 		const data = message.data;
-		const right = message.origem.role === role ? true : false;
-		const lastMessageSameSide = index !== messages.length - 1 ? message.origem.role === messages[index+1].origem.role : false;
-		const lastMessageDate = index !== messages.length - 1 ? messages[index+1].data : message.data;
 		const right = message.origem.role === role;
 		const lastMessageSameSide = !firstMessage ? message.origem.role === messages[index+1].origem.role : false;
 		const lastMessageDate = !firstMessage ? messages[index+1].data : message.data;
@@ -102,7 +99,28 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 			lastMessageSameSide={lastMessageSameSide} lastMessageDate={lastMessageDate}
 			lastMessage={lastMessage} firstMessage={firstMessage}
 		/>;
+	}
 
+	const sendMessageClickHandler = () => {
+		if (newMessage && user) {
+			socket.emit("new_message", { message: newMessage, otherUser: id, token });
+
+			setMessages((prevMessages: Message[]) => {
+				const newMessageObject: Message = {
+					data: getNowDateUtc(),
+					mensagem: newMessage,
+					origem: {
+						identity: user.id.toString(),
+						nome: user.nome,
+						role: user.role,
+					}
+				};
+				return [newMessageObject, ...prevMessages];
+                
+            });
+
+			setNewMessage('');
+		}
 	}
 
 	return(
@@ -115,16 +133,16 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 			
 			<FlatList
 				data={messages}
-				initialNumToRender={20}
-				// progressViewOffset={20}
-				inverted
-				// ItemSeparatorComponent={}
-				ListEmptyComponent={<Skeleton />}
 				renderItem={messageComponent}
 				keyExtractor={(item, index) => {return index.toString()}}
-				viewabilityConfig={{
-					waitForInteraction: true,
-				}}
+				inverted
+				initialNumToRender={20}
+				ListEmptyComponent={<Skeleton />}
+				// viewabilityConfig={{
+				// 	waitForInteraction: true,
+				// }}
+
+				scrollEnabled={!loading}
 
 				ref={flatListRef}
 				onScroll={(e) => {
@@ -136,7 +154,6 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 				<RectButton
 					onPress={() => {
 						flatListRef.current?.scrollToIndex({ animated: true, index: 0, viewPosition: 1 });
-						setScrolledToBottom(true);
 					}}
 					style={styles.scrollDownButton}
 				>
@@ -144,32 +161,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 				</RectButton>
 			}
 
-			{/* <ScrollView
-				style={styles.content}
-				ref={scrollViewRef}
-				onContentSizeChange={() => {scrollViewRef.current?.scrollToEnd({ animated: true });}}
-				onScroll={() => {scrollViewRef.current.contentOff}}
-			>
-				<View style={styles.messages}>
-					{
-						!loading
-						?
-						messages.map((message, index) => {
-							const mensagem = message.mensagem;
-							const data = message.data;
-							const right = message.origem.role === role ? true : false;
-							const lastMessageSameSide = index ? message.origem.role === messages[index-1].origem.role : false;
-							const lastMessageDate = index ? messages[index-1].data : message.data;
-
-							return <Message key={index} loading={false} message={mensagem} date={data} right={right} lastMessageSameSide={lastMessageSameSide} lastMessageDate={lastMessageDate} />
-						})
-						:
-						[...Array(6)].map((value, index) => {
-							return <Message key={index} loading={true} right={index%2 ? true : false} />
-						})
-					}
-				</View>
-			</ScrollView> */}
+			<ChatTextBox message={newMessage} setMessage={setNewMessage} sendMessageClickHandler={sendMessageClickHandler} />
 		</View>
 	);
 }
