@@ -61,6 +61,7 @@ export function AppRoutes() {
 			<Screen 
 				name="Conversa"
 				component={Conversa}
+				options={{ swipeEnabled: false }}
 			/>
 
 			<Screen 
