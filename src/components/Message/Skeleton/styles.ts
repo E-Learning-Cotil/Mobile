@@ -5,6 +5,7 @@ import { theme } from '../../../global/styles/theme';
 export const styles = StyleSheet.create({
 	container: {
 		padding: 20,
+		paddingBottom: 0,
 
 		transform: [{ scaleY: -1 }],
 	},

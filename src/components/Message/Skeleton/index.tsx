@@ -19,7 +19,7 @@ export function Skeleton() {
 					const rightSkeletonStyle = { ...styles.rightSkeleton, ...{ marginLeft: `${skeletonMargin}%` } };
 					const right = Math.random() < 0.5;
 
-					const showCorner = right === lastMessageSide;
+					const showCorner = right !== lastMessageSide;
 
 					lastMessageSide = right;
 
@@ -38,7 +38,7 @@ export function Skeleton() {
 							<View style={[
 								styles.messageBubbleCorner,
 								right && styles.rightMessageBubbleCorner,
-								showCorner && { display: 'none' }
+								!showCorner && { borderTopColor: 'transparent', }
 							]}/>
 						</ContentLoader>
 					);
