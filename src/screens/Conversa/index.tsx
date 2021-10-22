@@ -85,13 +85,24 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 	}, [messages]);
 
 	const messageComponent = ({ item: message, index }: FlatListProps) => {
+		const firstMessage = index === messages.length - 1;
+		const lastMessage = index === 0;
+
 		const mensagem = message.mensagem;
 		const data = message.data;
 		const right = message.origem.role === role ? true : false;
 		const lastMessageSameSide = index !== messages.length - 1 ? message.origem.role === messages[index+1].origem.role : false;
 		const lastMessageDate = index !== messages.length - 1 ? messages[index+1].data : message.data;
+		const right = message.origem.role === role;
+		const lastMessageSameSide = !firstMessage ? message.origem.role === messages[index+1].origem.role : false;
+		const lastMessageDate = !firstMessage ? messages[index+1].data : message.data;
 
-		return <Message key={index} message={mensagem} date={data} right={right} lastMessageSameSide={lastMessageSameSide} lastMessageDate={lastMessageDate} />
+		return <Message 
+			key={index} message={mensagem} date={data} right={right} 
+			lastMessageSameSide={lastMessageSameSide} lastMessageDate={lastMessageDate}
+			lastMessage={lastMessage} firstMessage={firstMessage}
+		/>;
+
 	}
 
 	return(

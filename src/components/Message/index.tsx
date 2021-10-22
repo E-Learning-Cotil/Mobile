@@ -13,9 +13,11 @@ interface Props {
 	date: string;
 	lastMessageSameSide: boolean;
 	lastMessageDate: string;
+	lastMessage: boolean;
+	firstMessage: boolean;
 }
 
-function Message({ message, date, right, lastMessageSameSide, lastMessageDate }: Props) {
+function Message({ message, date, right, lastMessageSameSide, lastMessageDate, lastMessage, firstMessage }: Props) {
 	const lastStyledDate = getStyledDate(lastMessageDate).toUpperCase();
 	const currentStyledDate = getStyledDate(date).toUpperCase();
 	const isNewDay = currentStyledDate !== lastStyledDate;
@@ -24,12 +26,13 @@ function Message({ message, date, right, lastMessageSameSide, lastMessageDate }:
 
 	return (
 		<View>
-			<DateLabel visible={isNewDay} styledDate={currentStyledDate} />
+			<DateLabel visible={!firstMessage ? isNewDay : firstMessage} styledDate={currentStyledDate} />
 
 			<View style={[
 				styles.container,
 				right && styles.rightMessage,
 				lastMessageSameSide && { marginTop: 5 },
+				lastMessage && { marginBottom: 5 },
 			]}>
 				<View style={styles.messageView}>
 					<Text style={styles.message}>
