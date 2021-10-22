@@ -21,6 +21,7 @@ interface Props {
 		params: {
 			id: string;
 			name: string;
+			imgLink: string;
 		};
 	};
 }
@@ -41,6 +42,7 @@ interface FlatListProps {
 }
 
 export function Conversa({route: {params: { id, name } }}: Props) {
+export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 	const { user, token } = useAuth();
 	const role = user?.role;
 	const color = role === 'ALUNO' ? theme.colors.green90 : theme.colors.purple90;

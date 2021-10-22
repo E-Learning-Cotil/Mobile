@@ -27,7 +27,7 @@ export function ContatoChat({ loading, id, avatar, name, message, date, navigati
 				<RectButton
 					style={styles.button}
 					onPress={() => {
-						navigation.navigate('Conversa', { id: id, name: name });
+						navigation.navigate('Conversa', { id: id, name: name, imgLink: avatar });
 					}}
 				>
 					<View style={styles.avatarView}>
