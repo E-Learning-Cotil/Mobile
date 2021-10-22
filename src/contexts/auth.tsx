@@ -15,7 +15,7 @@ interface User {
 	telefone: string;
 	email: string;
 	id: number;
-	role: string;
+	role: 'ALUNO' | 'PROFESSOR';
 }
 
 interface AuthResponse {
