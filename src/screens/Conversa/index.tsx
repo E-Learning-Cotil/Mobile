@@ -7,6 +7,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { NavBar } from '../../components/NavBar';
 import Message from '../../components/Message'
 import { Skeleton } from '../../components/Message/Skeleton'
+import { ChatNavBar } from '../../components/ChatNavBar';
 
 import { useAuth } from '../../contexts/auth';
 
@@ -93,9 +94,10 @@ export function Conversa({route: {params: { id, name } }}: Props) {
 
 	return(
 		<View style={styles.container}>          
-			<NavBar 
-				title={name} iconName="arrow-left"
+			<ChatNavBar 
+				text={name}
 				color={color}
+				imgLink={imgLink}
 			/>
 			
 			<FlatList
