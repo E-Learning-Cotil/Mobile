@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
 
 		borderRadius: 16,
 
-		marginVertical: 8,
+		marginBottom: 16,
 	},
 
 	button: {
