@@ -72,7 +72,7 @@ export function Turmas({ navigation }: any){
 				color={color}
 			/>
 
-			<ScrollView style={styles.content}>
+			<ScrollView style={styles.content} scrollEnabled={!loading}>
 				
 				<View style={styles.turmas}>
 					<View style={styles.turmasList}>

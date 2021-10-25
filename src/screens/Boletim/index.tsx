@@ -84,7 +84,7 @@ export function Boletim() {
 				color={theme.colors.green90}
 			/>
 
-			<ScrollView style={styles.content}>
+			<ScrollView style={styles.content} scrollEnabled={!loading}>
 				<View style={styles.boletim}>
 					{
 						!loading

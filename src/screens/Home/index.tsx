@@ -103,7 +103,7 @@ export function Home({ navigation }: any){
 				color={color}
 			/>
 
-			<ScrollView style={styles.content}>
+			<ScrollView style={styles.content} scrollEnabled={!loading}>
 				{
 					role === 'ALUNO'
 					&&

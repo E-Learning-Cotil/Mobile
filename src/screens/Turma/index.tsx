@@ -115,7 +115,7 @@ export function Turma({ route, navigation }: any){
 		return(
 			<View style={[styles.container]}>
 				<NavBar color={theme.colors.highlight}/>
-				<ScrollView style={styles.content}>
+				<ScrollView style={styles.content} scrollEnabled={false}>
 				{
 					[...Array(6)].map((value, index) => {
 						return <CardTopico 
