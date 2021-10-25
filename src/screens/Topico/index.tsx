@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView, Text, Dimensions } from 'react-native';
 
-import { LabelText } from '../../components/LabelText';
+import Carousel from 'react-native-snap-carousel';
+
 import { NavBar } from '../../components/NavBar';
-import { CardAtividade } from '../../components/CardAtividade';
-import { CardTurma } from '../../components/CardTurma';
+import { CarouselPagination } from '../../components/CarouselPagination';
 
 import { useAuth } from '../../contexts/auth';
 
@@ -13,6 +13,7 @@ import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
 import api from '../../services/api';
 import { CardMaterialAtividadeTeste } from '../../components/CardMaterialAtividadeTeste';
+import ContentLoader, { Rect } from "react-content-loader/native"
 
 interface DadosConteudo{
 	id: number;
@@ -42,12 +43,12 @@ export function Topico({ route, navigation }: any){
 	const { id } = route.params;
 	const { user } = useAuth();
 	const role = user?.role;
-
-	var qtdElementos = 0;
 	
 	const [ loading, setLoading ] = useState(true);
 	
 	const [ dados, setDados ] = useState<DadosTopico>();
+	const [ matrizDados, setMatrizDados ] = useState<DadosTopico[][]>([ [], [], [] ]);
+	const [ activeIndex, setActiveIndex ] = useState(1);
 	
 	useEffect(() => {		
 		async function getDados() {
@@ -58,7 +59,12 @@ export function Topico({ route, navigation }: any){
 				} = await api.get(`/topicos/${id}`);
 				
 				setDados(data);
-
+				setMatrizDados(matrizDados.map((value, index) => {
+					if (index === 0) return data.materiais;
+					else if (index === 1) return data.atividades;
+					else if (index === 2) return data.testes;
+					else return [];
+				}));
 				
 			} catch (error: any) {
 				console.log('Error Topico: ', error.response.data.error);
@@ -87,121 +93,157 @@ export function Topico({ route, navigation }: any){
 		setLoading(true);
 		load();
 	}, [id]);
-			
+
+	function scrollView({ item, index }: any) {
+		const message = ['Nenhum Material', 'Nenhuma Atividade', 'Nenhum Teste'];
+
+		if (item)
+		return (
+			<ScrollView style={styles.scrollView}>
+				{
+					index === 0 ?
+					item.map((material: any, index: number) => {
+						const title = material.nome;
+						
+						const id = material.id;
+
+						const cor = index % 2;
+
+						return <CardMaterialAtividadeTeste 
+							key={id}
+							type={1}
+							title={title} 
+							color={ cor == 0? dados?.turma.cores.corPrim : dados?.turma.cores.corSec }
+							navigation = {navigation} 
+							id = {id}
+						/>
+					})
+					:
+					index === 1 ?
+					item.map((atividade: any, index: number) => {
+						const title = atividade.nome;
+						
+						const id = atividade.id;		
+						const cor = index % 2;
+
+						return <CardMaterialAtividadeTeste 
+							key={id}
+							type={2}
+							title={title} 
+							color={cor == 0? dados?.turma.cores.corPrim : dados?.turma.cores.corSec} 
+							navigation = {navigation} 
+							id = {id}
+						/>
+					})
+					:
+					index === 2 &&
+					item.map((teste: any, index: number) => {
+						const title = teste.nome;
+						
+						const id = teste.id;		
 
 
-	if(!loading){
+
+						const cor = index % 2;
+
+						return <CardMaterialAtividadeTeste 
+							key={id}
+							type={3}
+							title={title} 
+							color={cor == 0? dados?.turma.cores.corPrim : dados?.turma.cores.corSec} 
+							navigation = {navigation} 
+							id = {id}
+						/>
+					})
+				}
+			</ScrollView>
+		);
+		else
+		return(
+
+			<Text style={styles.text}>{message[index]}</Text>
+		);
+	}
+
+	if(!loading && dados){
 		return( 
 			<View style={[styles.container]}>
-					<NavBar 
-						title={ dados?.turma.nome } 
-						iconName={ dados?.turma.icone.altLink }
-						color={ dados?.turma.cores.corPrim }
+				<NavBar 
+					title={ dados?.turma.nome } 
+					iconName={ dados?.turma.icone.altLink }
+					color={ dados?.turma.cores.corPrim }
+				/>
+				<View style={styles.content}>
+
+					<Text 
+						style={[styles.title, styles.text]}
+						numberOfLines={1}
+					>
+						{dados?.nome}
+					</Text>
+
+					<Text 
+						style={[styles.description, styles.text]}
+						numberOfLines={4}
+					>
+						{dados?.descricao}
+					</Text>
+
+					<CarouselPagination
+						length={3}
+						activeIndex={activeIndex}
+						corPrim={dados.turma.cores.corPrim}
+						corSec={dados.turma.cores.corSec}
 					/>
-						<ScrollView style={styles.content}>
 
-							<Text 
-								style={[styles.title, styles.text]}
-								numberOfLines={1}
-							>
-								{dados?.nome}
-							</Text>
+					<Carousel
+						style={styles.carousel}
+						data={matrizDados}
+						renderItem={scrollView}
+						itemWidth={(Dimensions.get('window').width - 40)}
+						sliderWidth={(Dimensions.get('window').width - 40)}
+						firstItem={1}
+						onSnapToItem={index => setActiveIndex(index) }
+					/>
 
-							<Text 
-								style={[styles.description, styles.text]}
-								numberOfLines={4}
-							>
-								{dados?.descricao}
-							</Text>
-
-							{
-								dados?.materiais && (dados.materiais).map((material) => {
-									const title = material.nome;
-									
-									const id = material.id;
-
-									const cor = qtdElementos % 2;
-
-									qtdElementos++;
-									
-
-									return <CardMaterialAtividadeTeste 
-										key={id}
-										type={1}
-										title={title} 
-										color={ cor == 0? dados.turma.cores.corPrim : dados.turma.cores.corSec }
-										navigation = {navigation} 
-										id = {id}
-									/>
-								})
-							}
-
-
-							{
-								dados?.atividades && (dados.atividades).map((atividade) => {
-									const title = atividade.nome;
-									
-									const id = atividade.id;		
-									const cor = qtdElementos % 2;
-
-									qtdElementos++;
-
-									return <CardMaterialAtividadeTeste 
-										key={id}
-										type={2}
-										title={title} 
-										color={cor == 0? dados.turma.cores.corPrim : dados.turma.cores.corSec} 
-										navigation = {navigation} 
-										id = {id}
-									/>
-								})	
-							}
-
-							{
-								dados?.testes && (dados.testes).map((teste) => {
-									const title = teste.nome;
-									
-									const id = teste.id;		
-
-
-
-									const cor = qtdElementos % 2;
-
-									qtdElementos++;
-
-									return <CardMaterialAtividadeTeste 
-										key={id}
-										type={3}
-										title={title} 
-										color={cor == 0? dados.turma.cores.corPrim : dados.turma.cores.corSec} 
-										navigation = {navigation} 
-										id = {id}
-									/>
-								})
-							}
-
-						</ScrollView>
+				</View>
 			</View>
 		);
 	}
 	else
 	{
-		return(
-			<View style={[styles.container]}>
-				<NavBar color={theme.colors.highlight}/>
-				<ScrollView style={styles.content}>
-					{
-						[...Array(6)].map((value, index) => {
-							return <CardMaterialAtividadeTeste 
-								key={index} 
-								loading={true} 
-								navigation = {navigation} 
-								id = {index}
-							/>
-						})
-					}
-				</ScrollView>
-			</View>
-		);
-	}		
+		return (
+		<View  style={[styles.container]}>
+			<NavBar color={theme.colors.highlight}/>
+
+			<ContentLoader
+				style={styles.skeleton}
+				speed={1}
+				width={Dimensions.get('window').width - 40}
+				height={150}
+				backgroundColor={theme.colors.gray80}
+				foregroundColor={theme.colors.gray70}
+			>
+				<Rect x="0" y="12" rx="6" ry="6" width="70%" height="22" />
+				<Rect x="0" y="46" rx="6" ry="6" width="100%" height="22" />
+				<Rect x="0" y="72" rx="6" ry="6" width="100%" height="22" />
+				<Rect x="41%" y="130" rx="6" ry="6" width="10" height="10" />
+				<Rect x="48%" y="127.5" rx="10" ry="10" width="15" height="15" />
+				<Rect x="56%" y="130" rx="6" ry="6" width="10" height="10" />
+			</ContentLoader>
+			<ScrollView style={styles.content} scrollEnabled={false}>
+
+				{
+					[...Array(6)].map((value, index) => {
+						return <CardMaterialAtividadeTeste 
+							key={index} 
+							loading={true} 
+							navigation = {navigation} 
+							id = {index}
+						/>
+					})
+				}
+			</ScrollView>				
+		</View>
+		);}
 }

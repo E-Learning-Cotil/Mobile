@@ -30,4 +30,19 @@ export const styles = StyleSheet.create({
 	topicosList: {
 		paddingTop: 5,
 	},
+
+	carousel: {
+		
+	},
+
+	scrollView: {
+		marginBottom: 40,
+	},
+
+	skeleton: {
+		marginHorizontal: 20,
+		borderRadius: 16,
+
+		marginVertical: 8,
+	},
 });
