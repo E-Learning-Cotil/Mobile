@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView, Text, Dimensions } from 'react-native';
 
 import { LabelText } from '../../components/LabelText';
 import { NavBar } from '../../components/NavBar';
@@ -13,6 +13,7 @@ import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
 import api from '../../services/api';
 import { CardTopico } from '../../components/CardTopico';
+import ContentLoader, { Rect } from "react-content-loader/native"
 
 
 interface DadosAtividade {
@@ -77,9 +78,6 @@ export function Atividade({ route, navigation }: any){
 						/>
 
 						<ScrollView style={styles.content}>
-							<View style={styles.topicosList}>
-								
-							</View>
 						</ScrollView>
 			</View>
 		);
@@ -89,16 +87,26 @@ export function Atividade({ route, navigation }: any){
 		return(
 			<View style={[styles.container]}>
 				<NavBar color={theme.colors.highlight}/>
-				<ScrollView style={styles.content}>
-				{
-					[...Array(6)].map((value, index) => {
-						return <CardTopico 
-							key={ index } 
-							loading={true} 
-							navigation = {navigation} 
-						/>
-					})
-				}
+				<ScrollView style={styles.content}  scrollEnabled={false}>
+				
+				<ContentLoader
+				style={styles.skeleton}
+				speed={1}
+				width={Dimensions.get('window').width - 40}
+				height={1000}
+				backgroundColor={theme.colors.gray80}
+				foregroundColor={theme.colors.gray70}
+			>
+				<Rect x="0" y="12" rx="6" ry="6" width="50%" height="22" />
+				<Rect x="0" y="38" rx="6" ry="6" width="40%" height="14" />
+				<Rect x="0" y="66" rx="6" ry="6" width="100%" height="20" />
+				<Rect x="0" y="90" rx="6" ry="6" width="100%" height="20" />
+				<Rect x="0" y="114" rx="6" ry="6" width="100%" height="20" />
+				<Rect x="0" y="138" rx="6" ry="6" width="100%" height="20" />
+				<Rect x="0" y="162" rx="6" ry="6" width="100%" height="20" />
+				<Rect x="0" y="198" rx="6" ry="6" width="30%" height="22" />
+				</ContentLoader>
+
 				</ScrollView>
 			</View>
 		);
