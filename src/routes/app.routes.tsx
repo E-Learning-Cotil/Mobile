@@ -15,6 +15,7 @@ import { Atividades } from '../screens/Atividades';
 import { Atividade } from '../screens/Atividade';
 import { Turma } from '../screens/Turma';
 import { Topico } from '../screens/Topico';
+import { Material } from '../screens/Material';
 
 const { Navigator, Screen } = createDrawerNavigator();
 
@@ -82,6 +83,11 @@ export function AppRoutes() {
 			<Screen 
 				name="Topico"
 				component={Topico}
+			/>
+
+			<Screen 
+				name="Material"
+				component={Material}
 			/>
 		</Navigator>
 	)
