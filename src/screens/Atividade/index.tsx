@@ -14,6 +14,7 @@ import { styles } from './styles';
 import api from '../../services/api';
 import { CardTopico } from '../../components/CardTopico';
 import ContentLoader, { Rect } from "react-content-loader/native"
+import { DownloadableFile } from '../../components/DownloadableFile';
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -78,7 +79,7 @@ export function Atividade({ route }: any){
 						iconName={ dadosAtividade?.topico.turma.icone.altLink }
 							color={ dadosAtividade?.topico.turma.cores.corPrim }
 						/>
-
+							<DownloadableFile/>
 						<ScrollView style={styles.content}>
 						</ScrollView>
 			</View>
