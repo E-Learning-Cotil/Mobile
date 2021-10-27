@@ -132,7 +132,6 @@ export function Home({ navigation }: any){
 										color={color} 
 										text={text}
 										date={date} 
-										navigation = {navigation}
 										id={idAtividade}
 									/>
 								})
@@ -170,7 +169,6 @@ export function Home({ navigation }: any){
 									color={color} 
 									subtitle={professor} 
 									iconLink={link} 
-									navigation = {navigation} 
 									id={id}
 								/>
 							})
@@ -189,7 +187,6 @@ export function Home({ navigation }: any){
 									color={color}
 									subtitle={subtitle} 
 									iconLink={link} 
-									navigation = {navigation}
 									id={id}
 								/>
 							}))

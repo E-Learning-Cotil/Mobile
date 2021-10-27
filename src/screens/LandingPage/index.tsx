@@ -18,7 +18,7 @@ export function LandingPage () {
 	const navigation = useNavigation();
 
 	function handleAccessClick () {
-		navigation.navigate('SignIn');
+		navigation.navigate('SignIn' as never);
 	}
 
 	return (

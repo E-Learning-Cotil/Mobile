@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useNavigation } from '@react-navigation/native'
 import { getFormattedDatetime, getDatetimeColor } from '../../utils/moment';
 
 import { Animated, View, Text, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
@@ -17,10 +18,11 @@ interface Props {
 	title?: string;
 	deadline?: string;
 	description?: string;
-	navigation?: any;
 }
 
-export function DropdownAtividade({id, title, deadline, description, loading, navigation}: Props) {
+export function DropdownAtividade({ id, title, deadline, description, loading }: Props) {
+	const navigation = useNavigation();
+
 	const { user } = useAuth();
 	const role = user?.role;
 	let status;
@@ -97,7 +99,7 @@ export function DropdownAtividade({id, title, deadline, description, loading, na
 					<View style={styles.buttonsView}>
 						<TouchableOpacity
 							style={styles.navigateButton}
-							onPress={() => {navigation?.navigate("Atividade", { id: id })}}
+							onPress={ () => navigation.navigate("Atividade" as never, { id: id } as never) }
 						>
 							<Text style={styles.navigateButtonText}>
 								Ver atividade

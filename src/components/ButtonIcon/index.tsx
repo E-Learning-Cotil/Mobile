@@ -5,18 +5,19 @@ import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
 import { styles } from './styles';
 
 import { LabelIcon } from '../LabelIcon';
+import { useNavigation } from '@react-navigation/native';
 
 type Props = RectButtonProps & {
-  navigation: any;
   title: string;
   iconName: string;
   routeName?: string;
 }
 
-export function ButtonIcon( { navigation, title, iconName, routeName, ...rest } : Props) {
-    
+export function ButtonIcon( { title, iconName, routeName, ...rest } : Props) {
+  const navigation = useNavigation();  
+
     function handleAccessClick () {
-      	navigation.navigate(routeName);
+      	navigation.navigate(routeName as never);
     }
 
     return(

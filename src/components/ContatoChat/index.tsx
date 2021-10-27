@@ -7,6 +7,7 @@ import ContentLoader, { Circle, Rect } from "react-content-loader/native"
 
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
+import { useNavigation } from '@react-navigation/native';
 
 interface Props {
 	loading: boolean;
@@ -15,10 +16,11 @@ interface Props {
 	name?: string;
 	message?: string;
 	date?: string;
-	navigation?: any;
 }
 
-export function ContatoChat({ loading, id, avatar, name, message, date, navigation }: Props){
+export function ContatoChat({ loading, id, avatar, name, message, date }: Props){
+	const navigation = useNavigation();
+	
 	if (!loading && date) {
 		date = getStyledDatetime(date);
 
@@ -27,7 +29,7 @@ export function ContatoChat({ loading, id, avatar, name, message, date, navigati
 				<RectButton
 					style={styles.button}
 					onPress={() => {
-						navigation.navigate('Conversa', { id: id, name: name, imgLink: avatar });
+						navigation.navigate('Conversa' as never, { id: id, name: name, imgLink: avatar } as never);
 					}}
 				>
 					<View style={styles.avatarView}>

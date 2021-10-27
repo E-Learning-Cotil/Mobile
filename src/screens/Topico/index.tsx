@@ -114,7 +114,6 @@ export function Topico({ route, navigation }: any){
 							type={1}
 							title={title} 
 							color={ cor == 0? dados?.turma.cores.corPrim : dados?.turma.cores.corSec }
-							navigation = {navigation} 
 							id = {id}
 						/>
 					})
@@ -131,7 +130,6 @@ export function Topico({ route, navigation }: any){
 							type={2}
 							title={title} 
 							color={cor == 0? dados?.turma.cores.corPrim : dados?.turma.cores.corSec} 
-							navigation = {navigation} 
 							id = {id}
 						/>
 					})
@@ -151,7 +149,6 @@ export function Topico({ route, navigation }: any){
 							type={3}
 							title={title} 
 							color={cor == 0? dados?.turma.cores.corPrim : dados?.turma.cores.corSec} 
-							navigation = {navigation} 
 							id = {id}
 						/>
 					})
@@ -238,7 +235,6 @@ export function Topico({ route, navigation }: any){
 						return <CardMaterialAtividadeTeste 
 							key={index} 
 							loading={true} 
-							navigation = {navigation} 
 							id = {index}
 						/>
 					})

@@ -7,7 +7,7 @@ import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
 import { FontAwesome5 } from '@expo/vector-icons'; 
-
+import { useNavigation } from "@react-navigation/native";
 
 interface Props {
 	id?: number;
@@ -17,10 +17,10 @@ interface Props {
 	color?: string;
 
 	loading?: boolean;
-	navigation : any;
 }
 
-export function CardMaterialAtividadeTeste ({navigation, id, type, title, color, loading = false}: Props) {
+export function CardMaterialAtividadeTeste ({ id, type, title, color, loading = false }: Props) {
+	const navigation = useNavigation();
 	var pagina = "";
 	var nomeIcone = "";
 
@@ -45,7 +45,7 @@ export function CardMaterialAtividadeTeste ({navigation, id, type, title, color,
 				<RectButton 
 					style={styles.button} 
 					onPress={() => {
-						navigation?.navigate(pagina, { id: id })
+						navigation.navigate(pagina as never, { id: id } as never)
 					}}
 				>
 					<View style={styles.row}>

@@ -101,7 +101,6 @@ export function Turma({ route, navigation }: any){
 											id={ id }
 											title={ title } 
 											description={ descricao } 
-											navigation = { navigation } 
 										/>
 									})
 								}
@@ -121,7 +120,6 @@ export function Turma({ route, navigation }: any){
 						return <CardTopico 
 							key={index} 
 							loading={true} 
-							navigation = {navigation} 
 						/>
 					})
 				}

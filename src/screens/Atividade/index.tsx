@@ -14,6 +14,7 @@ import { styles } from './styles';
 import api from '../../services/api';
 import { CardTopico } from '../../components/CardTopico';
 import ContentLoader, { Rect } from "react-content-loader/native"
+import { useNavigation } from '@react-navigation/native';
 
 
 interface DadosAtividade {
@@ -39,7 +40,8 @@ interface DadosAtividade {
 	}
 }
 
-export function Atividade({ route, navigation }: any){
+export function Atividade({ route }: any){
+	const navigation = useNavigation();
 	const { id } = route.params;
 	const { user } = useAuth();
 	const role = user?.role;

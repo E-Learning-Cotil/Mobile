@@ -6,6 +6,7 @@ import ContentLoader, { Rect } from "react-content-loader/native";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
+import { useNavigation } from "@react-navigation/native";
 
 interface Props {
 	color?: string;
@@ -13,17 +14,17 @@ interface Props {
 	date?: string;
 	loading?: boolean;
 	id?: number;
-	navigation?: any;
 }
 
-export function CardAtividade ({ color, text, date, loading = false, navigation, id }: Props) {
+export function CardAtividade ({ color, text, date, loading = false, id }: Props) {
+	const navigation = useNavigation();
 
 	if (!loading)
 		return (
 			<View style={styles.container}>
 				<RectButton 
 					style={styles.button}
-					onPress={() => {navigation?.navigate("Atividade", { id: id })}}
+					onPress={() => {navigation.navigate("Atividade" as never, { id: id } as never)}}
 				>
 					<View style={styles.row}>
 						<FontAwesome5 name="bookmark" size={24} color={color} />

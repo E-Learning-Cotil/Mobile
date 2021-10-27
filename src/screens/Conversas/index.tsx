@@ -61,7 +61,7 @@ export function Conversas({ navigation }: any){
 						const message = conversation.mensagem;
 						const date = conversation.data;
 
-						return <ContatoChat key={rg} loading={false} id={rg} avatar={avatar} name={name} message={message} date={date} navigation={navigation}/>
+						return <ContatoChat key={rg} loading={false} id={rg} avatar={avatar} name={name} message={message} date={date} />
 					})
 					:
 					[...Array(6)].map((value, index) => {

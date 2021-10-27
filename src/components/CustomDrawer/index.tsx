@@ -50,26 +50,22 @@ export function CustomDrawer ({ navigation }: DrawerContentComponentProps) {
 
 			<View style={styles.pageLinksView}>
 				<ButtonIcon
-					navigation={ navigation } 
 					title="Home"
 					iconName="home"
 					routeName="Home"
 					
 				/>
 				<ButtonIcon
-					navigation={ navigation } 
 					title="Atividades"
 					iconName="list"
 					routeName="Atividades"
 				/>
 				<ButtonIcon
-					navigation={ navigation } 
 					title="Turmas"
 					iconName="book"
 					routeName="Turmas"
 				/>
 				<ButtonIcon
-					navigation={ navigation } 
 					title="Boletim"
 					iconName="scroll"
 					routeName="Boletim"
@@ -78,13 +74,11 @@ export function CustomDrawer ({ navigation }: DrawerContentComponentProps) {
 					}
 				/>
 				<ButtonIcon
-					navigation={ navigation } 
 					title="Conversas"
 					iconName="comment-alt"
 					routeName="Conversas"
 				/>
 				<ButtonIcon
-					navigation={ navigation } 
 					title="Configurações"
 					iconName="cog"
 					routeName="Configuracoes"

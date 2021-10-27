@@ -69,7 +69,7 @@ export function Atividades({ navigation }: any){
 							const deadline = atividade.dataFim;
 							const description = `${atividade.topico.nome} - ${atividade.nome}`;
 
-							return <DropdownAtividade key={id} id={id} title={title} deadline={deadline} description={description} loading={false} navigation={navigation} />
+							return <DropdownAtividade key={id} id={id} title={title} deadline={deadline} description={description} loading={false} />
 						})
 						:
 						[...Array(12)].map((value, index) => {

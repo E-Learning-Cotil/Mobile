@@ -89,7 +89,6 @@ export function Teste({ route, navigation }: any){
 						return <CardTopico 
 							key={ index } 
 							loading={true} 
-							navigation = {navigation} 
 						/>
 					})
 				}
