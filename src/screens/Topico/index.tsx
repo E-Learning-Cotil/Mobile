@@ -71,23 +71,9 @@ export function Topico({ route, navigation }: any){
 			}			
 		}
 
-		/*async function getTopicos() {
-			try{
-				const {
-					data,	
-					status
-				} = await api.get(`/topicos/?idTurma=${id}`);
-
-				setTopicos(data);
-			} catch (error: any) {
-				console.log('Error Turma: ', error.response.data.error);
-			}	
-		}*/
-
 		async function load(){
 			await getDados();
 
-			/*await getTopicos();*/
 			setLoading(false);
 		}
 		setLoading(true);

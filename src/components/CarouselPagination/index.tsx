@@ -36,14 +36,6 @@ export function CarouselPagination ({ length, activeIndex, corPrim, corSec }: Pr
 			containerStyle={[
 				styles.container
 			]}
-			dotStyle={[
-				styles.dot,
-				{ backgroundColor: corPrim }
-			]}
-			inactiveDotStyle={[
-				styles.inactiveDot,
-				{ backgroundColor: corPrim }
-			]}
 
 			dotElement={customDotElement}
 			inactiveDotElement={customInactiveDotElement}
