@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-import { View, Text} from 'react-native';
+import { Animated, View, Text } from 'react-native';
 import { Pagination } from 'react-native-snap-carousel';
 
 import { styles } from './styles';
@@ -9,24 +9,41 @@ interface Props {
 	length: number;
 	activeIndex: number;
 	corPrim: string;
-	corSec: string;
 }
 
-export function CarouselPagination ({ length, activeIndex, corPrim, corSec }: Props) {
+export function CarouselPagination ({ length, activeIndex, corPrim }: Props) {
 	const title = ['Materiais', 'Atividades', 'Testes'];
 
+	const corSec = corPrim + 80;
+
+	const scaleAnim = useRef(new Animated.Value(0.8)).current;
+
+	useEffect(() => {
+		scaleAnim.setValue(0.83);
+
+		Animated.spring(
+			scaleAnim,
+			{
+				toValue: 1,
+				mass: 1.5,
+				velocity: 0.75,
+				useNativeDriver: false,
+			}
+		).start();
+	}, [activeIndex]);
+
 	const customDotElement =
-	<View
-		style={[ styles.dot , { backgroundColor: corPrim }]}
+	<Animated.View
+		style={[ styles.dot, { backgroundColor: corPrim }, { transform: ([{ scale: scaleAnim }]) } ]}
 	>
 		<Text style={styles.text} >
 			{ title[activeIndex] }
 		</Text>
-	</View>;
+	</Animated.View>;
 
 	const customInactiveDotElement = 
-	<View 
-		style={[ styles.inactiveDot, { backgroundColor: corPrim }]}
+	<Animated.View 
+		style={[ styles.inactiveDot, { backgroundColor: corSec } ]}
 	/>;
 
 	return (
@@ -39,6 +56,15 @@ export function CarouselPagination ({ length, activeIndex, corPrim, corSec }: Pr
 
 			dotElement={customDotElement}
 			inactiveDotElement={customInactiveDotElement}
+
+			// dotStyle={[
+			// 	// styles.dot,
+			// 	{ backgroundColor: corPrim }
+			// ]}
+			// inactiveDotStyle={[
+			// 	// styles.inactiveDot,
+			// 	{ backgroundColor: corPrim }
+			// ]}
 		/>
 	);
 }

@@ -4,8 +4,8 @@ import { theme } from '../../global/styles/theme';
 
 export const styles = StyleSheet.create({
 	container: {
-		// height: 30,
-		// marginBottom: 0,
+		height: 60,
+		marginTop: 10,
 	},
 
 	dot: {
@@ -17,7 +17,6 @@ export const styles = StyleSheet.create({
 		alignItems: 'center',
 
 		paddingHorizontal: 8,
-		marginHorizontal: 8,
 	},
 
 	text: {
@@ -31,11 +30,9 @@ export const styles = StyleSheet.create({
 	},
 
 	inactiveDot: {
-		width: 65,
-		height: 10,
-		borderRadius: 5,
-
-		opacity: 0.5,
+		width: 75,
+		height: 16,
+		borderRadius: 8,
 
 		marginHorizontal: 10,
 	},

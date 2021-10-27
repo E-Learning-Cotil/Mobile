@@ -75,7 +75,9 @@ export function Topico({ route, navigation }: any){
 			await getDados();
 
 			setLoading(false);
+			setActiveIndex(1);
 		}
+
 		setLoading(true);
 		load();
 	}, [id]);
@@ -175,7 +177,6 @@ export function Topico({ route, navigation }: any){
 						length={3}
 						activeIndex={activeIndex}
 						corPrim={dados.turma.cores.corPrim}
-						corSec={dados.turma.cores.corSec}
 					/>
 
 					<Carousel
