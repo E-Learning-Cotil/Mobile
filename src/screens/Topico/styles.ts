@@ -36,7 +36,11 @@ export const styles = StyleSheet.create({
 	},
 
 	scrollView: {
-		marginBottom: 40,
+		minHeight: '100%',
+	},
+
+	scrollViewContent: {
+		marginBottom: '50%',
 	},
 
 	skeleton: {

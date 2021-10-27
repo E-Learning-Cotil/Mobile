@@ -86,6 +86,7 @@ export function Topico({ route, navigation }: any){
 		if (item)
 		return (
 			<ScrollView style={styles.scrollView}>
+				<View style={styles.scrollViewContent}>
 				{
 					index === 0 ?
 					item.map((material: any, index: number) => {
@@ -124,10 +125,7 @@ export function Topico({ route, navigation }: any){
 					item.map((teste: any, index: number) => {
 						const title = teste.nome;
 						
-						const id = teste.id;		
-
-
-
+						const id = teste.id;
 						const cor = index % 2;
 
 						return <CardMaterialAtividadeTeste 
@@ -139,6 +137,7 @@ export function Topico({ route, navigation }: any){
 						/>
 					})
 				}
+				</View>
 			</ScrollView>
 		);
 		else
