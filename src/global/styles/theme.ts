@@ -14,10 +14,11 @@ export const theme = {
 		purple90: '#6C1795',
 		purple80: '#9F18DF',
 
-		highlight: '#9f9f9f',
-    	white: '#fff',
+		black: '#000000',
+		highlight: '#9F9F9F',
+    	white: '#FFFFFF',
 
-		red70: '#e74b4b',
+		red70: '#E74B4B',
 		red80: '#ED3131',
 
 		yellow80: '#E7EA4B',
