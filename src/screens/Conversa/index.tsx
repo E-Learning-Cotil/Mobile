@@ -138,9 +138,6 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 				inverted
 				initialNumToRender={20}
 				ListEmptyComponent={<Skeleton />}
-				// viewabilityConfig={{
-				// 	waitForInteraction: true,
-				// }}
 
 				scrollEnabled={!loading}
 
