@@ -134,7 +134,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 			<FlatList
 				data={messages}
 				renderItem={messageComponent}
-				keyExtractor={(item, index) => {return index.toString()}}
+				keyExtractor={ item => item.data + item.origem.role + item.mensagem.length }
 				inverted
 				initialNumToRender={20}
 				ListEmptyComponent={<Skeleton />}
