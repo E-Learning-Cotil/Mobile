@@ -17,7 +17,7 @@ interface Props {
 	firstMessage: boolean;
 }
 
-function Message({ message, date, right, lastMessageSameSide, lastMessageDate, lastMessage, firstMessage }: Props) {
+const Message = memo(({ message, date, right, lastMessageSameSide, lastMessageDate, lastMessage, firstMessage }: Props) => {
 	const lastStyledDate = getStyledDate(lastMessageDate).toUpperCase();
 	const currentStyledDate = getStyledDate(date).toUpperCase();
 	const isNewDay = currentStyledDate !== lastStyledDate;
@@ -53,6 +53,6 @@ function Message({ message, date, right, lastMessageSameSide, lastMessageDate, l
 			</View>
 		</View>
 	);
-}
+});
 
-export default memo(Message) ;
+export { Message };

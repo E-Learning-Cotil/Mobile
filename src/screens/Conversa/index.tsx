@@ -5,7 +5,7 @@ import { RectButton } from "react-native-gesture-handler";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 import { ChatNavBar } from '../../components/ChatNavBar';
-import Message from '../../components/Message';
+import { Message } from '../../components/Message';
 import { Skeleton } from '../../components/Message/Skeleton';
 import { ChatTextBox } from '../../components/ChatTextBox';
 
