@@ -80,7 +80,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 	useEffect(() => {
 		if (messages.length !== 0) {
 			setLoading(false);
-			flatListRef.current?.scrollToIndex({ animated: true, index: 0, viewPosition: 1 });
+			flatListRef.current?.scrollToIndex({ animated: true, index: 0, viewPosition: 0 });
 		}
 	}, [messages]);
 
@@ -153,7 +153,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 				(!scrolledToBottom && !loading) &&
 				<RectButton
 					onPress={() => {
-						flatListRef.current?.scrollToIndex({ animated: true, index: 0, viewPosition: 1 });
+						flatListRef.current?.scrollToIndex({ animated: true, index: 0, viewPosition: 0 });
 					}}
 					style={styles.scrollDownButton}
 				>
