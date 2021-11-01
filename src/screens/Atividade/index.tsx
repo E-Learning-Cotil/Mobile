@@ -16,6 +16,7 @@ import { CardTopico } from '../../components/CardTopico';
 import ContentLoader, { Rect } from "react-content-loader/native"
 import { DownloadableFile } from '../../components/DownloadableFile';
 import { useNavigation } from '@react-navigation/native';
+import { getStyledDate, getDatetimeColor } from '../../utils/moment';
 
 
 interface DadosAtividade {
@@ -74,13 +75,31 @@ export function Atividade({ route }: any){
 		return( 
 			<View style={[styles.container]}>
 						<NavBar 
-						title={ dadosAtividade?.nome } 
+						title={ dadosAtividade?.topico.turma.nome } 
 						
 						iconName={ dadosAtividade?.topico.turma.icone.altLink }
 							color={ dadosAtividade?.topico.turma.cores.corPrim }
 						/>
-							<DownloadableFile/>
 						<ScrollView style={styles.content}>
+							<Text style={[styles.title, styles.text]}>
+								{dadosAtividade?.nome}
+							</Text>
+
+							<Text style={[styles.title, styles.text]}>
+								Data de entrega: {dadosAtividade && getStyledDate(dadosAtividade.dataFim)}
+							</Text>
+
+							<Text style={[styles.title, styles.text]}>
+								{}
+							</Text>
+
+							<Text style={[styles.title, styles.text]}>
+								Passa zap gata 😍
+							</Text>
+							<DownloadableFile
+								color={dadosAtividade?.topico.turma.cores.corPrim}
+							/>
+
 						</ScrollView>
 			</View>
 		);
