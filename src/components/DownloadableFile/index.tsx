@@ -34,18 +34,25 @@ export function DownloadableFile ({ id, type, title, color, loading = false}: Pr
 					}}
 				>
 					<View style={styles.row}>
-						<Text 
+						<View style={styles.contentDiv}>
+							<FontAwesome5 name={"file"} size={24} color="black" />	
+							<Text 
 							style={[ 
 								styles.text,
 								styles.title 
 							]} 
 							numberOfLines={1}
-						>
-							sim!!!!
-						</Text> 
+							>
+								sim!!!!
+							</Text> 	
+						</View>
+						
+
+						
+							
 
 						<View style={[styles.iconDiv, {backgroundColor: color}]}>
-							<FontAwesome5 name={"file"} size={24} color="white" />
+							<FontAwesome5 name={"download"} size={24} color="white" />
 						</View>
 					</View>
 							

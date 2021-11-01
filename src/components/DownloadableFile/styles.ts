@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
 		width: '100%',
 		height: 46,
 
-		backgroundColor: theme.colors.gray90,
+		backgroundColor: theme.colors.white,
 
 		borderRadius: 16,
 
@@ -32,10 +32,14 @@ export const styles = StyleSheet.create({
 
 	title: {
 		fontFamily:theme.fonts.title400,
-		color: theme.colors.white,
+		color: theme.colors.background,
 		fontSize: 18,
-		width: '75%',
+	},
 
+	contentDiv: {
+		marginLeft: '5%',
+		flexDirection: 'row',
+		width: '70%',
 	},
 
 	skeleton: {		
