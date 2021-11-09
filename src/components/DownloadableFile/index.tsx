@@ -1,8 +1,16 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { 
+	View, 
+	Text, 
+	Image, 
+	PermissionsAndroid,
+    Platform,
+} from "react-native";
+
 import { RectButton } from "react-native-gesture-handler";
 import ContentLoader, { Rect } from "react-content-loader/native"
 
+import ReactNativeBlobUtil from 'react-native-blob-util';
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
@@ -23,6 +31,47 @@ interface Props {
 export function DownloadableFile ({ id, type, title, color, loading = false}: Props) {
 	const navigation = useNavigation();
 
+	
+	// const fileUrl = 'https://res.cloudinary.com/educorreia/image/upload/v1633365748/gnbuwy83t0ga9oq1mw55.png';
+
+	// const getFileExtention = (fileUrl: string) => {
+	// 	// To get the file extension
+	// 	return /[.]/.exec(fileUrl) ?
+	// 			 /[^.]+$/.exec(fileUrl) : undefined;
+	//   };
+
+	// // Get today's date to add the time suffix in filename
+    // let date = new Date(); 
+    // // Function to get extention of the file url
+    // let file_ext = getFileExtention(fileUrl);
+
+	// console.log('file',file_ext)
+
+	// // @ts-expect-error
+	// file_ext = '.' + file_ext[0];
+	ReactNativeBlobUtil
+		.config({ fileCache: true, appendExt: 'png' })
+		.fetch('GET', 'https://res.cloudinary.com/educorreia/image/upload/v1633365748/gnbuwy83t0ga9oq1mw55.png')
+		.then(response => {
+			console.log(response.path());
+		});
+
+	  //console.log(ReactNativeBlobUtil)
+
+	/*ReactNativeBlobUtil
+  .config({
+    // add this option that makes response data to be stored as a file,
+    // this is much more performant.
+    fileCache : true,
+  })
+  .fetch('GET', 'http://www.example.com/file/example.zip', {
+    //some headers ..
+  })
+  .then((res) => {
+    // the temp file path
+    console.log('The file saved to ', res.path())
+  })
+*/
 	if (!loading)
 		return (
 			<View style={styles.container}>
@@ -43,7 +92,7 @@ export function DownloadableFile ({ id, type, title, color, loading = false}: Pr
 							]} 
 							numberOfLines={1}
 							>
-								sim!!!!
+								extensão
 							</Text> 	
 						</View>
 						
