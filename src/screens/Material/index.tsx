@@ -14,6 +14,9 @@ import { styles } from './styles';
 import api from '../../services/api';
 import { CardTopico } from '../../components/CardTopico';
 import ContentLoader, { Rect } from "react-content-loader/native"
+import { DownloadableFile } from '../../components/DownloadableFile';
+import { useNavigation } from '@react-navigation/native';
+import { getStyledDate } from '../../utils/moment';
 
 
 interface DadosMaterial {
@@ -40,27 +43,28 @@ interface DadosMaterial {
 	}
 }
 
-export function Material({ route, navigation }: any){
+export function Material({ route }: any){
+	const navigation = useNavigation();
 	const { id } = route.params;
 	const { user } = useAuth();
 	const role = user?.role;
 	
 	const [ loading, setLoading ] = useState(true);
 	
-	const [ dadosMaterial, setDadosMaterial ] = useState<DadosMaterial>();
+	const [ dadosAtividade, setDadosAtividade ] = useState<DadosMaterial>();
 	
 	useEffect(() => {		
-		async function getDadosMaterial() {
+		async function getDadosAtividade() {
 			const {
 				data,	
 				status
-			} = await api.get(`/materiais/${id}`);
+			} = await api.get(`/atividades/${id}`);
 
-			setDadosMaterial(data);
+			setDadosAtividade(data);
 		}
 
 		async function load(){
-			await getDadosMaterial();
+			await getDadosAtividade();
 			setLoading(false);
 		}
 
@@ -72,20 +76,27 @@ export function Material({ route, navigation }: any){
 		return( 
 			<View style={[styles.container]}>
 						<NavBar 
-						title={ dadosMaterial?.nome } 
+						title={ dadosAtividade?.topico.turma.nome } 
 						
-						iconName={ dadosMaterial?.topico.turma.icone.altLink }
-							color={ dadosMaterial?.topico.turma.cores.corPrim }
+						iconName={ dadosAtividade?.topico.turma.icone.altLink }
+							color={ dadosAtividade?.topico.turma.cores.corPrim }
 						/>
-
 						<ScrollView style={styles.content}>
-							<View style={styles.topicosList}>
+							<Text style={[styles.title, styles.text]}>
+								{dadosAtividade?.nome}
+							</Text>
 
-								<Text style={[styles.title, styles.text]}>{dadosMaterial?.nome}</Text>
+							<Text style={[styles.title, styles.text]}>
+								{}
+							</Text>
 
-								<Text style={[styles.content, styles.text]}>{dadosMaterial?.conteudo}</Text>
-								
-							</View>
+							<Text style={[styles.title, styles.text]}>
+								Passa zap gata 😍
+							</Text>
+							<DownloadableFile
+								color={dadosAtividade?.topico.turma.cores.corPrim}
+							/>
+
 						</ScrollView>
 			</View>
 		);
@@ -95,8 +106,7 @@ export function Material({ route, navigation }: any){
 		return(
 			<View style={[styles.container]}>
 				<NavBar color={theme.colors.highlight}/>
-				<ScrollView style={styles.content} scrollEnabled={false}>
-				 
+				<ScrollView style={styles.content}  scrollEnabled={false}>
 				
 				<ContentLoader
 				style={styles.skeleton}
@@ -105,14 +115,15 @@ export function Material({ route, navigation }: any){
 				height={1000}
 				backgroundColor={theme.colors.gray80}
 				foregroundColor={theme.colors.gray70}
-				>
-					<Rect x="0" y="12" rx="6" ry="6" width="70%" height="22" />
-					<Rect x="0" y="46" rx="6" ry="6" width="100%" height="20" />
-					<Rect x="0" y="70" rx="6" ry="6" width="100%" height="20" />
-					<Rect x="0" y="94" rx="6" ry="6" width="100%" height="20" />
-					<Rect x="0" y="118" rx="6" ry="6" width="100%" height="20" />
-					<Rect x="0" y="142" rx="6" ry="6" width="100%" height="20" />
-					<Rect x="0" y="178" rx="6" ry="6" width="30%" height="22" />
+			>
+				<Rect x="0" y="12" rx="6" ry="6" width="50%" height="22" />
+				<Rect x="0" y="38" rx="6" ry="6" width="40%" height="14" />
+				<Rect x="0" y="66" rx="6" ry="6" width="100%" height="20" />
+				<Rect x="0" y="90" rx="6" ry="6" width="100%" height="20" />
+				<Rect x="0" y="114" rx="6" ry="6" width="100%" height="20" />
+				<Rect x="0" y="138" rx="6" ry="6" width="100%" height="20" />
+				<Rect x="0" y="162" rx="6" ry="6" width="100%" height="20" />
+				<Rect x="0" y="198" rx="6" ry="6" width="30%" height="22" />
 				</ContentLoader>
 
 				</ScrollView>
