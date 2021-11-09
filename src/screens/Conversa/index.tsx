@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Text } from 'react-native';
 import { RectButton } from "react-native-gesture-handler";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 import { ChatNavBar } from '../../components/ChatNavBar';
 import { Message } from '../../components/Message';
 import { Skeleton } from '../../components/Message/Skeleton';
+import { EmptyChat } from '../../components/EmptyChat';
 import { ChatTextBox } from '../../components/ChatTextBox';
 
 import { useAuth } from '../../contexts/auth';
@@ -58,32 +59,6 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 
 	const [ loading, setLoading ] = useState<boolean>(true);
 
-	useEffect(() => {
-		if (!loading) setLoading(true);
-		if (messages.length !== 0) setMessages([]);
-
-		socket.on("previous_messages", (messages: Message[]) => setMessages(messages.reverse()));
-		socket.emit("identify", { token });
-		socket.emit("open_chat", { otherUser: id, token });
-		socket.on("new_message", ([data]: Message[]) => {
-			setMessages((prevMessages: Message[]) => {
-                if(data.origem.identity === id){
-                    return [data, ...prevMessages];
-                }
-				else {
-					return prevMessages;
-				}
-            });
-        });
-	}, [id]);
-
-	useEffect(() => {
-		if (messages.length !== 0) {
-			setLoading(false);
-			flatListRef.current?.scrollToIndex({ animated: true, index: 0, viewPosition: 0 });
-		}
-	}, [messages]);
-
 	const messageComponent = ({ item: message, index }: FlatListProps) => {
 		const firstMessage = index === messages.length - 1;
 		const lastMessage = index === 0;
@@ -123,6 +98,35 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 		}
 	}
 
+	const loadPreviousMessagesHandler = (messages: Message[]) => {
+		console.log('messages', messages);
+		setMessages(messages.reverse());			
+		setLoading(false);
+		
+		if (messages.length !== 0) {
+			flatListRef.current?.scrollToIndex({ animated: true, index: 0, viewPosition: 0 });
+		}
+	}
+
+	useEffect(() => {
+		if (!loading) setLoading(true);
+		if (messages.length !== 0) setMessages([]);
+
+		socket.on("previous_messages", loadPreviousMessagesHandler);
+		socket.emit("identify", { token });
+		socket.emit("open_chat", { otherUser: id, token });
+		socket.on("new_message", ([data]: Message[]) => {
+			setMessages((prevMessages: Message[]) => {
+                if(data.origem.identity === id){
+                    return [data, ...prevMessages];
+                }
+				else {
+					return prevMessages;
+				}
+            });
+        });
+	}, [id]);
+
 	return(
 		<View style={styles.container}>          
 			<ChatNavBar 
@@ -137,7 +141,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 				keyExtractor={ item => item.data + item.origem.role + item.mensagem.length }
 				inverted
 				initialNumToRender={20}
-				ListEmptyComponent={<Skeleton />}
+				ListEmptyComponent={loading ? <Skeleton /> : <EmptyChat />}
 
 				scrollEnabled={!loading}
 
