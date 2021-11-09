@@ -13,8 +13,8 @@ import { styles } from './styles';
 import { io } from "socket.io-client";
 
 interface Conversation {
-	data: string;
-	mensagem: string;
+	data: string | null;
+	mensagem: string | null;
 	professor: {
 		email: string;
 		foto: string;
@@ -58,10 +58,10 @@ export function Conversas({ navigation }: any){
 						const rg = conversation.professor.rg;
 						const avatar = conversation.professor.foto;
 						const name = conversation.professor.nome;
-						const message = conversation.mensagem;
+						const message = conversation.mensagem || 'Começar a conversar';
 						const date = conversation.data;
 
-						return <ContatoChat key={rg} loading={false} id={rg} avatar={avatar} name={name} message={message} date={date} />
+						return <ContatoChat key={rg} loading={false} id={rg} avatar={avatar} name={name} message={message} date={date} noMessage={!conversation.mensagem} />
 					})
 					:
 					[...Array(6)].map((value, index) => {

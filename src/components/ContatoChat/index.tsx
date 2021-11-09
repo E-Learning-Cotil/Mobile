@@ -15,14 +15,15 @@ interface Props {
 	avatar?: string;
 	name?: string;
 	message?: string;
-	date?: string;
+	date?: string | null;
+	noMessage?: boolean;
 }
 
-export function ContatoChat({ loading, id, avatar, name, message, date }: Props){
+export function ContatoChat({ loading, id, avatar, name, message, date, noMessage }: Props){
 	const navigation = useNavigation();
 	
-	if (!loading && date) {
-		date = getStyledDatetime(date);
+	if (!loading) {
+		if (date) date = getStyledDatetime(date);
 
 		return (
 			<View style={styles.container}>
@@ -47,7 +48,7 @@ export function ContatoChat({ loading, id, avatar, name, message, date }: Props)
 								{date}
 							</Text>
 						</View>
-						<Text style={styles.message} numberOfLines={1}>
+						<Text style={[styles.message, noMessage && { fontStyle: 'italic' }]} numberOfLines={1}>
 							{message}
 						</Text>
 					</View>
