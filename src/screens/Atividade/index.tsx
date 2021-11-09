@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react';
 
-import { View, ScrollView, Text, Dimensions } from 'react-native';
+import { 
+	View,
+	ScrollView,
+	Text,
+	Dimensions,
+} from 'react-native';
+
+import ContentLoader, { Rect } from "react-content-loader/native"
+import { useNavigation } from '@react-navigation/native';
 
 import { LabelText } from '../../components/LabelText';
 import { NavBar } from '../../components/NavBar';
 import { CardAtividade } from '../../components/CardAtividade';
 import { CardTurma } from '../../components/CardTurma';
+import { CardTopico } from '../../components/CardTopico';
+import { DownloadableFile } from '../../components/DownloadableFile';
 
 import { useAuth } from '../../contexts/auth';
+import { getStyledDate, getDatetimeColor } from '../../utils/moment';
+import api from '../../services/api';
 
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
-import api from '../../services/api';
-import { CardTopico } from '../../components/CardTopico';
-import ContentLoader, { Rect } from "react-content-loader/native"
-import { DownloadableFile } from '../../components/DownloadableFile';
-import { useNavigation } from '@react-navigation/native';
-import { getStyledDate, getDatetimeColor } from '../../utils/moment';
+
 
 
 interface DadosAtividade {
