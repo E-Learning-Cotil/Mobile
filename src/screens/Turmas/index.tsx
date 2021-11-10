@@ -82,7 +82,6 @@ export function Turmas({ navigation }: any){
 								return <CardTurma 
 									key={index} 
 									loading={true} 
-									navigation = {navigation} 
 									id = {index}
 								/>
 							})
@@ -102,7 +101,6 @@ export function Turmas({ navigation }: any){
 									color={color} 
 									subtitle={professor} 
 									iconLink={link} 
-									navigation = {navigation} 
 									id = {id}
 								/>
 							})
@@ -121,7 +119,6 @@ export function Turmas({ navigation }: any){
 									color={color}
 									subtitle={subtitle} 
 									iconLink={link} 
-									navigation = {navigation} 
 									id = {id}
 								/>
 							}))
