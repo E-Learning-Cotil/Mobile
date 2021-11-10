@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { 
 	View, 
 	Text, 
@@ -7,10 +7,13 @@ import {
     Platform,
 } from "react-native";
 
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+import * as MediaLibrary from 'expo-media-library';
+
 import { RectButton } from "react-native-gesture-handler";
 import ContentLoader, { Rect } from "react-content-loader/native"
 
-import ReactNativeBlobUtil from 'react-native-blob-util';
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
@@ -31,8 +34,7 @@ interface Props {
 export function DownloadableFile ({ id, type, title, color, loading = false}: Props) {
 	const navigation = useNavigation();
 
-	
-	// const fileUrl = 'https://res.cloudinary.com/educorreia/image/upload/v1633365748/gnbuwy83t0ga9oq1mw55.png';
+	const fileUrl = 'https://res.cloudinary.com/educorreia/image/upload/v1633365748/gnbuwy83t0ga9oq1mw55.png';
 
 	// const getFileExtention = (fileUrl: string) => {
 	// 	// To get the file extension
@@ -49,29 +51,61 @@ export function DownloadableFile ({ id, type, title, color, loading = false}: Pr
 
 	// // @ts-expect-error
 	// file_ext = '.' + file_ext[0];
-	ReactNativeBlobUtil
-		.config({ fileCache: true, appendExt: 'png' })
-		.fetch('GET', 'https://res.cloudinary.com/educorreia/image/upload/v1633365748/gnbuwy83t0ga9oq1mw55.png')
-		.then(response => {
-			console.log(response.path());
-		});
 
-	  //console.log(ReactNativeBlobUtil)
+	// const [ downloadState, setDownloadState ] = useState({ downloadProgress: -1 });
 
-	/*ReactNativeBlobUtil
-  .config({
-    // add this option that makes response data to be stored as a file,
-    // this is much more performant.
-    fileCache : true,
-  })
-  .fetch('GET', 'http://www.example.com/file/example.zip', {
-    //some headers ..
-  })
-  .then((res) => {
-    // the temp file path
-    console.log('The file saved to ', res.path())
-  })
-*/
+	// const callback = (downloadProgress: FileSystem.DownloadProgressData) => {
+	// 	const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
+	// 	setDownloadState({
+	// 		downloadProgress: progress,
+	// 	});
+	// };
+	
+	// const downloadResumable = FileSystem.createDownloadResumable(
+	// 	fileUrl,
+	// 	FileSystem.documentDirectory + 'atividade.png',
+	// 	{},
+	// 	callback
+	// );
+
+	useEffect(() => {
+		const download = async () => {
+			MediaLibrary.getAlbumsAsync().then(albums => console.log('albums', albums))
+			await MediaLibrary.getPermissionsAsync()
+			.then(async permission => {
+				if (permission.status !== MediaLibrary.PermissionStatus.GRANTED) {
+					return;
+				}
+
+				await FileSystem.downloadAsync(
+					fileUrl,
+					FileSystem.cacheDirectory + 'arquivobaixalogo.png'
+				)
+				.then(async ({ uri }) => {
+					try {
+						const asset = await MediaLibrary.createAssetAsync(uri);
+						const album = await MediaLibrary.getAlbumAsync('Downloads');
+						console.log('asset', asset)
+						console.log('album', album)
+						if (album == null) {
+							console.log('null')
+							await MediaLibrary.createAlbumAsync('E-learning', asset, false);
+						} else {
+							console.log('not null')
+							await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+						}
+					} catch (e) {
+						console.error(e);
+					}
+				})
+				.catch(e => console.error(e));
+			})
+			.catch(e => console.error(e));
+		}
+
+		download();
+	}, []);
+
 	if (!loading)
 		return (
 			<View style={styles.container}>
