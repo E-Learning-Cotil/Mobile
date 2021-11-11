@@ -30,7 +30,8 @@ export const styles = StyleSheet.create({
 		borderRadius: 20, 
 
 		color: theme.colors.white,
-		fontFamily: theme.fonts.text700
+		fontFamily: theme.fonts.text700,
+		fontSize: 18,
 	},
 
 	button: {},
