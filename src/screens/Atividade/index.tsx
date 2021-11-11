@@ -105,6 +105,7 @@ export function Atividade({ route }: any){
 							</Text>
 							<DownloadableFile
 								color={dadosAtividade?.topico.turma.cores.corPrim}
+								url={'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'}
 							/>
 
 						</ScrollView>

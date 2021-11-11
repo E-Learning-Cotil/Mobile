@@ -10,13 +10,15 @@ import {
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
+import * as IntentLauncher from 'expo-intent-launcher';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { RectButton } from "react-native-gesture-handler";
-import ContentLoader, { Rect } from "react-content-loader/native"
+import ContentLoader, { Rect } from "react-content-loader/native";
 
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
-import { DrawerContentComponentProps } from "@react-navigation/drawer";
+
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { useNavigation } from "@react-navigation/native";
 
@@ -27,84 +29,60 @@ interface Props {
 	type?: number;
 	title?: string;
 	color?: string;
+	url: string;
+	//name: string;
 
 	loading?: boolean;
 }
 
-export function DownloadableFile ({ id, type, title, color, loading = false}: Props) {
+export function DownloadableFile ({ id, type, title, color, loading = false, url, /*name*/}: Props) {
 	const navigation = useNavigation();
 
-	const fileUrl = 'https://res.cloudinary.com/educorreia/image/upload/v1633365748/gnbuwy83t0ga9oq1mw55.png';
+	const trimUrl = (url: string) => {
+		return url.substring(url.lastIndexOf('/') + 1)
+	}
 
-	// const getFileExtention = (fileUrl: string) => {
-	// 	// To get the file extension
-	// 	return /[.]/.exec(fileUrl) ?
-	// 			 /[^.]+$/.exec(fileUrl) : undefined;
-	//   };
+	const downloadAndOpen = async (fileUrl: string) => {
+		try {
+			const image = ['png', 'jpg', 'jpeg'];
 
-	// // Get today's date to add the time suffix in filename
-    // let date = new Date(); 
-    // // Function to get extention of the file url
-    // let file_ext = getFileExtention(fileUrl);
+			const fileName = trimUrl(fileUrl)
 
-	// console.log('file',file_ext)
+			const fileExtension = fileName.split('.').pop();
 
-	// // @ts-expect-error
-	// file_ext = '.' + file_ext[0];
+			const isImage = fileExtension && image.includes(fileExtension);
 
-	// const [ downloadState, setDownloadState ] = useState({ downloadProgress: -1 });
+			const { exists } = await FileSystem.getInfoAsync(FileSystem.cacheDirectory + fileName);
 
-	// const callback = (downloadProgress: FileSystem.DownloadProgressData) => {
-	// 	const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
-	// 	setDownloadState({
-	// 		downloadProgress: progress,
-	// 	});
-	// };
-	
-	// const downloadResumable = FileSystem.createDownloadResumable(
-	// 	fileUrl,
-	// 	FileSystem.documentDirectory + 'atividade.png',
-	// 	{},
-	// 	callback
-	// );
-
-	useEffect(() => {
-		const download = async () => {
-			MediaLibrary.getAlbumsAsync().then(albums => console.log('albums', albums))
-			await MediaLibrary.getPermissionsAsync()
-			.then(async permission => {
-				if (permission.status !== MediaLibrary.PermissionStatus.GRANTED) {
-					return;
-				}
-
-				await FileSystem.downloadAsync(
+			if (!exists) {
+				const { uri } = await FileSystem.downloadAsync(
 					fileUrl,
-					FileSystem.cacheDirectory + 'arquivobaixalogo.png'
-				)
-				.then(async ({ uri }) => {
-					try {
-						const asset = await MediaLibrary.createAssetAsync(uri);
-						const album = await MediaLibrary.getAlbumAsync('Downloads');
-						console.log('asset', asset)
-						console.log('album', album)
-						if (album == null) {
-							console.log('null')
-							await MediaLibrary.createAlbumAsync('E-learning', asset, false);
-						} else {
-							console.log('not null')
-							await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
-						}
-					} catch (e) {
-						console.error(e);
-					}
-				})
-				.catch(e => console.error(e));
-			})
-			.catch(e => console.error(e));
-		}
+					FileSystem.cacheDirectory + fileName,
+				);
 
-		download();
-	}, []);
+				if ( isImage ) {
+					const asset = await MediaLibrary.createAssetAsync(uri);
+					const album = await MediaLibrary.getAlbumAsync('E-learning');
+	
+					if (album === null) {
+						await MediaLibrary.createAlbumAsync('E-learning', asset, false);
+					} else {
+						await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+					}
+				}
+			}
+
+			const contentUri = await FileSystem.getContentUriAsync(FileSystem.cacheDirectory + fileName);
+
+			await IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+				data: contentUri,
+				flags: 1,
+			});
+		}
+		catch (e) {
+			console.error(e);
+		}
+	}
 
 	if (!loading)
 		return (
@@ -112,8 +90,7 @@ export function DownloadableFile ({ id, type, title, color, loading = false}: Pr
 				<RectButton 
 					style={styles.button} 
 					onPress={() => {
-					
-						navigation.navigate('pagina' as never, { id: id } as never)
+						downloadAndOpen(url);
 					}}
 				>
 					<View style={styles.row}>
@@ -126,7 +103,7 @@ export function DownloadableFile ({ id, type, title, color, loading = false}: Pr
 							]} 
 							numberOfLines={1}
 							>
-								extensão
+								{trimUrl(url)}
 							</Text> 	
 						</View>
 						
@@ -148,12 +125,13 @@ export function DownloadableFile ({ id, type, title, color, loading = false}: Pr
 				style={styles.skeleton}
 				speed={1}
 				width={'100%'}
-				height={100}
+				height={46}
 				backgroundColor={theme.colors.gray80}
 				foregroundColor={theme.colors.gray70}
 			>
-				<Rect x="75%" y="0" rx="16" ry="16" width="25%" height="100" />
-				<Rect x="5%" y="38" rx="6" ry="6" width="65%" height="22" />
+				<Rect x="12" y="7" rx="6" ry="6" width="24" height="32" />
+				<Rect x="50" y="14" rx="6" ry="6" width="55%" height="18" />
+				<Rect x="75%" y="0" rx="18" ry="18" width="25%" height="46" />
 			</ContentLoader>
 		)
 }
