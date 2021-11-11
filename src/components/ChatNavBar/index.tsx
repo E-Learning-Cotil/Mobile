@@ -12,13 +12,25 @@ interface Props {
 	color: string
 	imgLink: string;
 	text: string;
+	lastMessage: {
+		data: string;
+		mensagem: string;
+		origem: {
+			role: 'ALUNO' | 'PROFESSOR';
+			identity: string;
+		};
+		destino: string;
+	};
 }
 
-export function ChatNavBar({ color, imgLink, text }: Props) {
+export function ChatNavBar({ color, imgLink, text, lastMessage }: Props) {
 	const navigation = useNavigation();
 
 	function goBackClickHandler() {
-		navigation.goBack();
+		if (lastMessage.origem)
+			navigation.navigate('Conversas' as never, { lastMessage } as never);
+		else
+			navigation.goBack();
 	}
 
 	return (

@@ -133,6 +133,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 				text={name}
 				color={color}
 				imgLink={imgLink}
+				lastMessage={{ ...messages[0], destino: id }}
 			/>
 			
 			<FlatList
