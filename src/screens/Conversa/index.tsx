@@ -141,7 +141,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 				keyExtractor={ item => item.data + item.origem.role + item.mensagem.length }
 				inverted
 				initialNumToRender={20}
-				ListEmptyComponent={loading ? <Skeleton /> : <EmptyChat />}
+				ListEmptyComponent={loading ? <Skeleton /> : <EmptyChat userRole={role} />}
 
 				scrollEnabled={!loading && messages.length !== 0}
 

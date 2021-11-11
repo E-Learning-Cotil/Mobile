@@ -16,16 +16,9 @@ export const styles = StyleSheet.create({
 		transform: [{ scaleY: -1 }],
 	},
 
-	image: {
-		width: '100%',
-		height: 300,
-
-		// backgroundColor: 'red'
-	},
-
 	text: {
 		fontFamily: theme.fonts.text700,
-		fontSize: 32,
+		fontSize: 26,
 		color: theme.colors.white,
 	},
 });
