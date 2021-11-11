@@ -203,16 +203,16 @@ export function Topico({ route, navigation }: any){
 				style={styles.skeleton}
 				speed={1}
 				width={Dimensions.get('window').width - 40}
-				height={150}
+				height={140}
 				backgroundColor={theme.colors.gray80}
 				foregroundColor={theme.colors.gray70}
 			>
 				<Rect x="0" y="12" rx="6" ry="6" width="70%" height="22" />
 				<Rect x="0" y="46" rx="6" ry="6" width="100%" height="22" />
 				<Rect x="0" y="72" rx="6" ry="6" width="100%" height="22" />
-				<Rect x="41%" y="130" rx="6" ry="6" width="10" height="10" />
-				<Rect x="48%" y="127.5" rx="10" ry="10" width="15" height="15" />
-				<Rect x="56%" y="130" rx="6" ry="6" width="10" height="10" />
+				<Rect x="8%" y="120" rx="7.5" ry="7.5" width="22%" height="15" />
+				<Rect x="35%" y="117.5" rx="12.5" ry="12.5" width="30%" height="20" />
+				<Rect x="70%" y="120" rx="7.5" ry="7.5" width="22%" height="15" />
 			</ContentLoader>
 			<ScrollView style={styles.content} scrollEnabled={false}>
 
