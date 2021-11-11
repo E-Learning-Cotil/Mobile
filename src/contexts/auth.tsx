@@ -14,7 +14,7 @@ interface User {
 	nome: string;
 	telefone: string;
 	email: string;
-	id: number;
+	id: string;
 	role: 'ALUNO' | 'PROFESSOR';
 }
 

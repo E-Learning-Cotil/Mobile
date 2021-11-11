@@ -5,8 +5,8 @@ interface User {
 	nome: string;
 	telefone: string;
 	email: string;
-	id: number;
-	role: string
+	id: string;
+	role: 'ALUNO' | 'PROFESSOR';
 }
 
 interface Response {
@@ -34,7 +34,7 @@ export async function signIn ({ email, password, role }: AuthData): Promise<Resp
 
 	return {
 		token,
-		user,
+		user: { ...user, id: String(user.id) },
 		status,
 		message
 	}
