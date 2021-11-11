@@ -91,7 +91,6 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 					}
 				};
 				return [newMessageObject, ...prevMessages];
-                
             });
 
 			setNewMessage('');
@@ -99,7 +98,6 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 	}
 
 	const loadPreviousMessagesHandler = (messages: Message[]) => {
-		console.log('messages', messages);
 		setMessages(messages.reverse());			
 		setLoading(false);
 		
@@ -111,20 +109,21 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 	useEffect(() => {
 		if (!loading) setLoading(true);
 		if (messages.length !== 0) setMessages([]);
+		if (newMessage.length !== 0) setNewMessage('');
 
 		socket.on("previous_messages", loadPreviousMessagesHandler);
 		socket.emit("identify", { token });
 		socket.emit("open_chat", { otherUser: id, token });
 		socket.on("new_message", ([data]: Message[]) => {
 			setMessages((prevMessages: Message[]) => {
-                if(data.origem.identity === id){
-                    return [data, ...prevMessages];
-                }
+				if(data.origem.identity === id){
+					return [data, ...prevMessages];
+				}
 				else {
 					return prevMessages;
 				}
-            });
-        });
+			});
+		});
 	}, [id]);
 
 	return(
@@ -144,7 +143,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 				initialNumToRender={20}
 				ListEmptyComponent={loading ? <Skeleton /> : <EmptyChat />}
 
-				scrollEnabled={!loading}
+				scrollEnabled={!loading && messages.length !== 0}
 
 				ref={flatListRef}
 				onScroll={(e) => {
