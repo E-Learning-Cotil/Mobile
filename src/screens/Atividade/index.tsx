@@ -5,10 +5,14 @@ import {
 	ScrollView,
 	Text,
 	Dimensions,
+	Modal,
 } from 'react-native';
 
 import ContentLoader, { Rect } from "react-content-loader/native"
 import { useNavigation } from '@react-navigation/native';
+
+import { FontAwesome5 } from '@expo/vector-icons'; 
+import { RectButton } from "react-native-gesture-handler";
 
 import { LabelText } from '../../components/LabelText';
 import { NavBar } from '../../components/NavBar';
@@ -28,11 +32,15 @@ import { styles } from './styles';
 
 interface DadosAtividade {
 	nome: string;
+	conteudo: string;
 	dataFim: string;
 	arquivosAtividades: [
 		{
 			id: number;
-			idArquivoProfessor: number;
+			arquivoProfessor: {
+				link: string;
+				nome: string;
+			}
 			idAtividade: number;
 		}
 	];	
@@ -47,6 +55,15 @@ interface DadosAtividade {
 			}
 		}
 	}
+	atividadesAlunos: [
+		{
+			dataEnvio: string;
+			link: string;
+			nome: string;
+			nota: string;
+			raAluno: number;
+		}
+	]
 }
 
 export function Atividade({ route }: any){
@@ -54,10 +71,30 @@ export function Atividade({ route }: any){
 	const { id } = route.params;
 	const { user } = useAuth();
 	const role = user?.role;
+
+	const [haveAnAnnex, sethaveAnAnnex] = useState(true);
+	const [showModal, setShowModal] = useState(false);
 	
 	const [ loading, setLoading ] = useState(true);
 	
 	const [ dadosAtividade, setDadosAtividade ] = useState<DadosAtividade>();
+
+	function visualizeSendingFile() {
+
+	}
+
+	function removeSendingFile() {
+		sethaveAnAnnex(false);
+	}
+
+	function addSendingFile() {
+		sethaveAnAnnex(true);
+	}
+
+	function sendFile() {
+		setShowModal(true);
+	}
+
 	
 	useEffect(() => {		
 		async function getDadosAtividade() {
@@ -88,27 +125,133 @@ export function Atividade({ route }: any){
 							color={ dadosAtividade?.topico.turma.cores.corPrim }
 						/>
 						<ScrollView style={styles.content}>
-							<Text style={[styles.title, styles.text]}>
+							<Text style={[styles.title, styles.text, {marginTop: 10}]}>
 								{dadosAtividade?.nome}
 							</Text>
 
-							<Text style={[styles.title, styles.text]}>
-								Data de entrega: {dadosAtividade && getStyledDate(dadosAtividade.dataFim)}
+							<Text style={[styles.subtitle, styles.text]}>
+								<Text>Data de entrega: </Text> 
+								<Text style={{color: (dadosAtividade?.atividadesAlunos  && dadosAtividade?.atividadesAlunos.length == 0 && role == "ALUNO") ? getDatetimeColor(dadosAtividade?.dataFim) : theme.colors.white}}>{dadosAtividade && getStyledDate(dadosAtividade.dataFim)}</Text>
+								
 							</Text>
 
-							<Text style={[styles.title, styles.text]}>
-								{}
+							<Text style={[styles.description, styles.text, {marginTop: 10}]}>
+								{dadosAtividade?.conteudo}
 							</Text>
 
-							<Text style={[styles.title, styles.text]}>
-								Passa zap gata 😍
-							</Text>
-							<DownloadableFile
-								color={dadosAtividade?.topico.turma.cores.corPrim}
-								url={'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'}
-							/>
+							{
+							
+								(dadosAtividade?.arquivosAtividades && dadosAtividade?.arquivosAtividades.length > 0) &&
+								<Text style={[styles.title, styles.text, {marginTop: 10}]}>
+									Anexos: 
+								</Text>
+							
+							}
+
+							{
+								dadosAtividade?.arquivosAtividades.map((arquivo, index) => {
+
+									return <DownloadableFile 
+										key={index}
+										name={arquivo.arquivoProfessor.nome}
+										url={arquivo.arquivoProfessor.link}
+										color={ dadosAtividade?.topico.turma.cores.corPrim }
+									/>
+								})
+							}			
 
 						</ScrollView>
+
+						<View style={styles.bottomContainer}> 
+							<Text style={[styles.subtitle, styles.text]}>
+								 Arquivos Anexados: 
+							</Text>
+
+						{
+							haveAnAnnex ? 
+							<View 
+								style={styles.buttonAnnex} 
+							>
+								<View style={styles.row}>
+									<View style={styles.contentDiv}>
+										<FontAwesome5 name={"file"} size={24} color="black" />	
+										<Text 
+										style={{
+											paddingLeft: 12,
+											paddingRight: 24,
+											fontFamily:theme.fonts.title400,
+											color: theme.colors.background,
+											fontSize: 18,
+										}} 
+										numberOfLines={1}
+										>
+											aaaaaaaaaaaaaaa
+										</Text> 	
+									</View>		
+
+									<RectButton 
+									style={[styles.iconDiv, {backgroundColor: dadosAtividade?.topico.turma.cores.corPrim}]}
+									onPress={() => {
+										removeSendingFile()
+									}}
+									>
+										<FontAwesome5 name={"window-close"} size={24} color="white" />
+									</RectButton>
+								</View>
+							
+							</View>
+							:
+							<RectButton 
+								style={[styles.buttonAddFile]}
+								onPress={() => {
+									addSendingFile()
+								}}
+							>
+								<Text style={[styles.text, styles.title]}> Adicionar arquivo </Text>
+							</RectButton>
+						}
+							<RectButton 
+								style={[styles.row, styles.buttonSend, {backgroundColor: dadosAtividade?.topico.turma.cores.corPrim}]}
+								onPress={() => { sendFile() }}
+							>
+								<Text style={[styles.text, styles.title]}> Enviar Atividade </Text>
+								<View>
+										<FontAwesome5 name={"telegram-plane"} size={32} color="white" />
+									</View>
+
+							</RectButton>
+						</View>
+
+						<Modal transparent={true} visible={showModal} onRequestClose={() => {
+							setShowModal(false);
+						}}>
+							<View style={[styles.modal, {backgroundColor: theme.colors.transparentBlack}]}> 
+								<View style={styles.modalDiv}>
+
+									<View 
+										style={[styles.buttonAnnex, {justifyContent: 'center',}]} 
+									>
+										<View style={styles.row}>
+											<View style={[styles.contentDiv,{width:'100%'}]}>
+												<FontAwesome5 name={"file"} size={24} color="black" />	
+												<Text 
+												style={{
+													paddingLeft: 12,
+													paddingRight: 24,
+													fontFamily:theme.fonts.title400,
+													color: theme.colors.background,
+													fontSize: 18,
+												}} 
+												numberOfLines={1}
+												>
+													aaaaaaaaaaaaaaa
+												</Text> 	
+											</View>		
+										</View>
+									</View>	
+								</View>
+							</View>
+						</Modal>
 			</View>
 		);
 	}
@@ -123,19 +266,26 @@ export function Atividade({ route }: any){
 				style={styles.skeleton}
 				speed={1}
 				width={Dimensions.get('window').width - 40}
-				height={1000}
+				height={230}
 				backgroundColor={theme.colors.gray80}
 				foregroundColor={theme.colors.gray70}
-			>
-				<Rect x="0" y="12" rx="6" ry="6" width="50%" height="22" />
-				<Rect x="0" y="38" rx="6" ry="6" width="40%" height="14" />
-				<Rect x="0" y="66" rx="6" ry="6" width="100%" height="20" />
-				<Rect x="0" y="90" rx="6" ry="6" width="100%" height="20" />
-				<Rect x="0" y="114" rx="6" ry="6" width="100%" height="20" />
-				<Rect x="0" y="138" rx="6" ry="6" width="100%" height="20" />
-				<Rect x="0" y="162" rx="6" ry="6" width="100%" height="20" />
-				<Rect x="0" y="198" rx="6" ry="6" width="30%" height="22" />
+				>
+					<Rect x="0" y="12" rx="6" ry="6" width="50%" height="22" />
+					<Rect x="0" y="38" rx="6" ry="6" width="40%" height="14" />
+					<Rect x="0" y="66" rx="6" ry="6" width="100%" height="20" />
+					<Rect x="0" y="90" rx="6" ry="6" width="100%" height="20" />
+					<Rect x="0" y="114" rx="6" ry="6" width="100%" height="20" />
+					<Rect x="0" y="138" rx="6" ry="6" width="100%" height="20" />
+					<Rect x="0" y="162" rx="6" ry="6" width="100%" height="20" />
+					<Rect x="0" y="198" rx="6" ry="6" width="30%" height="22" />
 				</ContentLoader>
+
+				<DownloadableFile 
+					name={""}
+					url={""}
+					loading={true}
+				/>
+
 
 				</ScrollView>
 			</View>
