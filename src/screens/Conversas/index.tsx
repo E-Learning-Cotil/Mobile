@@ -33,16 +33,27 @@ interface Message {
 	destino: string;
 }
 
+interface Professor {
+	email: string;
+	foto: string;
+	nome: string;
+	rg: string;
+	telefone: string;
+}
+
+interface Aluno {
+	email: string;
+	foto: string;
+	nome: string;
+	ra: string;
+	telefone: string;
+}
+
 interface Conversation {
 	data: string | null;
 	mensagem: string | null;
-	professor: {
-		email: string;
-		foto: string;
-		nome: string;
-		rg: string;
-		telefone: string;
-	}
+	professor?: Professor;
+	aluno?: Aluno;
 }
 
 export function Conversas({ route: { params }, navigation }: Props){
@@ -101,15 +112,25 @@ export function Conversas({ route: { params }, navigation }: Props){
 					!loading
 					?
 					conversations.map(conversation => {
-						const rg = conversation.professor.rg;
-						const avatar = conversation.professor.foto;
-						const name = conversation.professor.nome;
+						let id, avatar, name;
+
+						if (conversation.professor) {
+							id = conversation.professor.rg;
+							avatar = conversation.professor.foto;
+							name = conversation.professor.nome;
+						}
+						else if (conversation.aluno) {
+							id = conversation.aluno.ra;
+							avatar = conversation.aluno.foto;
+							name = conversation.aluno.nome;
+						}
+						
 						const message = conversation.mensagem || 'Começar a conversar';
 						const date = conversation.data;
 
 						return <ContatoChat
-									key={rg} loading={false} id={rg} avatar={avatar}
-									name={name} message={message} date={date} color={color}
+									key={id} loading={false} id={id} avatar={avatar}
+									name={name} message={message} date={date}
 									noMessage={!conversation.mensagem}
 								/>
 					})
