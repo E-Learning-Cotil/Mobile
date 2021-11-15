@@ -8,10 +8,8 @@ export const styles = StyleSheet.create({
 		height: 46,
 
 		backgroundColor: theme.colors.white,
-
 		borderRadius: 16,
-
-		marginBottom: 16,
+		marginTop: 16,
 	},
 
 	button: {

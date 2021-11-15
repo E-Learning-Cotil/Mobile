@@ -24,31 +24,29 @@ import { useNavigation } from "@react-navigation/native";
 
 
 interface Props {
-	id?: number;
-	
-	type?: number;
-	title?: string;
+	name: string;
 	color?: string;
 	url: string;
-	//name: string;
 
 	loading?: boolean;
 }
 
-export function DownloadableFile ({ id, type, title, color, loading = false, url, /*name*/}: Props) {
+export function DownloadableFile ({ name, color, loading = false, url}: Props) {
 	const navigation = useNavigation();
-
+	
+	
+	
 	const trimUrl = (url: string) => {
 		return url.substring(url.lastIndexOf('/') + 1)
 	}
+	
+	const fileName = trimUrl(url);
+
+	const fileExtension = fileName.split('.').pop();
 
 	const downloadAndOpen = async (fileUrl: string) => {
 		try {
 			const image = ['png', 'jpg', 'jpeg'];
-
-			const fileName = trimUrl(fileUrl)
-
-			const fileExtension = fileName.split('.').pop();
 
 			const isImage = fileExtension && image.includes(fileExtension);
 
@@ -103,13 +101,9 @@ export function DownloadableFile ({ id, type, title, color, loading = false, url
 							]} 
 							numberOfLines={1}
 							>
-								{trimUrl(url)}
+								{`${name}.${fileExtension}`}
 							</Text> 	
-						</View>
-						
-
-						
-							
+						</View>		
 
 						<View style={[styles.iconDiv, {backgroundColor: color}]}>
 							<FontAwesome5 name={"download"} size={24} color="white" />
