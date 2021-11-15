@@ -26,6 +26,7 @@ interface AuthResponse {
 interface AuthContextData {
     signed: boolean;
     user: User | null;
+	setUser: React.Dispatch<React.SetStateAction<User | null>>;
 	loading: boolean;
     signIn({ email, password, role }: AuthData): Promise<AuthResponse>;
 	signOut(): void;
@@ -111,7 +112,7 @@ export function AuthProvider ({ children }: AuthProviderProps) {
 	}
 
 	return (
-		<AuthContext.Provider value={{ signed: Boolean(user), user, loading, signIn, signOut, token: userToken }}>
+		<AuthContext.Provider value={{ signed: Boolean(user), user, setUser, loading, signIn, signOut, token: userToken }}>
 			{children}
 		</AuthContext.Provider>
 	);	
