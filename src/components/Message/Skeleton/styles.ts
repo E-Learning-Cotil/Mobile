@@ -19,8 +19,6 @@ export const styles = StyleSheet.create({
 	},
 
 	rightSkeleton: {
-		backgroundColor: theme.colors.green90,
-
 		borderRadius: 8,
 
 		marginBottom: 10,
@@ -46,7 +44,5 @@ export const styles = StyleSheet.create({
 	rightMessageBubbleCorner: {
 		left: undefined,
 		right: -10,
-
-		borderTopColor: theme.colors.green90,
 	},
 });

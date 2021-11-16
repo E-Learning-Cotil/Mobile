@@ -61,7 +61,7 @@ export function Conversas({ route: { params }, navigation }: Props){
 	const role = user?.role;
 	const color = role === 'ALUNO' ? theme.colors.green90 : theme.colors.purple90;
 
-	const socket = io("https://elearning-tcc.herokuapp.com");
+	const socket = io(process.env.API_URL as any);
 
 	const [ conversations, setConversations ] = useState<Conversation[]>([]);
 
@@ -70,10 +70,25 @@ export function Conversas({ route: { params }, navigation }: Props){
 	function updateConversations (message: Message) {
 		setConversations(previousState => previousState.map(conversation => {
 			if (
-				((message.origem.identity === undefined || message.origem.identity === user?.id) && message.destino === conversation.professor.rg) ||
-				// (message.origem.identity === user.id && message.destino === conversation.aluno.) || // LOGIN as PROFESSOR
-				// (message.origem.role === 'ALUNO' && message.origem.identity === conversation.professor.rg) || // LOGIN as PROFESSOR
-				(message.origem.role === 'PROFESSOR' && message.origem.identity === conversation.professor.rg)
+				(
+					conversation.professor &&
+					((
+						( message.origem.identity === undefined || message.origem.identity === user?.id ) &&
+						message.destino === conversation.professor.rg
+					) || (
+						message.origem.role === 'PROFESSOR' &&
+						message.origem.identity === conversation.professor.rg
+					))
+				) || (
+					conversation.aluno &&
+					((
+						( message.origem.identity === undefined || message.origem.identity === user?.id ) &&
+						message.destino == conversation.aluno.ra
+					) || (
+						message.origem.role === 'ALUNO' &&
+						message.origem.identity == conversation.aluno.ra
+					))
+				)
 			) {
 				conversation.data = message.data;
 				conversation.mensagem = message.mensagem;

@@ -25,7 +25,6 @@ export const styles = StyleSheet.create({
 		marginRight: 20,
 
 		alignSelf: 'flex-end',
-		backgroundColor: theme.colors.green90,
 	},
 
 	messageBubbleCorner: {
@@ -48,8 +47,6 @@ export const styles = StyleSheet.create({
 	rightMessageBubbleCorner: {
 		left: undefined,
 		right: -10,
-
-		borderTopColor: theme.colors.green90,
 	},
 
 	messageView: {
@@ -77,21 +74,5 @@ export const styles = StyleSheet.create({
 		color: theme.colors.white,
 
 		lineHeight: 18,
-	},
-
-	skeleton: {
-		backgroundColor: theme.colors.gray90,
-
-		borderRadius: 8,
-
-		marginBottom: 10,
-	},
-
-	rightSkeleton: {
-		backgroundColor: theme.colors.green90,
-
-		borderRadius: 8,
-
-		marginBottom: 10,
 	},
 });

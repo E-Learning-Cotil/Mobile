@@ -48,7 +48,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 	const role = user?.role;
 	const color = role === 'ALUNO' ? theme.colors.green90 : theme.colors.purple90;
 
-	const socket = io("https://elearning-tcc.herokuapp.com");
+	const socket = io(process.env.API_URL as any);
 
 	const flatListRef = useRef<FlatList | null>(null);
 
@@ -72,11 +72,11 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 		return <Message 
 			key={index} message={mensagem} date={data} right={right} 
 			lastMessageSameSide={lastMessageSameSide} lastMessageDate={lastMessageDate}
-			lastMessage={lastMessage} firstMessage={firstMessage}
+			lastMessage={lastMessage} firstMessage={firstMessage} userRole={role}
 		/>;
 	}
 
-	const sendMessageClickHandler = () => {
+	function sendMessageClickHandler () {
 		if (newMessage && user) {
 			socket.emit("new_message", { message: newMessage, otherUser: id, token });
 
@@ -97,7 +97,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 		}
 	}
 
-	const loadPreviousMessagesHandler = (messages: Message[]) => {
+	function loadPreviousMessagesHandler (messages: Message[]) {
 		setMessages(messages.reverse());			
 		setLoading(false);
 		
@@ -141,7 +141,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 				keyExtractor={ item => item.data + item.origem.role + item.mensagem.length }
 				inverted
 				initialNumToRender={20}
-				ListEmptyComponent={loading ? <Skeleton /> : <EmptyChat userRole={role} />}
+				ListEmptyComponent={loading ? <Skeleton userRole={role} /> : <EmptyChat userRole={role} />}
 
 				scrollEnabled={!loading && messages.length !== 0}
 
@@ -162,7 +162,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 				</RectButton>
 			}
 
-			<ChatTextBox message={newMessage} setMessage={setNewMessage} sendMessageClickHandler={sendMessageClickHandler} />
+			<ChatTextBox message={newMessage} setMessage={setNewMessage} userRole={role} sendMessageClickHandler={sendMessageClickHandler} />
 		</View>
 	);
 }

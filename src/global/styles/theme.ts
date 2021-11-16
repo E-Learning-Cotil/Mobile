@@ -13,6 +13,7 @@ export const theme = {
 		purple100: '#4E0670',
 		purple90: '#6C1795',
 		purple80: '#9F18DF',
+		purple70: '#b94aed',
 
 		transparentBlack: '#000a',
 		black: '#000000',

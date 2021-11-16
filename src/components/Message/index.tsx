@@ -15,9 +15,12 @@ interface Props {
 	lastMessageDate: string;
 	lastMessage: boolean;
 	firstMessage: boolean;
+	userRole?: 'ALUNO' | 'PROFESSOR';
 }
 
-const Message = memo(({ message, date, right, lastMessageSameSide, lastMessageDate, lastMessage, firstMessage }: Props) => {
+const Message = memo(({ message, date, right, lastMessageSameSide, lastMessageDate, lastMessage, firstMessage, userRole }: Props) => {
+	const color = userRole === 'ALUNO' ? theme.colors.green90 : theme.colors.purple90;
+
 	const lastStyledDate = getStyledDate(lastMessageDate).toUpperCase();
 	const currentStyledDate = getStyledDate(date).toUpperCase();
 	const isNewDay = currentStyledDate !== lastStyledDate;
@@ -30,7 +33,7 @@ const Message = memo(({ message, date, right, lastMessageSameSide, lastMessageDa
 
 			<View style={[
 				styles.container,
-				right && styles.rightMessage,
+				right && { ...styles.rightMessage, ...{ backgroundColor: color } },
 				lastMessageSameSide && { marginTop: 5 },
 				lastMessage && { marginBottom: 5 },
 			]}>
@@ -47,7 +50,7 @@ const Message = memo(({ message, date, right, lastMessageSameSide, lastMessageDa
 
 				<View style={[
 					styles.messageBubbleCorner,
-					right && styles.rightMessageBubbleCorner,
+					right && { ...styles.rightMessageBubbleCorner, ...{ borderTopColor: color } },
 					lastMessageSameSide && { borderTopColor: 'transparent' },
 				]}/>
 			</View>
