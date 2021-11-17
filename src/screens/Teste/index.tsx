@@ -1,58 +1,120 @@
 import React, { useEffect, useState } from 'react';
 
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 
-import { LabelText } from '../../components/LabelText';
 import { NavBar } from '../../components/NavBar';
-import { CardAtividade } from '../../components/CardAtividade';
-import { CardTurma } from '../../components/CardTurma';
+import { Pergunta } from '../../components/Pergunta';
 
 import { useAuth } from '../../contexts/auth';
 
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
 import api from '../../services/api';
-import { CardTopico } from '../../components/CardTopico';
 
 
-interface DadosAtividade {
-	nome: string;
+interface DadosTeste {
+	id: number;
+	conteudo: {
+		alternativas: {
+			texto: string;
+		}[];
+		certo: number;
+		imagem: string | null;
+		pergunta: string;
+	}[];
 	dataInicio: string;
 	dataFim: string;
+	nome: string;
+	testesAlunos: {
+		id: number;
+		dataEnvio: string;
+		nota: string;
+	}[];
 	topicos: {
+		id: number;
+		nome: string;
+		descricao: string;
 		turma: {
+			id: number;
 			nome: string;
-			icone: {
-				altLink: string;
-			}
+			idSerie: number;
+			rgProfessor: string;
 			cores: {
 				corPrim: string;
+				corSec: string;
+			}
+			icone: {
+				link: string;
+				altLink: string;
 			}
 		}
 	}
 }
 
-export function Teste({ route, navigation }: any){
+export function Teste({ route, navigation }: any) {
 	const { id } = route.params;
 	const { user } = useAuth();
 	const role = user?.role;
-	
+
 	const [ loading, setLoading ] = useState(true);
-	
-	const [ dadosAtividade, setDadosAtividade ] = useState<DadosAtividade>();
-	
-	useEffect(() => {		
-		async function getDadosAtividade() {
+
+	const [ dadosTeste, setDadosTeste ] = useState<DadosTeste>();
+	const [ testResult, setTestResult ] = useState<boolean[]>();
+	const [ checked, setChecked ] = useState<boolean[]>();
+
+	function setResult ( idAlternative: number, correct: boolean ) {
+		console.log(idAlternative, correct)
+		setChecked(prevState => prevState?.map((prev, index) => {
+			if (index === idAlternative)
+				return true;
+			else
+				return prev;
+		}));
+
+		setTestResult(prevState => prevState?.map((result, index) => {
+			if (index === idAlternative)
+				return correct;
+			else
+				return result;
+		}));
+	}
+
+	async function submitTest () {
+		if (dadosTeste && testResult && checked && checked.every(e => e === true)) {
+			let count = 0;
+
+			testResult.map(result => { if (result) count++ })
+
+			const grade = Math.round((count / testResult.length * 10) * 10) / 10;
+
+			try {
+				await api.post('/testes-aluno', {
+					nota: grade,
+					idTeste: dadosTeste.id,
+					idTurma: dadosTeste.topicos.turma.id,
+				});
+			} catch (error) {
+				console.error(error);
+			}
+		}
+	}
+
+	useEffect(() => {
+		async function getDadosTeste() {
 			const {
-				data,	
+				data,
 				status
 			} = await api.get(`/testes/${id}`);
 
-			setDadosAtividade(data);
+			data.conteudo = JSON.parse(data.conteudo);
+
+			setDadosTeste(data);
+			setTestResult([...Array(data.conteudo.length).fill(false)]);
+			setChecked([...Array(data.conteudo.length).fill(false)]);
 		}
 
-		async function load(){
-			await getDadosAtividade();
+		async function load() {
+			await getDadosTeste();
 			setLoading(false);
 		}
 
@@ -60,40 +122,57 @@ export function Teste({ route, navigation }: any){
 		load();
 	}, [id]);
 
-	if(!loading){
-		return( 
-			<View style={[styles.container]}>
-						<NavBar 
-						title={ dadosAtividade?.nome } 
-						
-						iconName={ dadosAtividade?.topicos.turma.icone.altLink }
-							color={ dadosAtividade?.topicos.turma.cores.corPrim }
-						/>
+	useEffect(() => {
+		console.log(testResult)
+	}, [testResult]);
 
-						<ScrollView style={styles.content} >
-							<View style={styles.topicosList}>
-								
-							</View>
-						</ScrollView>
-			</View>
-		);
-	}
-	else
-	{
-		return(
+	if (!loading) {
+		return (
 			<View style={[styles.container]}>
-				<NavBar color={theme.colors.highlight}/>
-				<ScrollView style={styles.content} scrollEnabled={false}>
-				{
-					[...Array(6)].map((value, index) => {
-						return <CardTopico 
-							key={ index } 
-							loading={true} 
-						/>
-					})
-				}
+				<NavBar
+					title={dadosTeste?.nome}
+					iconName={dadosTeste?.topicos.turma.icone.altLink}
+					color={dadosTeste?.topicos.turma.cores.corPrim}
+				/>
+
+				<ScrollView style={styles.content} >
+					<View style={styles.perguntasList}>
+						{
+							dadosTeste?.testesAlunos.length === 0 ?
+							dadosTeste.conteudo.map((pergunta, index) => <Pergunta
+								key={index}
+								pergunta={pergunta}
+								idPergunta={index}
+								setResult={setResult}
+								color={dadosTeste.topicos.turma.cores.corPrim}
+							/>)
+							:
+							null // TESTE JÀ RESOLVIDO
+						}
+
+						<View style={styles.buttonsView}>
+							<TouchableOpacity
+								style={styles.submitButton}
+								onPress={ submitTest }
+							>
+								<Text style={styles.submitButtonText}>
+									Enviar Teste
+								</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
 				</ScrollView>
 			</View>
 		);
-	}			
+	}
+	else {
+		return (
+			<View style={[styles.container]}>
+				<NavBar color={theme.colors.highlight} />
+				<ScrollView style={styles.content} scrollEnabled={false}>
+					<Text style={{ color: 'red' }} >LOADING</Text>
+				</ScrollView>
+			</View>
+		);
+	}
 }
