@@ -21,6 +21,8 @@ import { CardTurma } from '../../components/CardTurma';
 import { CardTopico } from '../../components/CardTopico';
 import { DownloadableFile } from '../../components/DownloadableFile';
 
+import * as DocumentPicker from 'expo-document-picker';
+
 import { useAuth } from '../../contexts/auth';
 import { getStyledDate, getDatetimeColor } from '../../utils/moment';
 import api from '../../services/api';
@@ -79,6 +81,12 @@ export function Atividade({ route }: any){
 	
 	const [ dadosAtividade, setDadosAtividade ] = useState<DadosAtividade>();
 
+	const [file, setFile] = useState(null);
+    const [sended, setSended] = useState(false);
+    const [isSending, setIsSending] = useState(false);
+
+	
+
 	function visualizeSendingFile() {
 
 	}
@@ -95,7 +103,41 @@ export function Atividade({ route }: any){
 		setShowModal(true);
 	}
 
-	
+	async function uploadFile () {
+
+		let response = await DocumentPicker.getDocumentAsync({});
+
+		if(response.type !== 'cancel')
+		{
+			const fileUri = response.uri;
+			const fileName = response.name;
+			let fileUriSubstring = fileUri.substring(fileUri.lastIndexOf('/') + 1);
+			const fileExtension = fileUriSubstring.split('.').pop();
+
+			let formData = new FormData();
+			formData.append('file', {
+				uri: fileUri,
+				name: fileName,
+				type: `${fileExtension}`
+			} as any);
+
+			const {data: uploadedFile} = await api.post('/arquivos', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					'basic_token': process.env.BASIC_TOKEN
+				}
+			})
+
+			setFile({
+				link: uploadedFile.link,
+				name: uploadedFile.name,
+				data: new Date().toISOString(),
+				nota: null
+			});
+		}
+	}
+
+
 	useEffect(() => {		
 		async function getDadosAtividade() {
 			const {
@@ -108,8 +150,42 @@ export function Atividade({ route }: any){
 
 		async function load(){
 			await getDadosAtividade();
+
+			if(dadosAtividade?.atividadesAlunos) {
+				const { atividadesAlunos: [sendedFile] } = dadosAtividade;
+	
+	
+				if(sendedFile) {
+					setFile({
+						name: sendedFile.nome,
+						link: sendedFile.link,
+						data: sendedFile.dataEnvio,
+						nota: sendedFile.nota
+					})
+					setSended(true);
+				}
+			}
+
 			setLoading(false);
 		}
+
+		/*const formData = new FormData();
+        
+                formData.append('file', acceptedFiles[0]);
+        
+                const {data: uploadedFile} = await api.post('/arquivos', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'basic_token': process.env.NEXT_PUBLIC_BASIC_TOKEN
+                    }
+                })
+
+                setFile({
+                    link: uploadedFile.link,
+                    name: uploadedFile.name,
+                    data: new Date().toISOString(),
+                    nota: null
+                }); */
 
 		setLoading(true);
 		load();
@@ -131,7 +207,7 @@ export function Atividade({ route }: any){
 
 							<Text style={[styles.subtitle, styles.text]}>
 								<Text>Data de entrega: </Text> 
-								<Text style={{color: (dadosAtividade?.atividadesAlunos  && dadosAtividade?.atividadesAlunos.length == 0 && role == "ALUNO") ? getDatetimeColor(dadosAtividade?.dataFim) : theme.colors.white}}>{dadosAtividade && getStyledDate(dadosAtividade.dataFim)}</Text>
+								<Text style={{color: (dadosAtividade?.atividadesAlunos  && dadosAtividade?.atividadesAlunos.length <= 0 && role == "ALUNO") ? getDatetimeColor(dadosAtividade?.dataFim) : theme.colors.white}}>{dadosAtividade && getStyledDate(dadosAtividade.dataFim)}</Text>
 								
 							</Text>
 
