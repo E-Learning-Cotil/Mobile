@@ -26,7 +26,7 @@ interface AuthResponse {
 interface AuthContextData {
     signed: boolean;
     user: User | null;
-	setUser: React.Dispatch<React.SetStateAction<User | null>>;
+	updateUser(user: User): void;
 	loading: boolean;
     signIn({ email, password, role }: AuthData): Promise<AuthResponse>;
 	signOut(): void;
@@ -68,6 +68,12 @@ export function AuthProvider ({ children }: AuthProviderProps) {
 
 		loadStoragedData();
 	}, []);
+
+	function updateUser (user: User) {
+		setUser(user);
+
+		AsyncStorage.setItem('@Elearning:user', JSON.stringify(user));
+	}
 
     async function signIn ({ email, password, role, rememberUser }: AuthData) {
 		try {
@@ -112,7 +118,7 @@ export function AuthProvider ({ children }: AuthProviderProps) {
 	}
 
 	return (
-		<AuthContext.Provider value={{ signed: Boolean(user), user, setUser, loading, signIn, signOut, token: userToken }}>
+		<AuthContext.Provider value={{ signed: Boolean(user), user, updateUser, loading, signIn, signOut, token: userToken }}>
 			{children}
 		</AuthContext.Provider>
 	);	

@@ -23,7 +23,7 @@ import { LabelIcon } from "../../components/LabelIcon";
 import * as ImagePicker from 'expo-image-picker';
 
 export function Configuracoes() {
-	const { user, setUser } = useAuth();
+	const { user, updateUser } = useAuth();
 
 	const role = user?.role;
 	const color = role === "ALUNO" ? theme.colors.green90 : theme.colors.purple90;
@@ -86,18 +86,27 @@ export function Configuracoes() {
 	async function configsUpdateHandler () {
 		if (user)
 		try {
-			const {
-				data,
-				status
-			} = await api.put('/alunos', {
+			if (role === 'ALUNO')
+			await api.put('/alunos', {
 				foto: userState.foto !== user?.foto ? userState.foto : undefined,
 				nome: userState.nome !== user?.nome ? userState.nome : undefined,
 				email: userState.email !== user?.email ? userState.email : undefined,
 				telefone: userState.telefone !== user?.telefone ? userState.telefone : undefined,
 				senha: userState.senha,
 			});
+			else {
+				const response = await api.put('/professores', {
+					foto: userState.foto !== user?.foto ? userState.foto : undefined,
+					nome: userState.nome !== user?.nome ? userState.nome : undefined,
+					email: userState.email !== user?.email ? userState.email : undefined,
+					telefone: userState.telefone !== user?.telefone ? userState.telefone : undefined,
+					senha: userState.senha,
+				})
 
-			setUser({ ...user, nome: userState.nome, email: userState.email, telefone: userState.telefone });
+				console.log(response)
+			}
+
+			updateUser({ ...user, foto: userState.foto, nome: userState.nome, email: userState.email, telefone: userState.telefone });
 		} catch (error) {
 			console.log(error);
 		}
