@@ -6,6 +6,8 @@ import {
 	Text,
 	Dimensions,
 	Modal,
+	Platform,
+	Alert
 } from 'react-native';
 
 import ContentLoader, { Rect } from "react-content-loader/native"
@@ -22,6 +24,7 @@ import { CardTopico } from '../../components/CardTopico';
 import { DownloadableFile } from '../../components/DownloadableFile';
 
 import * as DocumentPicker from 'expo-document-picker';
+
 
 import { useAuth } from '../../contexts/auth';
 import { getStyledDate, getDatetimeColor } from '../../utils/moment';
@@ -68,73 +71,112 @@ interface DadosAtividade {
 	]
 }
 
+interface File {
+	name: string;
+	link: string;
+	data: string;
+	nota: any;
+}
+
 export function Atividade({ route }: any){
 	const navigation = useNavigation();
 	const { id } = route.params;
 	const { user } = useAuth();
 	const role = user?.role;
 
-	const [haveAnAnnex, sethaveAnAnnex] = useState(true);
 	const [showModal, setShowModal] = useState(false);
 	
 	const [ loading, setLoading ] = useState(true);
 	
 	const [ dadosAtividade, setDadosAtividade ] = useState<DadosAtividade>();
+	
+	const [file, setFile] = useState<File | null>(null);
+	const [haveAnAnnex, sethaveAnAnnex] = useState(false);
 
-	const [file, setFile] = useState(null);
     const [sended, setSended] = useState(false);
     const [isSending, setIsSending] = useState(false);
 
-	
-
-	function visualizeSendingFile() {
-
-	}
-
-	function removeSendingFile() {
+	function removeAnnexedFile() {
 		sethaveAnAnnex(false);
+		setFile(null);
 	}
 
-	function addSendingFile() {
-		sethaveAnAnnex(true);
+	async function sendFile() {
+		
 	}
 
-	function sendFile() {
-		setShowModal(true);
-	}
+	async function annexFile () {
+		try {
+			let response = await DocumentPicker.getDocumentAsync({});
 
-	async function uploadFile () {
+			
 
-		let response = await DocumentPicker.getDocumentAsync({});
+			if(response.type !== 'cancel')
+			{
+				if (Platform.OS === 'android' && response.uri[0] === '/') {
+					response.uri = `file://${response.uri}`;
+					response.uri = response.uri.replace(/%/g, '%25');
+				  }
+				  
+				const fileUri = response.uri;
+				const fileName = response.name;
+				let fileUriSubstring = fileUri.substring(fileUri.lastIndexOf('/') + 1);
+				const fileExtension = fileUriSubstring.split('.').pop();
 
-		if(response.type !== 'cancel')
-		{
-			const fileUri = response.uri;
-			const fileName = response.name;
-			let fileUriSubstring = fileUri.substring(fileUri.lastIndexOf('/') + 1);
-			const fileExtension = fileUriSubstring.split('.').pop();
+				let formData = new FormData();
+				formData.append('file', {
+					uri: fileUri,
+					name: fileName,
+					type: 'multipart/form-data'
+				} as any);
 
-			let formData = new FormData();
-			formData.append('file', {
-				uri: fileUri,
-				name: fileName,
-				type: `${fileExtension}`
-			} as any);
+				
+			
+				const {data: uploadedFile} = await api.post('/arquivos', formData, {
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						'basic_token': process.env.BASIC_TOKEN
+					}
+				})
+		
+				setFile({
+					link: uploadedFile.link,
+					name: uploadedFile.name,
+					data: new Date().toISOString(),
+					nota: null
+				});
 
-			const {data: uploadedFile} = await api.post('/arquivos', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-					'basic_token': process.env.BASIC_TOKEN
-				}
-			})
+				console.log(file?.name);
+				Alert.alert(
+					"Não deu erro!",
+					"Eba!",
+					[
+					  {
+						text: "Cancel",
+						onPress: () => console.log("Cancel Pressed"),
+						style: "cancel"
+					  },
+					  { text: "OK", onPress: () => console.log("OK Pressed") }
+					]
+				  );
 
-			setFile({
-				link: uploadedFile.link,
-				name: uploadedFile.name,
-				data: new Date().toISOString(),
-				nota: null
-			});
+				sethaveAnAnnex(true);
+			}
+		} catch (error) {
+			Alert.alert(
+				"deu erro!",
+				`${error}`,
+				[
+				  {
+					text: "Cancel",
+					onPress: () => console.log("Cancel Pressed"),
+					style: "cancel"
+				  },
+				  { text: "OK", onPress: () => console.log("OK Pressed") }
+				]
+			  );
 		}
+
 	}
 
 
@@ -157,35 +199,18 @@ export function Atividade({ route }: any){
 	
 				if(sendedFile) {
 					setFile({
-						name: sendedFile.nome,
 						link: sendedFile.link,
+						name: sendedFile.nome,
 						data: sendedFile.dataEnvio,
 						nota: sendedFile.nota
 					})
-					setSended(true);
+					sethaveAnAnnex(true);
 				}
+					setSended(true);
 			}
-
+			console.log(file);
 			setLoading(false);
 		}
-
-		/*const formData = new FormData();
-        
-                formData.append('file', acceptedFiles[0]);
-        
-                const {data: uploadedFile} = await api.post('/arquivos', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'basic_token': process.env.NEXT_PUBLIC_BASIC_TOKEN
-                    }
-                })
-
-                setFile({
-                    link: uploadedFile.link,
-                    name: uploadedFile.name,
-                    data: new Date().toISOString(),
-                    nota: null
-                }); */
 
 		setLoading(true);
 		load();
@@ -245,6 +270,7 @@ export function Atividade({ route }: any){
 
 						{
 							haveAnAnnex ? 
+							/* Arquivo */
 							<View 
 								style={styles.buttonAnnex} 
 							>
@@ -261,14 +287,14 @@ export function Atividade({ route }: any){
 										}} 
 										numberOfLines={1}
 										>
-											aaaaaaaaaaaaaaa
+											{`${file?.name}`}
 										</Text> 	
 									</View>		
 
 									<RectButton 
 									style={[styles.iconDiv, {backgroundColor: dadosAtividade?.topico.turma.cores.corPrim}]}
 									onPress={() => {
-										removeSendingFile()
+										removeAnnexedFile()
 									}}
 									>
 										<FontAwesome5 name={"window-close"} size={24} color="white" />
@@ -277,18 +303,20 @@ export function Atividade({ route }: any){
 							
 							</View>
 							:
+							/* Botão adicionar arquivo */
 							<RectButton 
 								style={[styles.buttonAddFile]}
 								onPress={() => {
-									addSendingFile()
+									annexFile()
 								}}
 							>
 								<Text style={[styles.text, styles.title]}> Adicionar arquivo </Text>
 							</RectButton>
 						}
+							{/* Botão enviar Atividade */}
 							<RectButton 
 								style={[styles.row, styles.buttonSend, {backgroundColor: dadosAtividade?.topico.turma.cores.corPrim}]}
-								onPress={() => { sendFile() }}
+								onPress={() => { setShowModal(true); }}
 							>
 								<Text style={[styles.text, styles.title]}> Enviar Atividade </Text>
 								<View>
@@ -296,6 +324,7 @@ export function Atividade({ route }: any){
 									</View>
 
 							</RectButton>
+
 						</View>
 
 						<Modal transparent={true} visible={showModal} onRequestClose={() => {
