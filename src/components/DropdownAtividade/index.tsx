@@ -18,9 +18,10 @@ interface Props {
 	title?: string;
 	deadline?: string;
 	description?: string;
+	tipo?: 'ATIVIDADE' | 'TESTE';
 }
 
-export function DropdownAtividade({ id, title, deadline, description, loading }: Props) {
+export function DropdownAtividade({ id, title, deadline, description, loading, tipo }: Props) {
 	const navigation = useNavigation();
 
 	const { user } = useAuth();
@@ -99,10 +100,15 @@ export function DropdownAtividade({ id, title, deadline, description, loading }:
 					<View style={styles.buttonsView}>
 						<TouchableOpacity
 							style={styles.navigateButton}
-							onPress={ () => navigation.navigate("Atividade" as never, { id: id } as never) }
+							onPress={ () => {
+								tipo === 'ATIVIDADE' ?
+								navigation.navigate("Atividade" as never, { id: id } as never)
+								:
+								navigation.navigate("Teste" as never, { id: id } as never)
+							}}
 						>
 							<Text style={styles.navigateButtonText}>
-								Ver atividade
+								Ver { tipo === 'ATIVIDADE' ? 'atividade' : 'teste' }
 							</Text>
 						</TouchableOpacity>
 					</View>

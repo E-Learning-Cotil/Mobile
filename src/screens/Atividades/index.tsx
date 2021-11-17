@@ -11,17 +11,20 @@ import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
 import api from '../../services/api';
 
+interface Topicos {
+	nome: string;
+	turma: {
+		nome: string;
+	}
+}
+
 interface Atividade {
 	id: number;
 	nome: string;
 	dataFim: string;
-	topico: {
-		nome: string;
-
-		turma: {
-			nome: string;
-		}
-	}
+	topicos: Topicos;
+	topico: Topicos;
+	tipo: 'ATIVIDADE' | 'TESTE';
 }
 
 export function Atividades({ navigation }: any){
@@ -63,13 +66,14 @@ export function Atividades({ navigation }: any){
 					{
 						!loading
 						?
-						atividades.map(atividade => {
+						atividades.map((atividade, index) => {
 							const id = atividade.id;
-							const title = atividade.topico.turma.nome;
 							const deadline = atividade.dataFim;
-							const description = `${atividade.topico.nome} - ${atividade.nome}`;
+							const tipo = atividade.tipo;
+							const title = tipo === 'ATIVIDADE' ? atividade.topico.turma.nome : atividade.topicos.turma.nome;
+							const description = `${tipo === 'ATIVIDADE' ? atividade.topico.nome : atividade.topicos.nome} - ${atividade.nome}`;
 
-							return <DropdownAtividade key={id} id={id} title={title} deadline={deadline} description={description} loading={false} />
+							return <DropdownAtividade key={index} id={id} title={title} deadline={deadline} description={description} loading={false} tipo={tipo} />
 						})
 						:
 						[...Array(12)].map((value, index) => {
