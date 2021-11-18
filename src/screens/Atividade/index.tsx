@@ -7,7 +7,8 @@ import {
 	Dimensions,
 	Modal,
 	Platform,
-	Alert
+	Alert,
+	Pressable
 } from 'react-native';
 
 import ContentLoader, { Rect } from "react-content-loader/native"
@@ -58,6 +59,7 @@ interface DadosAtividade {
 			cores: {
 				corPrim: string;
 			}
+			id: number;
 		}
 	}
 	atividadesAlunos: [
@@ -78,8 +80,7 @@ interface File {
 	nota: any;
 }
 
-export function Atividade({ route }: any){
-	const navigation = useNavigation();
+export function Atividade({ route, navigation }: any){
 	const { id } = route.params;
 	const { user } = useAuth();
 	const role = user?.role;
@@ -102,7 +103,41 @@ export function Atividade({ route }: any){
 	}
 
 	async function sendFile() {
-		
+		setIsSending(true);
+
+		const newActivity = {
+            link: file?.link,
+            nome: file?.name,
+            idAtividade: Number(id),
+            idTurma: dadosAtividade?.topico.turma.id    
+        }
+
+		try {
+            const {status, data: { message }} = await api.post('/atividades-aluno', newActivity);
+
+            if(status === 201){
+                Alert.alert(
+					"Sucesso!",
+					`Arquivo enviado com sucesso!`,
+					[
+					  { text: "OK", onPress: () => console.log("OK Pressed") }
+					]
+				  );
+                setSended(true);
+				setShowModal(false);
+            }
+        } catch (error) {
+            Alert.alert(
+				"Erro ao enviar o arquivo!",
+				`Tente novamente`,
+				[
+				  { text: "OK", onPress: () => console.log("OK Pressed") }
+				]
+			  );
+        }
+        
+
+        setIsSending(false);
 	}
 
 	async function annexFile () {
@@ -145,33 +180,13 @@ export function Atividade({ route }: any){
 					data: new Date().toISOString(),
 					nota: null
 				});
-
-				console.log(file?.name);
-				Alert.alert(
-					"Não deu erro!",
-					"Eba!",
-					[
-					  {
-						text: "Cancel",
-						onPress: () => console.log("Cancel Pressed"),
-						style: "cancel"
-					  },
-					  { text: "OK", onPress: () => console.log("OK Pressed") }
-					]
-				  );
-
 				sethaveAnAnnex(true);
 			}
 		} catch (error) {
 			Alert.alert(
-				"deu erro!",
-				`${error}`,
+				"Erro ao anexar arquivo!",
+				`Tente novamente`,
 				[
-				  {
-					text: "Cancel",
-					onPress: () => console.log("Cancel Pressed"),
-					style: "cancel"
-				  },
 				  { text: "OK", onPress: () => console.log("OK Pressed") }
 				]
 			  );
@@ -182,21 +197,19 @@ export function Atividade({ route }: any){
 
 	useEffect(() => {		
 		async function getDadosAtividade() {
+			setFile(null);
+			sethaveAnAnnex(false);
+			setSended(false);
+
 			const {
 				data,	
 				status
 			} = await api.get(`/atividades/${id}`);
 
-			setDadosAtividade(data);
-		}
-
-		async function load(){
-			await getDadosAtividade();
-
-			if(dadosAtividade?.atividadesAlunos) {
-				const { atividadesAlunos: [sendedFile] } = dadosAtividade;
-	
-	
+			if(data.atividadesAlunos) {
+				
+				const { atividadesAlunos: [sendedFile] } = data;
+			
 				if(sendedFile) {
 					setFile({
 						link: sendedFile.link,
@@ -205,158 +218,224 @@ export function Atividade({ route }: any){
 						nota: sendedFile.nota
 					})
 					sethaveAnAnnex(true);
-				}
 					setSended(true);
+					
+				}
+					
 			}
-			console.log(file);
+
+			setDadosAtividade(data);
+		}
+
+		async function load(){
+			/**/
+			await getDadosAtividade();
+
+			
 			setLoading(false);
 		}
 
+		
 		setLoading(true);
 		load();
+
 	}, [id]);
 
 	if(!loading){
 		return( 
 			<View style={[styles.container]}>
-						<NavBar 
-						title={ dadosAtividade?.topico.turma.nome } 
+				<NavBar 
+				title={ dadosAtividade?.topico.turma.nome } 
+				
+				iconName={ dadosAtividade?.topico.turma.icone.altLink }
+					color={ dadosAtividade?.topico.turma.cores.corPrim }
+				/>
+
+				
+				<ScrollView style={styles.content}>
+					<Text style={[styles.title, styles.text, {marginTop: 10}]}>
+						{dadosAtividade?.nome}
+					</Text>
+
+					<Text style={[styles.subtitle, styles.text]}>
+						<Text>Data de entrega: </Text> 
+						<Text style={{color: (dadosAtividade?.atividadesAlunos  && dadosAtividade?.atividadesAlunos.length <= 0 && role == "ALUNO") ? getDatetimeColor(dadosAtividade?.dataFim) : theme.colors.white}}>{dadosAtividade && getStyledDate(dadosAtividade.dataFim)}</Text>
 						
-						iconName={ dadosAtividade?.topico.turma.icone.altLink }
-							color={ dadosAtividade?.topico.turma.cores.corPrim }
-						/>
-						<ScrollView style={styles.content}>
-							<Text style={[styles.title, styles.text, {marginTop: 10}]}>
-								{dadosAtividade?.nome}
-							</Text>
+					</Text>
 
-							<Text style={[styles.subtitle, styles.text]}>
-								<Text>Data de entrega: </Text> 
-								<Text style={{color: (dadosAtividade?.atividadesAlunos  && dadosAtividade?.atividadesAlunos.length <= 0 && role == "ALUNO") ? getDatetimeColor(dadosAtividade?.dataFim) : theme.colors.white}}>{dadosAtividade && getStyledDate(dadosAtividade.dataFim)}</Text>
-								
-							</Text>
+					<Text style={[styles.description, styles.text, {marginTop: 10}]}>
+						{dadosAtividade?.conteudo}
+					</Text>
 
-							<Text style={[styles.description, styles.text, {marginTop: 10}]}>
-								{dadosAtividade?.conteudo}
-							</Text>
+					{
+					
+						(dadosAtividade?.arquivosAtividades && dadosAtividade?.arquivosAtividades.length > 0) &&
+						<Text style={[styles.title, styles.text, {marginTop: 10}]}>
+							Anexos: 
+						</Text>
+					
+					}
 
-							{
-							
-								(dadosAtividade?.arquivosAtividades && dadosAtividade?.arquivosAtividades.length > 0) &&
-								<Text style={[styles.title, styles.text, {marginTop: 10}]}>
-									Anexos: 
-								</Text>
-							
-							}
+					{
+						dadosAtividade?.arquivosAtividades.map((arquivo, index) => {
 
-							{
-								dadosAtividade?.arquivosAtividades.map((arquivo, index) => {
+							return <DownloadableFile 
+								key={index}
+								name={arquivo.arquivoProfessor.nome}
+								url={arquivo.arquivoProfessor.link}
+								color={ dadosAtividade?.topico.turma.cores.corPrim }
+							/>
+						})
+					}			
 
-									return <DownloadableFile 
-										key={index}
-										name={arquivo.arquivoProfessor.nome}
-										url={arquivo.arquivoProfessor.link}
-										color={ dadosAtividade?.topico.turma.cores.corPrim }
-									/>
-								})
-							}			
+					
+				</ScrollView>
 
-						</ScrollView>
+				<View style={[styles.bottomContainer, sended && {height: 130}]}> 
+					<Text style={[styles.subtitle, styles.text]}>
+							Arquivos Anexados: 
+					</Text>
 
-						<View style={styles.bottomContainer}> 
-							<Text style={[styles.subtitle, styles.text]}>
-								 Arquivos Anexados: 
-							</Text>
-
-						{
-							haveAnAnnex ? 
-							/* Arquivo */
-							<View 
-								style={styles.buttonAnnex} 
-							>
-								<View style={styles.row}>
-									<View style={styles.contentDiv}>
-										<FontAwesome5 name={"file"} size={24} color="black" />	
-										<Text 
-										style={{
-											paddingLeft: 12,
-											paddingRight: 24,
-											fontFamily:theme.fonts.title400,
-											color: theme.colors.background,
-											fontSize: 18,
-										}} 
-										numberOfLines={1}
-										>
-											{`${file?.name}`}
-										</Text> 	
-									</View>		
-
-									<RectButton 
-									style={[styles.iconDiv, {backgroundColor: dadosAtividade?.topico.turma.cores.corPrim}]}
-									onPress={() => {
-										removeAnnexedFile()
-									}}
+				{
+					sended ?
+						file && <DownloadableFile name={file?.name} url={file?.link} color={dadosAtividade?.topico.turma.cores.corPrim}/>
+					: 
+					haveAnAnnex ? 
+						/* Arquivo */
+						<View 
+							style={styles.buttonAnnex} 
+						>
+							<View style={styles.row}>
+								<View style={styles.contentDiv}>
+									<FontAwesome5 name={"file"} size={24} color="black" />	
+									<Text 
+									style={{
+										paddingLeft: 12,
+										paddingRight: 24,
+										fontFamily:theme.fonts.title400,
+										color: theme.colors.background,
+										fontSize: 18,
+									}} 
+									numberOfLines={1}
 									>
-										<FontAwesome5 name={"window-close"} size={24} color="white" />
-									</RectButton>
-								</View>
-							
-							</View>
-							:
-							/* Botão adicionar arquivo */
-							<RectButton 
-								style={[styles.buttonAddFile]}
-								onPress={() => {
-									annexFile()
-								}}
-							>
-								<Text style={[styles.text, styles.title]}> Adicionar arquivo </Text>
-							</RectButton>
-						}
-							{/* Botão enviar Atividade */}
-							<RectButton 
-								style={[styles.row, styles.buttonSend, {backgroundColor: dadosAtividade?.topico.turma.cores.corPrim}]}
-								onPress={() => { setShowModal(true); }}
-							>
-								<Text style={[styles.text, styles.title]}> Enviar Atividade </Text>
-								<View>
-										<FontAwesome5 name={"telegram-plane"} size={32} color="white" />
-									</View>
+										{`${file?.name}`}
+									</Text> 	
+								</View>		
 
-							</RectButton>
+								<RectButton 
+								style={[styles.iconDiv, {backgroundColor: dadosAtividade?.topico.turma.cores.corPrim}]}
+								onPress={() => {
+									removeAnnexedFile()
+								}}
+								>
+									<FontAwesome5 name={"window-close"} size={24} color="white" />
+								</RectButton>
+							</View>
+						
+						</View>
+						:
+						/* Botão adicionar arquivo */
+						<RectButton 
+							style={[styles.buttonAddFile]}
+							onPress={() => {
+								annexFile()
+							}}
+						>
+							<Text style={[styles.text, styles.title]}> Adicionar arquivo </Text>
+						</RectButton>
+				}
+					{/* Botão enviar Atividade */}
+					{
+						!sended ?
+					<RectButton 
+						style={[styles.row, styles.buttonSend, {backgroundColor: dadosAtividade?.topico.turma.cores.corPrim}]}
+						onPress={() => { haveAnAnnex ? setShowModal(true) : Alert.alert(
+							"Voce precisa anexar um arquivo!",
+							`Por favor, anexe um arquivo antes de enviar a atividade.`,
+							[
+							  { text: "OK", onPress: () => console.log("OK Pressed") }
+							]
+						  ); }}
+					>
+						<Text style={[styles.text, styles.title]}> Enviar Atividade </Text>
+						<View>
+								<FontAwesome5 name={"telegram-plane"} size={32} color="white" />
+							</View>
+
+					</RectButton>
+					:
+					<Text style={[styles.subtitle, styles.text,{marginTop: 10}]}>Data de envio: {getStyledDate(file?.data)}</Text>
+				}
+				</View>
+
+				<Modal transparent={true} visible={showModal} onRequestClose={() => {
+					setShowModal(false);
+				}}>
+					<View style={[styles.modal, {backgroundColor: theme.colors.transparentBlack}]}> 
+						<View style={styles.modalDiv}>
+							<Text style={[styles.text, styles.subtitle, {paddingTop: 10}]}>
+								Confirmar envio da atividade?
+							</Text>
+			
+							{file &&
+								<View 
+									style={[styles.buttonAnnex, {justifyContent: 'center',}]} 
+								>
+									<View style={styles.row}>
+										<View style={[styles.contentDiv,{width:'90%'}]}>
+											<FontAwesome5 name={"file"} size={24} color="black" />	
+											<Text 
+											style={{
+												paddingLeft: 12,
+												paddingRight: 24,
+												fontFamily:theme.fonts.title400,
+												color: theme.colors.background,
+												fontSize: 18,
+											}} 
+											numberOfLines={1}
+											>
+												{`${file?.name}`}
+											</Text> 	
+										</View>		
+									</View>
+								</View>	 
+							} 
+							
+							<View style={[styles.row, {marginTop: 20, justifyContent:'space-between'}]}>
+								<Pressable 
+								style={[
+									styles.cancelConfirmButton,
+										{backgroundColor: dadosAtividade?.topico.turma.cores.corPrim }
+										]}
+								onPress={() => {
+									setShowModal(false);
+								}}
+								>
+										<Text style={[styles.text, styles.subtitle]}>
+											Cancelar
+										</Text>
+								</Pressable>
+
+								<Pressable 
+								style={[
+									styles.cancelConfirmButton,
+										{backgroundColor: dadosAtividade?.topico.turma.cores.corPrim }
+										]}
+								onPress={() => {
+									sendFile();
+								}}
+								>
+									<Text style={[styles.text, styles.subtitle]}>
+										Confirmar
+									</Text>
+								</Pressable>
+							</View>					
 
 						</View>
+					</View>
+				</Modal>
 
-						<Modal transparent={true} visible={showModal} onRequestClose={() => {
-							setShowModal(false);
-						}}>
-							<View style={[styles.modal, {backgroundColor: theme.colors.transparentBlack}]}> 
-								<View style={styles.modalDiv}>
-
-									<View 
-										style={[styles.buttonAnnex, {justifyContent: 'center',}]} 
-									>
-										<View style={styles.row}>
-											<View style={[styles.contentDiv,{width:'100%'}]}>
-												<FontAwesome5 name={"file"} size={24} color="black" />	
-												<Text 
-												style={{
-													paddingLeft: 12,
-													paddingRight: 24,
-													fontFamily:theme.fonts.title400,
-													color: theme.colors.background,
-													fontSize: 18,
-												}} 
-												numberOfLines={1}
-												>
-													aaaaaaaaaaaaaaa
-												</Text> 	
-											</View>		
-										</View>
-									</View>	
-								</View>
-							</View>
-						</Modal>
+						
 			</View>
 		);
 	}

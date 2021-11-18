@@ -114,13 +114,21 @@ export const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: 250,
+		marginTop: 100,
 	},
 
 	modalDiv: {
 		width: '90%',
-		height: 200,
+		height: 170,
 		backgroundColor: theme.colors.gray80,
 		paddingHorizontal: 20,
+	},
+
+	cancelConfirmButton: {
+		width: '45%',
+		height: 50,
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 16,
 	}
 });
