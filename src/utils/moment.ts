@@ -30,6 +30,11 @@ function getStyledDate (date: string) {
 	});
 }
 
+function showTimePassed(date: string){
+	moment.locale('pt-br');
+    return moment(date).fromNow();
+}
+
 function getFormattedDatetime (date: string, format: string) {
 	moment.locale('pt-br');
 
@@ -52,4 +57,11 @@ function getNowDateUtc () {
 	return moment().format();
 }
 
-export { getStyledDatetime, getStyledDate, getFormattedDatetime, getDatetimeColor, getNowDateUtc };
+export {
+	getStyledDatetime,
+	getStyledDate,
+	showTimePassed,
+	getFormattedDatetime,
+	getDatetimeColor,
+	getNowDateUtc
+};
