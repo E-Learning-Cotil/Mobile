@@ -73,6 +73,7 @@ export function Turma({ route, navigation }: any) {
 				data,
 				status
 			} = await api.get(`/turmas/${id}`);
+
 			setDados(data);
 		} catch (error: any) {
 			console.log('Error Turma: ', error.response.data.error);
@@ -156,6 +157,18 @@ export function Turma({ route, navigation }: any) {
 						setModalVisible(!modalVisible);
 					}}>
 					<View style={styles.modal}>
+						<View style={styles.modalCloseButtonView}>
+							<TouchableOpacity
+								style={styles.modalCloseButton}
+								onPress={ () => {
+									setModalVisible(false);
+									setNewTopicTitle('');
+									setNewTopicDescription('');
+								}}
+							>
+								<FontAwesome5 name="times" size={25} color="white" />
+							</TouchableOpacity>
+						</View>
 						<View style={styles.modalContent}>
 							<Text style={styles.modalText}>
 								Nome do tópico:

@@ -74,6 +74,24 @@ export const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 
+	modalCloseButtonView: {
+		position: 'absolute',
+		top: '23%',
+		right: '10%',
+	},
+
+	modalCloseButton: {
+		width: 30,
+		height: 30,
+		borderRadius: 15,
+
+		backgroundColor: `${theme.colors.black}aa`,
+
+		justifyContent: 'center',
+		alignItems: 'center',
+
+	},
+
 	modalContent: {
 		width: '80%',
 
