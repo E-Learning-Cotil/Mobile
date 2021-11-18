@@ -22,6 +22,11 @@ export const styles = StyleSheet.create({
 		fontSize: 22,
 	},
 
+	subtitle: {
+		fontFamily: theme.fonts.title400,
+		fontSize: 16,
+	},
+
 	description: {
 		fontFamily:theme.fonts.text400,
 		fontSize: 18,
