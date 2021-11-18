@@ -68,7 +68,6 @@ export function Teste({ route, navigation }: any) {
 	const status = dadosTeste ? getDatetimeColor(dadosTeste.dataFim) : 'red';
 
 	function setResult ( idAlternative: number, correct: boolean ) {
-		console.log(idAlternative, correct)
 		setChecked(prevState => prevState?.map((prev, index) => {
 			if (index === idAlternative)
 				return true;
@@ -115,8 +114,6 @@ export function Teste({ route, navigation }: any) {
 		} = await api.get(`/testes/${id}`);
 
 		data.conteudo = JSON.parse(data.conteudo);
-
-		console.log(data)
 
 		setDadosTeste(data);
 		setTestResult([...Array(data.conteudo.length).fill(false)]);
