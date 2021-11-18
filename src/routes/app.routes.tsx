@@ -17,6 +17,7 @@ import { Turma } from '../screens/Turma';
 import { Topico } from '../screens/Topico';
 import { Material } from '../screens/Material';
 import { Teste } from '../screens/Teste';
+import { CriarTeste } from '../screens/CriarTeste';
 
 const { Navigator, Screen } = createDrawerNavigator();
 
@@ -94,6 +95,11 @@ export function AppRoutes() {
 			<Screen 
 				name="Teste"
 				component={Teste}
+			/>
+
+			<Screen 
+				name="CriarTeste"
+				component={CriarTeste}
 			/>
 		</Navigator>
 	)
