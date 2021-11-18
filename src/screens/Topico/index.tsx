@@ -33,7 +33,7 @@ interface DadosTopico {
 			altLink: string;
 		};
 	};
-	materiais: DadosConteudo[];
+	Materiais: DadosConteudo[];
 	atividades: DadosConteudo[];
 	testes: DadosConteudo[];
 	
@@ -53,17 +53,19 @@ export function Topico({ route, navigation }: any){
 	useEffect(() => {		
 		async function getDados() {
 			try{
+				setMatrizDados([ [], [], [] ]);
+
 				const {
 					data,	
 					status
 				} = await api.get(`/topicos/${id}`);
 				
 				setDados(data);
+
 				setMatrizDados(matrizDados.map((value, index) => {
-					if (index === 0) return data.materiais;
+					if (index === 0) return data.Materiais;
 					else if (index === 1) return data.atividades;
 					else if (index === 2) return data.testes;
-					else return [];
 				}));
 				
 			} catch (error: any) {
@@ -84,8 +86,8 @@ export function Topico({ route, navigation }: any){
 
 	function scrollView({ item, index }: any) {
 		const message = ['Nenhum Material', 'Nenhuma Atividade', 'Nenhum Teste'];
-
-		if (item)
+		
+		if (item.length !== 0)
 		return (
 			<ScrollView style={styles.scrollView}>
 				<View style={styles.scrollViewContent}>
@@ -144,8 +146,11 @@ export function Topico({ route, navigation }: any){
 		);
 		else
 		return(
-
-			<Text style={styles.text}>{message[index]}</Text>
+			<View style={{ minHeight: '100%' }}>
+				<Text style={[styles.text, { textAlign: 'center' }]}>
+					{ message[index] }
+				</Text>
+			</View>
 		);
 	}
 
