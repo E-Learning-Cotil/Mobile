@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import { View, ScrollView, Text, Dimensions } from 'react-native';
+import { View, ScrollView, Text, Dimensions, TouchableOpacity, Modal } from 'react-native';
+import { RectButton } from 'react-native-gesture-handler';
+import { FontAwesome5 } from '@expo/vector-icons'; 
 
 import Carousel from 'react-native-snap-carousel';
 
@@ -45,6 +47,8 @@ export function Topico({ route, navigation }: any){
 	const role = user?.role;
 	
 	const [ loading, setLoading ] = useState(true);
+
+	const [ modalVisible, setModalVisible ] = useState(false);
 	
 	const [ dados, setDados ] = useState<DadosTopico>();
 	const [ matrizDados, setMatrizDados ] = useState<DadosTopico[][]>([ [], [], [] ]);
@@ -163,7 +167,6 @@ export function Topico({ route, navigation }: any){
 					color={ dados?.turma.cores.corPrim }
 				/>
 				<View style={styles.content}>
-
 					<Text 
 						style={[styles.title, styles.text]}
 						numberOfLines={1}
@@ -193,8 +196,70 @@ export function Topico({ route, navigation }: any){
 						firstItem={1}
 						onSnapToItem={index => setActiveIndex(index) }
 					/>
-
 				</View>
+
+				{
+					role === 'PROFESSOR' &&
+					<View style={styles.buttonView}>
+						<TouchableOpacity
+							style={[styles.createPostButton, { backgroundColor: dados.turma.cores.corPrim }]}
+							onPress={ () => setModalVisible(true) }
+						>
+							<Text style={styles.createPostButtonText}>
+								Postagem
+							</Text>
+							<FontAwesome5 name="plus" size={24} color="white" />
+						</TouchableOpacity>
+					</View>
+				}
+
+				<Modal
+					animationType="slide"
+					transparent={true}
+					visible={modalVisible}
+					onRequestClose={() => {
+						setModalVisible(!modalVisible);
+					}}>
+					<View style={styles.modal}>
+						<View style={styles.modalCloseButtonView}>
+							<TouchableOpacity
+								style={styles.modalCloseButton}
+								onPress={ () => setModalVisible(false) }
+							>
+								<FontAwesome5 name="times" size={25} color="white" />
+							</TouchableOpacity>
+						</View>
+						<View style={styles.modalContent}>
+							<TouchableOpacity
+								style={[styles.modalButton, { backgroundColor: dados.turma.cores.corPrim }]}
+								onPress={ () => {} }
+							>
+								<FontAwesome5 name="book" size={24} color="white" style={{ width: 25 }} />
+								<Text style={styles.modalButtonText}>
+									Material
+								</Text>
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={[styles.modalButton, { backgroundColor: dados.turma.cores.corSec }]}
+								onPress={ () => {} }
+							>
+								<FontAwesome5 name="file-signature" size={24} color="white" style={{ width: 25 }} />
+								<Text style={styles.modalButtonText}>
+									Atividade
+								</Text>
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={[styles.modalButton, { backgroundColor: dados.turma.cores.corPrim }]}
+								onPress={ () => {} }
+							>
+								<FontAwesome5 name="clipboard-list" size={24} color="white" style={{ width: 25 }} />
+								<Text style={styles.modalButtonText}>
+									Teste
+								</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</Modal>
 			</View>
 		);
 	}
