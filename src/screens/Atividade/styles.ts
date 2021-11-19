@@ -22,6 +22,10 @@ export const styles = StyleSheet.create({
 		padding: 20,
 	},
 
+	row: {
+		flexDirection: 'row',
+	},
+
 	text: {
 		color: theme.colors.white,
 	},
@@ -34,6 +38,12 @@ export const styles = StyleSheet.create({
 	subtitle: {
 		fontFamily: theme.fonts.title400,
 		fontSize: 16,
+	},
+	
+	description: {
+		fontFamily:theme.fonts.text400,
+		fontSize: 18,
+		marginTop: 10,
 	},
 
 	buttonAnnex: {
@@ -64,9 +74,61 @@ export const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 	},
 
-	row: {
+	
+	buttonView: {
+		position: 'absolute',
+		bottom: 0,
+		zIndex: 10,
+
 		flexDirection: 'row',
+		justifyContent: 'center',
+
+		paddingHorizontal: 15,
+		paddingVertical: 15,
+		backgroundColor: theme.colors.gray90,
+
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 12,
+		},
+		shadowOpacity: 0.58,
+		shadowRadius: 16.00,
+
+		elevation: 24,
 	},
+
+	editButton: {
+		flex: 1,
+
+		height: 45,
+
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+
+		paddingHorizontal: 20,
+
+		borderRadius: 4,
+	},
+
+	editButtonText: {
+		fontFamily: theme.fonts.text700,
+		fontSize: 24,
+		lineHeight: 26,
+		color: theme.colors.white,
+
+		textAlign: 'center',
+		textAlignVertical: 'center',
+	},
+
+	cancelConfirmButton: {
+		width: '45%',
+		height: 50,
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 16,
+	}, 
 
 	contentDiv: {
 		alignItems: 'center',
@@ -85,36 +147,11 @@ export const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 
-	description: {
-		fontFamily:theme.fonts.text400,
-		fontSize: 18,
-		marginTop: 10,
-	},
-
-	topicosList: {
-		paddingTop: 5,
-	},
-
-	carousel: {
-		
-	},
-
-	scrollView: {
-		marginBottom: 40,
-	},
-
-	skeleton: {
-		paddingHorizontal: 20,
-		borderRadius: 16,
-
-		marginVertical: 8,
-	},
-
 	modal: {
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: 100,
+		marginTop: 70,
 	},
 
 	modalDiv: {
@@ -124,11 +161,11 @@ export const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 	},
 
-	cancelConfirmButton: {
-		width: '45%',
-		height: 50,
-		justifyContent: 'center',
-		alignItems: 'center',
+	skeleton: {
+		paddingHorizontal: 20,
 		borderRadius: 16,
-	}
+
+		marginVertical: 8,
+	},
+
 });

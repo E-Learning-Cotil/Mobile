@@ -200,31 +200,32 @@ export function Atividade({ route, navigation }: any){
 			setFile(null);
 			sethaveAnAnnex(false);
 			setSended(false);
-
-			const {
-				data,	
-				status
-			} = await api.get(`/atividades/${id}`);
-
-			if(data.atividadesAlunos) {
+			try {
+				const {
+					data,	
+					status
+				} = await api.get(`/atividades/${id}`);
+	
+				if(data.atividadesAlunos) {
+					
+					const { atividadesAlunos: [sendedFile] } = data;
 				
-				const { atividadesAlunos: [sendedFile] } = data;
-			
-				if(sendedFile) {
-					setFile({
-						link: sendedFile.link,
-						name: sendedFile.nome,
-						data: sendedFile.dataEnvio,
-						nota: sendedFile.nota
-					})
-					sethaveAnAnnex(true);
-					setSended(true);
-					
+					if(sendedFile) {
+						setFile({
+							link: sendedFile.link,
+							name: sendedFile.nome,
+							data: sendedFile.dataEnvio,
+							nota: sendedFile.nota
+						})
+						sethaveAnAnnex(true);
+						setSended(true);
+						
+					}
 				}
-					
+				setDadosAtividade(data);
+			} catch (error) {
+				
 			}
-
-			setDadosAtividade(data);
 		}
 
 		async function load(){
@@ -286,87 +287,110 @@ export function Atividade({ route, navigation }: any){
 								color={ dadosAtividade?.topico.turma.cores.corPrim }
 							/>
 						})
-					}			
-
-					
+					}					
 				</ScrollView>
 
-				<View style={[styles.bottomContainer, sended && {height: 130}]}> 
-					<Text style={[styles.subtitle, styles.text]}>
-							Arquivos Anexados: 
-					</Text>
-
-				{
-					sended ?
-						file && <DownloadableFile name={file?.name} url={file?.link} color={dadosAtividade?.topico.turma.cores.corPrim}/>
-					: 
-					haveAnAnnex ? 
-						/* Arquivo */
-						<View 
-							style={styles.buttonAnnex} 
-						>
-							<View style={styles.row}>
-								<View style={styles.contentDiv}>
-									<FontAwesome5 name={"file"} size={24} color="black" />	
-									<Text 
-									style={{
-										paddingLeft: 12,
-										paddingRight: 24,
-										fontFamily:theme.fonts.title400,
-										color: theme.colors.background,
-										fontSize: 18,
-									}} 
-									numberOfLines={1}
-									>
-										{`${file?.name}`}
-									</Text> 	
-								</View>		
-
-								<RectButton 
-								style={[styles.iconDiv, {backgroundColor: dadosAtividade?.topico.turma.cores.corPrim}]}
-								onPress={() => {
-									removeAnnexedFile()
-								}}
-								>
-									<FontAwesome5 name={"window-close"} size={24} color="white" />
-								</RectButton>
-							</View>
-						
-						</View>
-						:
-						/* Botão adicionar arquivo */
-						<RectButton 
-							style={[styles.buttonAddFile]}
-							onPress={() => {
-								annexFile()
-							}}
-						>
-							<Text style={[styles.text, styles.title]}> Adicionar arquivo </Text>
-						</RectButton>
-				}
-					{/* Botão enviar Atividade */}
-					{
-						!sended ?
-					<RectButton 
-						style={[styles.row, styles.buttonSend, {backgroundColor: dadosAtividade?.topico.turma.cores.corPrim}]}
-						onPress={() => { haveAnAnnex ? setShowModal(true) : Alert.alert(
-							"Voce precisa anexar um arquivo!",
-							`Por favor, anexe um arquivo antes de enviar a atividade.`,
-							[
-							  { text: "OK", onPress: () => console.log("OK Pressed") }
-							]
-						  ); }}
+			{
+				role === 'PROFESSOR' ?
+					<View style={styles.buttonView}>
+					<RectButton
+						style={[styles.editButton, { backgroundColor: dadosAtividade?.topico.turma.cores.corPrim  }]}
+						onPress={ () => {navigation.navigate("CriarAtividade", {update: true, atividade: dadosAtividade})} }
 					>
-						<Text style={[styles.text, styles.title]}> Enviar Atividade </Text>
-						<View>
-								<FontAwesome5 name={"telegram-plane"} size={32} color="white" />
-							</View>
-
+						<Text style={styles.editButtonText}>
+							Editar
+						</Text>
+						<FontAwesome5 name="pencil-alt" size={24} color="white" />
 					</RectButton>
+					</View>
+
 					:
-					<Text style={[styles.subtitle, styles.text,{marginTop: 10}]}>Data de envio: {getStyledDate(file?.data)}</Text>
+
+					<>
+
+					<View style={[styles.bottomContainer, sended && {height: 130}]}> 
+					{
+						<Text style={[styles.subtitle, styles.text]}>
+								Arquivos Anexados: 
+						</Text>
+
+						
+					}
+
+	{
+						sended ?
+							file && <DownloadableFile name={file?.name} url={file?.link} color={dadosAtividade?.topico.turma.cores.corPrim}/>
+						: 
+						haveAnAnnex ? 
+							/* Arquivo */
+							<View 
+								style={styles.buttonAnnex} 
+							>
+								<View style={styles.row}>
+									<View style={styles.contentDiv}>
+										<FontAwesome5 name={"file"} size={24} color="black" />	
+										<Text 
+										style={{
+											paddingLeft: 12,
+											paddingRight: 24,
+											fontFamily:theme.fonts.title400,
+											color: theme.colors.background,
+											fontSize: 18,
+										}} 
+										numberOfLines={1}
+										>
+											{`${file?.name}`}
+										</Text> 	
+									</View>		
+
+									<RectButton 
+									style={[styles.iconDiv, {backgroundColor: dadosAtividade?.topico.turma.cores.corPrim}]}
+									onPress={() => {
+										removeAnnexedFile()
+									}}
+									>
+										<FontAwesome5 name={"window-close"} size={24} color="white" />
+									</RectButton>
+								</View>
+							
+							</View>
+							:
+							/* Botão adicionar arquivo */
+							<RectButton 
+								style={[styles.buttonAddFile]}
+								onPress={() => {
+									annexFile()
+								}}
+							>
+								<Text style={[styles.text, styles.title]}> Adicionar arquivo </Text>
+							</RectButton>
+					}
+						{/* Botão enviar Atividade */}
+						{
+							!sended ?
+								<RectButton 
+									style={[styles.row, styles.buttonSend, {backgroundColor: dadosAtividade?.topico.turma.cores.corPrim}]}
+									onPress={() => { haveAnAnnex ? setShowModal(true) : Alert.alert(
+										"Voce precisa anexar um arquivo!",
+										`Por favor, anexe um arquivo antes de enviar a atividade.`,
+										[
+										{ text: "OK", onPress: () => console.log("OK Pressed") }
+										]
+									); }}
+								>
+									<Text style={[styles.text, styles.title]}> Enviar Atividade </Text>
+									<View>
+											<FontAwesome5 name={"telegram-plane"} size={32} color="white" />
+										</View>
+
+								</RectButton>
+								:
+								<Text style={[styles.subtitle, styles.text,{marginTop: 10}]}>Data de envio: {getStyledDate(file?.data)}</Text>
+					}
+					</View>
+
+					</>
 				}
-				</View>
 
 				<Modal transparent={true} visible={showModal} onRequestClose={() => {
 					setShowModal(false);
@@ -437,6 +461,7 @@ export function Atividade({ route, navigation }: any){
 
 						
 			</View>
+		
 		);
 	}
 	else
@@ -469,9 +494,41 @@ export function Atividade({ route, navigation }: any){
 					url={""}
 					loading={true}
 				/>
-
-
 				</ScrollView>
+				{role === 'PROFESSOR' ?
+				<ContentLoader
+				style={{backgroundColor: theme.colors.gray90}}
+				speed={1}
+				width={'100%'}
+				height={'12%'}
+				backgroundColor={theme.colors.gray80}
+				foregroundColor={theme.colors.gray70}
+				>
+				 	<Rect x="20" y="20%" rx="6" ry="6" width={Dimensions.get('window').width - 40} height="60%" />
+					<Rect x="30" y="30%" rx="6" ry="6" width='20%' height="40%" />
+					<Rect x="80%" y="30%" rx="6" ry="6" width={((Dimensions.get('window').width * 20)/100) - 40} height="40%" /> 
+
+
+				</ContentLoader>	
+				: 
+					<ContentLoader
+					style={{backgroundColor: theme.colors.gray90, borderTopRightRadius: 16, borderTopLeftRadius: 16}}
+					speed={1}
+					width={'100%'}
+					height={'30%'}
+					backgroundColor={theme.colors.gray80}
+					foregroundColor={theme.colors.gray70}
+					>
+					<Rect x="20" y="10" rx="6" ry="6" width="40%" height="22" />
+
+					<Rect x="20" y="30%" rx="6" ry="6" width={Dimensions.get('window').width - 40} height="30%" />
+					<Rect x="30%" y="37.5%" rx="6" ry="6" width="40%" height="15%" />
+
+					<Rect x="20" y="65%" rx="6" ry="6" width={Dimensions.get('window').width - 40} height="30%" />
+					<Rect x="80%" y="70%" rx="6" ry="6" width={((Dimensions.get('window').width * 20)/100) - 40} height="20%" />
+					<Rect x="30" y="70%" rx="6" ry="6" width="65%" height="20%" />
+					</ContentLoader>	
+	}
 			</View>
 		);
 	}			
