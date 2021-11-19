@@ -23,6 +23,7 @@ interface DadosConteudo{
 }
 
 interface DadosTopico {
+	id: number;
 	nome: string;
 	descricao: string;
 	turma: {
@@ -232,25 +233,34 @@ export function Topico({ route, navigation }: any){
 						<View style={styles.modalContent}>
 							<TouchableOpacity
 								style={[styles.modalButton, { backgroundColor: dados.turma.cores.corPrim }]}
-								onPress={ () => {} }
+								onPress={ () => {
+									setModalVisible(false);
+								} }
 							>
 								<FontAwesome5 name="book" size={24} color="white" style={{ width: 25 }} />
 								<Text style={styles.modalButtonText}>
 									Material
 								</Text>
 							</TouchableOpacity>
+
 							<TouchableOpacity
 								style={[styles.modalButton, { backgroundColor: dados.turma.cores.corSec }]}
-								onPress={ () => {} }
+								onPress={ () => {
+									setModalVisible(false);
+								} }
 							>
 								<FontAwesome5 name="file-signature" size={24} color="white" style={{ width: 25 }} />
 								<Text style={styles.modalButtonText}>
 									Atividade
 								</Text>
 							</TouchableOpacity>
+
 							<TouchableOpacity
 								style={[styles.modalButton, { backgroundColor: dados.turma.cores.corPrim }]}
-								onPress={ () => {} }
+								onPress={ () => {
+									setModalVisible(false);
+									navigation.navigate('CriarTeste', { topico: dados });
+								} }
 							>
 								<FontAwesome5 name="clipboard-list" size={24} color="white" style={{ width: 25 }} />
 								<Text style={styles.modalButtonText}>
