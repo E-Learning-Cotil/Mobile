@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 import { theme } from '../../global/styles/theme';
 
@@ -13,117 +13,89 @@ export const styles = StyleSheet.create({
 		padding: 20,
 	},
 
-	perguntasList: {
-		paddingBottom: 30,
-	},
-
 	header: {
 		width: '100%',
 
 		flexDirection: 'column',
-		alignItems: 'center',
 
-		marginBottom: 10,
+		marginBottom: 25,
 	},
 
-	headerTitle: {
+	headerInput: {
+		width: '100%',
 		fontFamily: theme.fonts.text700,
 		fontSize: 18,
 		color: theme.colors.white,
 
-		textAlign: 'center',
+		borderBottomColor: theme.colors.white,
+		borderBottomWidth: 2,
+		borderStyle: 'solid',
+
+		marginBottom: 10,
 	},
 
-	headerSubtitle: {
+	headerDateView: {
+		flexDirection: 'row',
+	},
+
+	headerText: {
+		width: 60,
+
+		fontFamily: theme.fonts.text700,
+		fontSize: 18,
+		color: theme.colors.white,
+
+		textAlign: 'left',
+	},
+
+	headerDate: {
+		width: 170,
 		fontFamily: theme.fonts.text700,
 		fontSize: 16,
 		color: theme.colors.white,
 
 		textAlign: 'center',
+		textAlignVertical: 'center',
+
+		backgroundColor: theme.colors.gray90,
+		borderRadius: 5,
+		borderBottomWidth: 2,
+		borderStyle: 'solid',
+		
+		paddingHorizontal: 10,
+		marginBottom: 5,
+	},
+
+	questionsList: {
+		minHeight: Dimensions.get('window').height - 355,
 	},
 
 	buttonsView: {
-		flexDirection: 'row',
+		flexDirection: 'column',
 		justifyContent: 'center',
+
+		marginBottom: 20,
 	},
 
 	submitButton: {
-		flex: 1,
+		width: '100%',
 
 		height: 42,
-		backgroundColor: theme.colors.purple90,
+		backgroundColor: theme.colors.gray90,
 
+		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
 
-		borderRadius: 4,
+		borderRadius: 5,
+
+		marginBottom: 10,
 	},
 
 	submitButtonText: {
 		fontFamily: theme.fonts.text700,
 		fontSize: 18,
 		color: theme.colors.white,
-	},
-
-	alreadyAnsweredView: {
-		width: '100%',
-		backgroundColor: theme.colors.gray90,
-
-		borderRadius: 5,
-
-		padding: 10,
-	},
-
-	alreadyAnsweredTitleView: {
-		flexDirection: 'row',
-
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-
-	alreadyAnsweredTitle: {
-		fontFamily: theme.fonts.text700,
-		fontSize: 18,
-		color: theme.colors.white,
-		lineHeight: 22,
-
-		textAlign: 'center',
-		textAlignVertical: 'center',
-
-		marginLeft: 5,
-	},
-
-	alreadyAnsweredGrade: {
-		fontFamily: theme.fonts.text700,
-		fontSize: 16,
-		color: theme.colors.white,
-
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-
-	goBackButton: {
-		height: 40,
-		maxWidth: '100%',
-		backgroundColor: theme.colors.purple90,
-
-		justifyContent: 'center',
-		alignItems: 'center',
-
-		marginTop: 10,
-		paddingHorizontal: 20,
-
-		borderRadius: 4,
-	},
-
-	goBackButtonText: {
-		fontFamily: theme.fonts.text700,
-		fontSize: 16,
-		color: theme.colors.white,
-		lineHeight: 18,
-
-		textAlign: 'center',
-		textAlignVertical: 'center',
 	},
 
 	skeleton: {
