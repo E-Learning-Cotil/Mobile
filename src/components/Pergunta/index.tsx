@@ -34,7 +34,6 @@ export function Pergunta ({ pergunta, idAlternative, setResult, color }: Props) 
 		});
 
 	useEffect(() => {
-		console.log(checked)
 		if (checked !== undefined)
 			setResult(idAlternative, checked === pergunta.certo);
 	}, [checked]);
