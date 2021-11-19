@@ -136,7 +136,7 @@ export function Teste({ route, navigation }: any) {
 		return (
 			<View style={[styles.container]}>
 				<NavBar
-					title={dadosTeste?.nome}
+					title={dadosTeste?.topicos.turma.nome}
 					iconName={dadosTeste?.topicos.turma.icone.altLink}
 					color={dadosTeste?.topicos.turma.cores.corPrim}
 				/>
@@ -144,6 +144,9 @@ export function Teste({ route, navigation }: any) {
 				<ScrollView style={styles.content} >
 					<View style={styles.perguntasList}>
 						<View style={styles.header}>
+							<Text style={styles.headerTitle}>
+								{ dadosTeste?.nome }
+							</Text>
 							<Text style={styles.headerTitle}>
 								{ dadosTeste?.topicos.nome }
 							</Text>
