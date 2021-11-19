@@ -35,10 +35,21 @@ function showTimePassed(date: string){
     return moment(date).fromNow();
 }
 
-function getFormattedDatetime (date: string, format: string) {
+function getFormattedDatetime (date: string, outputFormat: string, inputFormat?: string) {
 	moment.locale('pt-br');
 
-	return moment(date).format(format);
+	if (inputFormat) {
+		if (outputFormat === 'UTC')
+		return moment(date, inputFormat).toISOString();
+		else
+		return moment(date, inputFormat).format(outputFormat);
+	}
+	else {
+		if (outputFormat === 'UTC')
+		return moment(date, inputFormat).toISOString();
+		else
+		return moment(date, inputFormat).format(outputFormat);
+	}
 }
 
 function getDatetimeColor (date: string) {
