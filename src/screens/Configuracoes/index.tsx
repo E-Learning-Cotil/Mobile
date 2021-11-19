@@ -44,9 +44,9 @@ export function Configuracoes() {
 
 	async function handleChoosePhoto () {
 		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
+		if (status !== 'granted') {
+		alert('Sorry, we need camera roll permissions to make this work!');
+		}
 		let result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
 			allowsEditing: true,
