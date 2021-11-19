@@ -31,15 +31,20 @@ export function Boletim() {
 				const {
 					data,
 					status
-				} = await api.get('/boletim');
+				}: { data: TurmaBoletim[], status: number } = await api.get('/boletim');
 	
-				setScaleAnimArray(await data.map(() => {
+				setScaleAnimArray(data.map(() => {
 					return new Animated.ValueXY({ x: 0, y: 0 });
 				}));
 	
-				setDropDownStates(await data.map(() => false));
+				setDropDownStates(data.map(() => false));
 	
-				setBoletim(data);
+				setBoletim(data.map(value => ({
+					nome: value.nome,
+					mediaAtividades: Math.round(value.mediaAtividades * 10) / 10,
+					mediaTestes: Math.round(value.mediaTestes * 10) / 10,
+					mediaTurma: Math.round(value.mediaTurma * 10) / 10,
+				})));
 				setLoading(false);
 			} catch (error: any) {
 				console.log('Error Atividades: ', error.response.data.error);

@@ -54,39 +54,41 @@ export function Topico({ route, navigation }: any){
 	const [ dados, setDados ] = useState<DadosTopico>();
 	const [ matrizDados, setMatrizDados ] = useState<DadosTopico[][]>([ [], [], [] ]);
 	const [ activeIndex, setActiveIndex ] = useState(1);
+
+	async function getDados() {
+		try{
+			setMatrizDados([ [], [], [] ]);
+
+			const {
+				data,	
+				status
+			} = await api.get(`/topicos/${id}`);
+			
+			setDados(data);
+
+			setMatrizDados(matrizDados.map((value, index) => {
+				if (index === 0) return data.Materiais;
+				else if (index === 1) return data.atividades;
+				else if (index === 2) return data.testes;
+			}));
+			
+		} catch (error: any) {
+			console.log('Error Topico: ', error.response.data.error);
+		}			
+	}
+
+	async function load(){
+		await getDados();
+
+		setLoading(false);
+		setActiveIndex(1);
+	}
 	
-	useEffect(() => {		
-		async function getDados() {
-			try{
-				setMatrizDados([ [], [], [] ]);
-
-				const {
-					data,	
-					status
-				} = await api.get(`/topicos/${id}`);
-				
-				setDados(data);
-
-				setMatrizDados(matrizDados.map((value, index) => {
-					if (index === 0) return data.Materiais;
-					else if (index === 1) return data.atividades;
-					else if (index === 2) return data.testes;
-				}));
-				
-			} catch (error: any) {
-				console.log('Error Topico: ', error.response.data.error);
-			}			
-		}
-
-		async function load(){
-			await getDados();
-
-			setLoading(false);
-			setActiveIndex(1);
-		}
-
-		setLoading(true);
-		load();
+	useEffect(() => {
+		navigation.addListener('focus', () => {
+			setLoading(true);
+			load();
+		});
 	}, [id]);
 
 	function scrollView({ item, index }: any) {

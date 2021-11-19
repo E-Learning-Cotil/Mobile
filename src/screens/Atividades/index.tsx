@@ -35,23 +35,25 @@ export function Atividades({ navigation }: any){
 	const [ loading, setLoading ] = useState(true);
 	const [ atividades, setAtividades ] = useState<Atividade[]>([]);
 
-	useEffect(() => {
-		async function getAtividades() {
-			try {
-				const {
-					data,
-					status
-				} = await api.get('/atividades/list-by-role');
-	
-				setAtividades(data);
-	
-				setLoading(false);
-			} catch (error: any) {
-				console.log('Error Atividades: ', error.response.data.error);
-			}
-		}
+	async function getAtividades() {
+		try {
+			const {
+				data,
+				status
+			} = await api.get('/atividades/list-by-role');
 
-		getAtividades();
+			setAtividades(data);
+
+			setLoading(false);
+		} catch (error: any) {
+			console.log('Error Atividades: ', error.response.data.error);
+		}
+	}
+
+	useEffect(() => {
+		navigation.addListener('focus', () => {
+			getAtividades();
+		});
 	}, []);
 
 	return(

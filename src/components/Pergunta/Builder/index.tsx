@@ -167,7 +167,7 @@ export function PerguntaBuilder ({ pergunta, perguntaIndex, onPerguntaChange, co
 					onPress={ addOptionHandler }
 				>
 					<Text style={[styles.addOptionButtonText, { marginLeft: 10 }]}>
-						Nova Pergunta
+						Nova Alternativa
 					</Text>
 				</TouchableOpacity>
 			}

@@ -60,40 +60,42 @@ export function Home({ navigation }: any){
 	const [ atividades, setAtividades ] = useState<Atividade[]>([]);
 	const [ turmas, setTurmas ] = useState<TurmaAluno[] | TurmaProfessor[]>([]);
 
-	useEffect(() => {
-		async function getAtividadesAndTurmas() {
-			if (role === 'ALUNO') {
-				try {
-					const {	
-						data,
-						status 
-					} = await api.get('/pagina-inicial'); 
-	
-					setAtividades(data.atividades);
-					setTurmas(data.turmas);
-					setLoading(false);
-				} catch (error: any) {
-					console.log('Error Home Aluno: ', error.response.data.error);
-				}				
-			}
-			else
-			{
-				try {
-					const {	
-						data,
-						status 
-					} = await api.get('/turmas/list-by-role'); 
-	
-					setTurmas(data);
-					setLoading(false);
-				} catch (error: any) {
-					console.log('Error Home Professor: ', error.response.data.error);
-				}
-				
-			}
-		}
+	async function getAtividadesAndTurmas() {
+		if (role === 'ALUNO') {
+			try {
+				const {	
+					data,
+					status 
+				} = await api.get('/pagina-inicial'); 
 
-		getAtividadesAndTurmas();
+				setAtividades(data.atividades);
+				setTurmas(data.turmas);
+				setLoading(false);
+			} catch (error: any) {
+				console.log('Error Home Aluno: ', error.response.data.error);
+			}				
+		}
+		else
+		{
+			try {
+				const {	
+					data,
+					status 
+				} = await api.get('/turmas/list-by-role'); 
+
+				setTurmas(data);
+				setLoading(false);
+			} catch (error: any) {
+				console.log('Error Home Professor: ', error.response.data.error);
+			}
+			
+		}
+	}
+
+	useEffect(() => {
+		navigation.addListener('focus', () => {
+			getAtividadesAndTurmas();
+		});
 	}, []);
 
 	return(
