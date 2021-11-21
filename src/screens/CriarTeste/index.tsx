@@ -163,7 +163,6 @@ export function CriarTeste({ route: { params: { topico } }, navigation }: Props)
 			})
 		) {
 			setTesteValid(true);
-			console.log('valido')
 		}
 		else setTesteValid(false);
 	}, [teste]);
