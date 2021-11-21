@@ -26,7 +26,9 @@ export const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 
-	column: {},
+	column: {
+		paddingRight: 20,
+	},
 
 	iconView: {
 		width: 40,

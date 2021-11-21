@@ -46,6 +46,8 @@ export const styles = StyleSheet.create({
 		color: theme.colors.white,
 
 		lineHeight: 26,
+
+		maxWidth: '85%',
 	},
 
 	date: {

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 import { theme } from '../../global/styles/theme';
 
@@ -42,5 +42,7 @@ export const styles = StyleSheet.create({
 		fontFamily: theme.fonts.title400,  
 		color: theme.colors.white,
 		fontSize: 26,
+
+		maxWidth: Dimensions.get('window').width - 130,
 	},
 });

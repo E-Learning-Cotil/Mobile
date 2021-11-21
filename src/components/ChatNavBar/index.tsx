@@ -44,7 +44,7 @@ export function ChatNavBar({ color, imgLink, text, lastMessage }: Props) {
 				source={{ uri: imgLink }}
 			/>
 
-			<Text style={styles.text} >
+			<Text style={styles.text} numberOfLines={1}>
 				{ text }
 			</Text>
 		</View>
