@@ -108,16 +108,20 @@ export function Teste({ route, navigation }: any) {
 	}
 
 	async function getDadosTeste() {
-		const {
-			data,
-			status
-		} = await api.get(`/testes/${id}`);
-
-		data.conteudo = JSON.parse(data.conteudo);
-
-		setDadosTeste(data);
-		setTestResult([...Array(data.conteudo.length).fill(false)]);
-		setChecked([...Array(data.conteudo.length).fill(false)]);
+		try {
+			const {
+				data,
+				status
+			} = await api.get(`/testes/${id}`);
+	
+			data.conteudo = JSON.parse(data.conteudo);
+	
+			setDadosTeste(data);
+			setTestResult([...Array(data.conteudo.length).fill(false)]);
+			setChecked([...Array(data.conteudo.length).fill(false)]);
+		} catch (error) {
+			console.error(JSON.stringify(error))
+		}
 	}
 
 	async function load() {
