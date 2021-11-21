@@ -16,9 +16,9 @@ import api from '../../services/api';
 
 interface Atividade {
 	id: number;
-	tipo: string;
 	dataFim: string;
 	nome: string;
+	tipo: 'ATIVIDADE' | 'TESTE';
 }
 
 interface TurmaAluno {
@@ -124,6 +124,7 @@ export function Home({ navigation }: any){
 								:
 								atividades.map(atividade => {
 									const key = atividade.id + atividade.tipo;
+									const tipo = atividade.tipo;
 									const text = atividade.nome;
 									const date = getFormattedDatetime(atividade.dataFim, "DD/MM");
 									const idAtividade = atividade.id;
@@ -135,6 +136,7 @@ export function Home({ navigation }: any){
 										text={text}
 										date={date} 
 										id={idAtividade}
+										tipo={tipo}
 									/>
 								})
 							}
