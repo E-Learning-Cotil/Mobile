@@ -42,7 +42,7 @@ interface DadosTopico {
 }
 
 export function Topico({ route, navigation }: any){
-	const { id } = route.params;
+	const { id, forceReload } = route.params;
 	const { user } = useAuth();
 	const role = user?.role;
 	
@@ -93,6 +93,12 @@ export function Topico({ route, navigation }: any){
 		load();
 		setActiveIndex(1);
 	}, [id]);
+
+	useEffect(() => {
+		return navigation.addListener('focus', () => {
+			if (forceReload === true) refresh();
+		});
+	}, [forceReload]);
 
 	function scrollView({ item, index }: any) {
 		const message = ['Nenhum Material', 'Nenhuma Atividade', 'Nenhum Teste'];

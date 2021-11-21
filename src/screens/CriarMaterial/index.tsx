@@ -82,7 +82,7 @@ export function CriarMaterial({ route: { params: { topico } }, navigation }: Pro
 				});
 
 				resetScreen();
-				navigation.navigate('Topico', { id: topico.id });
+				navigation.navigate('Topico', { id: topico.id, forceReload: true });
 			} catch (error: any) {
 				console.error(error.response.data.error);
 			}
