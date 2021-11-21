@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
-import { View, ScrollView, Text, Dimensions, TouchableOpacity, Modal } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
+import { View, ScrollView, RefreshControl, Text, Dimensions, TouchableOpacity, Modal } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 import Carousel from 'react-native-snap-carousel';
@@ -48,6 +47,7 @@ export function Topico({ route, navigation }: any){
 	const role = user?.role;
 	
 	const [ loading, setLoading ] = useState(true);
+	const [ refreshing, setRefreshing ] = useState(false);
 
 	const [ modalVisible, setModalVisible ] = useState(false);
 	
@@ -57,19 +57,18 @@ export function Topico({ route, navigation }: any){
 
 	async function getDados() {
 		try{
-			setMatrizDados([ [], [], [] ]);
-
 			const {
 				data,	
 				status
 			} = await api.get(`/topicos/${id}`);
 			
-			setDados(data);
+			if (data !== dados)
+				setDados(data);
 
 			setMatrizDados(matrizDados.map((value, index) => {
-				if (index === 0) return data.Materiais;
-				else if (index === 1) return data.atividades;
-				else if (index === 2) return data.testes;
+				if (index === 0) return matrizDados[0] !== data.Materiais ? data.Materiais : matrizDados[0];
+				else if (index === 1) return matrizDados[1] !== data.atividades ? data.atividades : matrizDados[1];
+				else if (index === 2) return matrizDados[2] !== data.testes ? data.testes : matrizDados[2];
 			}));
 			
 		} catch (error: any) {
@@ -77,18 +76,22 @@ export function Topico({ route, navigation }: any){
 		}			
 	}
 
-	async function load(){
+	async function load() {
 		await getDados();
 
 		setLoading(false);
-		setActiveIndex(1);
+		setRefreshing(false);
 	}
-	
+
+	function refresh() {
+		setRefreshing(true);
+		load();
+	}
+
 	useEffect(() => {
-		navigation.addListener('focus', () => {
-			setLoading(true);
-			load();
-		});
+		setLoading(true);
+		load();
+		setActiveIndex(1);
 	}, [id]);
 
 	function scrollView({ item, index }: any) {
@@ -96,7 +99,17 @@ export function Topico({ route, navigation }: any){
 		
 		if (item.length !== 0)
 		return (
-			<ScrollView style={styles.scrollView}>
+			<ScrollView
+				style={styles.scrollView}
+				refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={refresh}
+						colors={[theme.colors.green90, theme.colors.purple90]}
+						progressBackgroundColor={theme.colors.gray70}
+			  		/>
+				}
+			>
 				<View style={styles.scrollViewContent}>
 				{
 					index === 0 ?
