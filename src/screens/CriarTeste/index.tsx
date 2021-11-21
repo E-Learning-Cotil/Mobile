@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, ScrollView, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { TextInputMask, TextInputMaskMethods } from 'react-native-masked-text';
 import { FontAwesome5 } from '@expo/vector-icons';
-import ContentLoader, { Circle, Rect } from 'react-content-loader/native';
 
 import { NavBar } from '../../components/NavBar';
 import { PerguntaBuilder } from '../../components/Pergunta/Builder';
@@ -14,7 +13,6 @@ import api from '../../services/api';
 
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
-import { AxiosError } from 'axios';
 
 interface Props {
 	route: {
