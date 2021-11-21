@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { DrawerScreenProps } from "@react-navigation/drawer";
 
 import {
 	View,
@@ -22,30 +23,31 @@ import { LabelIcon } from "../../components/LabelIcon";
 
 import * as ImagePicker from 'expo-image-picker';
 
-export function Configuracoes() {
+export function Configuracoes({ navigation }: DrawerScreenProps<{}>) {
 	const { user, updateUser } = useAuth();
-
 	const role = user?.role;
 	const color = role === "ALUNO" ? theme.colors.green90 : theme.colors.purple90;
 
-	const [editMode, setEditMode] = useState(false);
-	const [loading, setLoading] = useState(true);
-
-	const scrollViewRef = useRef<ScrollView>(null);
-	const firstTextInputRef = useRef<TextInput>(null);
-
-	const [userState, setUserState] = useState({
+	const firstUserState = {
 		foto: user?.foto || '',
 		email: user?.email || '',
 		telefone: user?.telefone || '',
 		nome: user?.nome || '',
 		senha: ''
-	});
+	};
+
+	const [ editMode, setEditMode ] = useState(false);
+
+	const scrollViewRef = useRef<ScrollView>(null);
+	const firstTextInputRef = useRef<TextInput>(null);
+	const initialUserStateRef = useRef(firstUserState);
+
+	const [ userState, setUserState ] = useState(firstUserState);
 
 	async function handleChoosePhoto () {
 		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 		if (status !== 'granted') {
-		alert('Sorry, we need camera roll permissions to make this work!');
+			alert('Desculpe, essa permissão é necessária para que o aplicativo funcione corretamente!');
 		}
 		let result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -94,23 +96,33 @@ export function Configuracoes() {
 				telefone: userState.telefone !== user?.telefone ? userState.telefone : undefined,
 				senha: userState.senha,
 			});
-			else {
-				const response = await api.put('/professores', {
-					foto: userState.foto !== user?.foto ? userState.foto : undefined,
-					nome: userState.nome !== user?.nome ? userState.nome : undefined,
-					email: userState.email !== user?.email ? userState.email : undefined,
-					telefone: userState.telefone !== user?.telefone ? userState.telefone : undefined,
-					senha: userState.senha,
-				})
+			else
+			await api.put('/professores', {
+				foto: userState.foto !== user?.foto ? userState.foto : undefined,
+				nome: userState.nome !== user?.nome ? userState.nome : undefined,
+				email: userState.email !== user?.email ? userState.email : undefined,
+				telefone: userState.telefone !== user?.telefone ? userState.telefone : undefined,
+				senha: userState.senha,
+			})
 
-				console.log(response)
-			}
-
-			updateUser({ ...user, foto: userState.foto, nome: userState.nome, email: userState.email, telefone: userState.telefone });
+			const newUserState = { ...user, foto: userState.foto, nome: userState.nome, email: userState.email, telefone: userState.telefone };
+			updateUser(newUserState);
+			initialUserStateRef.current = { ...newUserState, senha: '' };
 		} catch (error) {
 			console.log(error);
 		}
 	}
+
+	function reset() {
+		setUserState(initialUserStateRef.current);
+
+		setEditMode(false);
+	}
+
+	useEffect(() => {
+		initialUserStateRef.current = userState;
+		return navigation.addListener('focus', reset);
+	}, []);
 
 	return (
 		<View style={styles.container}>
@@ -194,13 +206,6 @@ export function Configuracoes() {
 							configsUpdateHandler();
 						}
 						else {
-							setUserState({
-								foto: user?.foto || '',
-								email: user?.email || '',
-								telefone: user?.telefone || '',
-								nome: user?.nome || '',
-								senha: ''
-							});
 							setEditMode(true);
 							firstTextInputRef.current?.focus();
 						}
