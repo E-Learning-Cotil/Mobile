@@ -250,6 +250,7 @@ export function Topico({ route, navigation }: any){
 								style={[styles.modalButton, { backgroundColor: dados.turma.cores.corPrim }]}
 								onPress={ () => {
 									setModalVisible(false);
+									navigation.navigate('CriarMaterial', { topico: dados });
 								} }
 							>
 								<FontAwesome5 name="book" size={24} color="white" style={{ width: 25 }} />
