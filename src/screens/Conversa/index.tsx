@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { RectButton } from "react-native-gesture-handler";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
@@ -26,6 +27,7 @@ interface Props {
 			imgLink: string;
 		};
 	};
+	navigation: DrawerNavigationProp<{}>
 }
 
 interface Message {
@@ -43,7 +45,7 @@ interface FlatListProps {
 	index: number;
 }
 
-export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
+export function Conversa({route: {params: { id, name, imgLink } }, navigation}: Props) {
 	const { user, token } = useAuth();
 	const role = user?.role;
 	const color = role === 'ALUNO' ? theme.colors.green90 : theme.colors.purple90;
@@ -51,6 +53,7 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 	const socket = io(process.env.API_URL as any);
 
 	const flatListRef = useRef<FlatList | null>(null);
+	const otherUserIdRef = useRef(id);
 
 	const [ scrolledToBottom, setScrolledToBottom ] = useState(true);
 
@@ -107,13 +110,13 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 	}
 
 	useEffect(() => {
+		otherUserIdRef.current = id;
+
 		if (!loading) setLoading(true);
 		if (messages.length !== 0) setMessages([]);
 		if (newMessage.length !== 0) setNewMessage('');
 
 		socket.on("previous_messages", loadPreviousMessagesHandler);
-		socket.emit("identify", { token });
-		socket.emit("open_chat", { otherUser: id, token });
 		socket.on("new_message", ([data]: Message[]) => {
 			setMessages((prevMessages: Message[]) => {
 				if(data.origem.identity === id){
@@ -125,6 +128,14 @@ export function Conversa({route: {params: { id, name, imgLink } }}: Props) {
 			});
 		});
 	}, [id]);
+
+	useEffect(() => {
+		navigation.addListener('focus', () => {
+			socket.emit("identify", { token });
+			socket.emit("open_chat", { otherUser: otherUserIdRef.current, token });
+		});
+	}, []);
+
 
 	return(
 		<View style={styles.container}>          
