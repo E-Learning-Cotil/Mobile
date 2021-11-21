@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
 
 	userInfoTextView: {
 		marginLeft: 10,
+		paddingRight: 40,
 	},
 
 	userName: {

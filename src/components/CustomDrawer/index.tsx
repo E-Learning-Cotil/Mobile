@@ -39,10 +39,10 @@ export function CustomDrawer ({ navigation }: DrawerContentComponentProps) {
 					urlImage={user?.foto}
 				/>
 				<View style={styles.userInfoTextView} >
-					<Text style={styles.userName} >
+					<Text style={styles.userName} numberOfLines={1} >
 						{ user?.nome }
 					</Text>
-					<Text style={styles.userEmail} >
+					<Text style={styles.userEmail} numberOfLines={1} >
 						{ user?.email }
 					</Text>
 				</View>
