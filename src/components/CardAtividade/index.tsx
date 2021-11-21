@@ -14,9 +14,10 @@ interface Props {
 	date?: string;
 	loading?: boolean;
 	id?: number;
+	tipo?: 'ATIVIDADE' | 'TESTE';
 }
 
-export function CardAtividade ({ color, text, date, loading = false, id }: Props) {
+export function CardAtividade ({ color, text, date, loading = false, id, tipo }: Props) {
 	const navigation = useNavigation();
 
 	if (!loading)
@@ -24,7 +25,12 @@ export function CardAtividade ({ color, text, date, loading = false, id }: Props
 			<View style={styles.container}>
 				<RectButton 
 					style={styles.button}
-					onPress={() => {navigation.navigate("Atividade" as never, { id: id } as never)}}
+					onPress={() => {
+						tipo === 'ATIVIDADE' ?
+						navigation.navigate("Atividade" as never, { id: id } as never)
+						:
+						navigation.navigate("Teste" as never, { id: id } as never)
+					}}
 				>
 					<View style={styles.row}>
 						<FontAwesome5 name="bookmark" size={24} color={color} />
