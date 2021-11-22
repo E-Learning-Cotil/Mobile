@@ -156,12 +156,12 @@ export function Teste({ route, navigation }: any) {
 							</Text>
 							<Text style={styles.headerSubtitle}>
 								{
-									!respondido ?
+									!respondido || role === 'PROFESSOR' ?
 									'Data de Entrega: \n' :
 									`Entregue ${showTimePassed(dadosTeste.testesAlunos[0].dataEnvio)}`
 								}
 								{
-									!respondido &&
+									!respondido || role === 'PROFESSOR' &&
 									<Text style={[
 										styles.headerSubtitle,
 
@@ -177,13 +177,24 @@ export function Teste({ route, navigation }: any) {
 						</View>
 
 						{
-							!respondido ?
+							// role === 'PROFESSOR'?
+							// dadosTeste.conteudo.map((pergunta, index) => <Pergunta
+							// 	key={index}
+							// 	pergunta={pergunta}
+							// 	idAlternative={index}
+							// 	setResult={setResult}
+							// 	color={dadosTeste.topicos.turma.cores.corPrim}
+							// 	showAnswers={true}
+							// />)
+							// :
+							!respondido || role === 'PROFESSOR' ?
 							dadosTeste.conteudo.map((pergunta, index) => <Pergunta
 								key={index}
 								pergunta={pergunta}
 								idAlternative={index}
 								setResult={setResult}
 								color={dadosTeste.topicos.turma.cores.corPrim}
+								showAnswers={role === 'PROFESSOR'}
 							/>)
 							:
 							<View style={styles.alreadyAnsweredView}>
@@ -211,7 +222,7 @@ export function Teste({ route, navigation }: any) {
 						}
 
 						{
-							!respondido &&
+							!respondido && role === 'ALUNO' &&
 							<View style={styles.buttonsView}>
 								<TouchableOpacity
 									style={[styles.submitButton, !checked?.every(e => e === true) && { backgroundColor: theme.colors.gray90 }]}

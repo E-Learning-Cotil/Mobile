@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Dimensions } from 'react-native';
-import {  } from '../../utils/moment';
 
 import { View, Text, Image } from 'react-native';
 import { RadioButton } from 'react-native-paper';
@@ -20,23 +19,28 @@ interface Props {
 	idAlternative: number;
 	setResult( id: number, correct: boolean ): void;
 	color: string;
+	showAnswers?: boolean;
 }
 
-export function Pergunta ({ pergunta, idAlternative, setResult, color }: Props) {
+export function Pergunta ({ pergunta, idAlternative, setResult, color, showAnswers }: Props) {
 	const [ checked, setChecked ] = useState<number>();
 
 	const desiredWidth = Dimensions.get('window').width - 60;
 	const [desiredHeight, setDesiredHeight] = React.useState(0)
-
-	if(pergunta.imagem)
+		
+	useEffect(() => {
+		if (checked !== undefined)
+		setResult(idAlternative, checked === pergunta.certo);
+	}, [checked]);
+		
+	useEffect(() => {
+		if(pergunta.imagem)
 		Image.getSize(pergunta.imagem, (width, height) => {
 			setDesiredHeight(desiredWidth  / width * height)
 		});
 
-	useEffect(() => {
-		if (checked !== undefined)
-			setResult(idAlternative, checked === pergunta.certo);
-	}, [checked]);
+		if (showAnswers) setChecked(pergunta.certo);
+	}, []);
 
 	return (
 		<View style={styles.container}>
@@ -62,6 +66,7 @@ export function Pergunta ({ pergunta, idAlternative, setResult, color }: Props) 
 						onPress={() => setChecked( index )}
 						uncheckedColor={theme.colors.white}
 						color={color}
+						disabled={(showAnswers && checked !== index)}
 					/>
 
 					<Text style={styles.alternativeText}>
