@@ -269,6 +269,7 @@ export function Topico({ route, navigation }: any){
 								style={[styles.modalButton, { backgroundColor: dados.turma.cores.corSec }]}
 								onPress={ () => {
 									setModalVisible(false);
+									navigation.navigate('CriarAtividade', {topico: dados});
 								} }
 							>
 								<FontAwesome5 name="file-signature" size={24} color="white" style={{ width: 25 }} />
