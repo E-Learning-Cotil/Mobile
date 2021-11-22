@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Mobile",
-    "slug": "Mobile",
+    "name": "Elearning",
+    "slug": "elearning-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-	"androidStatusBar": {
-		"barStyle": "light-content",
-		"backgroundColor": "#202020"
-	},
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#202020"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -27,7 +27,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#202020"
-      }
+      },
+      "package": "cotil.elearning"
     },
     "web": {
       "favicon": "./assets/favicon.png"
