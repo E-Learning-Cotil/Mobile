@@ -177,16 +177,6 @@ export function Teste({ route, navigation }: any) {
 						</View>
 
 						{
-							// role === 'PROFESSOR'?
-							// dadosTeste.conteudo.map((pergunta, index) => <Pergunta
-							// 	key={index}
-							// 	pergunta={pergunta}
-							// 	idAlternative={index}
-							// 	setResult={setResult}
-							// 	color={dadosTeste.topicos.turma.cores.corPrim}
-							// 	showAnswers={true}
-							// />)
-							// :
 							!respondido || role === 'PROFESSOR' ?
 							dadosTeste.conteudo.map((pergunta, index) => <Pergunta
 								key={index}
